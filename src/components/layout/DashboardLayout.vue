@@ -80,7 +80,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .slide-right-enter-active,
 .slide-right-leave-active {
-  transition: transform 0.4s ease;
+  transition: transform 0.1s ease;
 }
 .slide-right-enter-from,
 .slide-right-leave-to {
