@@ -14,7 +14,29 @@ import {
 
   import wef from "@/assets/wef.jpg";
 const showConferencePopup = ref(false);
+const timeLeft = ref({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+let countdownInterval = null;
 
+const startCountdown = () => {
+  const targetDate = new Date("March 4, 2026 09:00:00").getTime();
+
+  countdownInterval = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+
+    if (distance < 0) {
+      clearInterval(countdownInterval);
+      return;
+    }
+
+    timeLeft.value = {
+      days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+      minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+      seconds: Math.floor((distance % (1000 * 60)) / 1000),
+    };
+  }, 1000);
+};
 const closeConferencePopup = () => {
   showConferencePopup.value = false;
   sessionStorage.setItem('hfn_conference_popup_shown', 'true');
@@ -106,9 +128,6 @@ const heroSlides = [
 const activeSlide = ref(0);
 let interval = null;
 
-onUnmounted(() => {
-  clearInterval(interval);
-});
 const faqs = computed(() => pageContent.value.faqs);
 const group =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715465/1feebd03da9f660dfb6e3f79b696f544_L_rxf7mk.jpg";
@@ -136,6 +155,7 @@ const pageId = 1;
 const selectedMonth = ref(Object.keys(homePageSchema.news.months)[0]);
 
 onMounted(async () => {
+  startCountdown();
   const observer = new IntersectionObserver(
     (entries) => {
       if (entries[0].isIntersecting) {
@@ -198,6 +218,12 @@ onMounted(async () => {
     });
   });
 });
+
+ onUnmounted(() => {
+  clearInterval(interval);
+  if (countdownInterval) clearInterval(countdownInterval);
+});
+ 
 </script>
 
 <template>
@@ -844,19 +870,34 @@ onMounted(async () => {
     <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" @click="closeConferencePopup"></div>
     
     <div class="relative bg-white rounded-[2.5rem] overflow-hidden max-w-lg w-full shadow-2xl transform transition-all border border-green-100">
-      <div class="h-32 bg-[#004d33] relative flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 opacity-10">
-          <svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#pattern)" /></svg>
+      
+      <div class="h-48 relative overflow-hidden">
+        <img 
+          src="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771138263/HFN_2026_CONFERENCE_FLYER._mzpw5l.jpg" 
+          class="w-full h-full object-cover"
+          alt="Conference 2026"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-[#004d33] via-transparent to-transparent"></div>
+        <div class="absolute bottom-4 left-8">
+           <h4 class="text-white font-black text-xl uppercase tracking-widest">Annual Conference</h4>
         </div>
-        <h4 class="relative text-white font-black text-2xl uppercase tracking-widest">Annual Conference</h4>
       </div>
 
       <div class="p-8 text-center">
-        <div class="inline-block px-4 py-1 rounded-full bg-orange-100 text-orange-600 text-xs font-bold uppercase mb-4">
-          Save the Date: March 4th-5th 2026
+        <div class="inline-block px-4 py-1 rounded-full bg-orange-100 text-orange-600 text-xs font-bold uppercase mb-6">
+          March 4th - 5th, 2026
         </div>
-        <h3 class="text-3xl font-black text-gray-900 mb-4">HFN 2026: Shaping the Future of Healthcare</h3>
-        <p class="text-gray-600 mb-8 font-medium">
+        
+        <h3 class="text-2xl font-black text-gray-900 mb-2">HFN 2026: Shaping the Future</h3>
+
+        <div class="grid grid-cols-4 gap-2 mb-8 mt-4">
+          <div v-for="(val, unit) in timeLeft" :key="unit" class="flex flex-col items-center p-2 bg-[#f2f9f3] rounded-xl border border-green-50">
+            <span class="text-2xl font-black text-green-700 leading-none">{{ val }}</span>
+            <span class="text-[10px] uppercase font-bold text-gray-400 mt-1">{{ unit }}</span>
+          </div>
+        </div>
+
+        <p class="text-gray-600 mb-8 font-medium text-sm">
           Join Nigeria's leading healthcare stakeholders for a transformative experience. Let's build a resilient health system together.
         </p>
         
@@ -878,13 +919,14 @@ onMounted(async () => {
 
       <button 
         @click="closeConferencePopup" 
-        class="absolute top-4 right-4 text-white/70 hover:text-white transition-colors"
+        class="absolute top-4 right-4 bg-black/20 hover:bg-black/40 text-white rounded-full p-1 transition-colors"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
     </div>
   </div>
 </transition>
+
 </template>
 
 <style scoped>
