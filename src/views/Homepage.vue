@@ -13,6 +13,12 @@ import {
 } from "@heroicons/vue/24/outline";
 
   import wef from "@/assets/wef.jpg";
+const showConferencePopup = ref(false);
+
+const closeConferencePopup = () => {
+  showConferencePopup.value = false;
+  sessionStorage.setItem('hfn_conference_popup_shown', 'true');
+};
 
 const latest =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769896360/243A8355_r47c3t.jpg";
@@ -139,6 +145,13 @@ onMounted(async () => {
     },
     { threshold: 0.2 }
   );
+
+  if (!sessionStorage.getItem('hfn_conference_popup_shown')) {
+    setTimeout(() => {
+      showConferencePopup.value = true;
+    }, 1500); 
+  }
+
 
   if (sectionRef.value) {
     observer.observe(sectionRef.value);
@@ -826,7 +839,52 @@ onMounted(async () => {
     </button>
   </div>
 </div>
+<transition name="fade">
+  <div v-if="showConferencePopup" class="fixed inset-0 z-[100] flex items-center justify-center px-4">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" @click="closeConferencePopup"></div>
+    
+    <div class="relative bg-white rounded-[2.5rem] overflow-hidden max-w-lg w-full shadow-2xl transform transition-all border border-green-100">
+      <div class="h-32 bg-[#004d33] relative flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+          <svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#pattern)" /></svg>
+        </div>
+        <h4 class="relative text-white font-black text-2xl uppercase tracking-widest">Annual Conference</h4>
+      </div>
 
+      <div class="p-8 text-center">
+        <div class="inline-block px-4 py-1 rounded-full bg-orange-100 text-orange-600 text-xs font-bold uppercase mb-4">
+          Save the Date: March 4th-5th 2026
+        </div>
+        <h3 class="text-3xl font-black text-gray-900 mb-4">HFN 2026: Shaping the Future of Healthcare</h3>
+        <p class="text-gray-600 mb-8 font-medium">
+          Join Nigeria's leading healthcare stakeholders for a transformative experience. Let's build a resilient health system together.
+        </p>
+        
+        <div class="flex flex-col gap-3">
+          <RouterLink 
+            to="/conference" 
+            @click="closeConferencePopup"
+            class="w-full bg-green-700 hover:bg-green-800 text-white py-4 rounded-2xl font-bold shadow-lg shadow-green-900/20 transition-all flex items-center justify-center gap-2"
+          >
+            Join Event
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+          </RouterLink>
+          
+          <button @click="closeConferencePopup" class="text-gray-400 hover:text-gray-600 font-bold text-sm py-2">
+            Remind me later
+          </button>
+        </div>
+      </div>
+
+      <button 
+        @click="closeConferencePopup" 
+        class="absolute top-4 right-4 text-white/70 hover:text-white transition-colors"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+</transition>
 </template>
 
 <style scoped>
