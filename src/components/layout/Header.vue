@@ -118,38 +118,56 @@ const toggleDropdown = (title) => {
 <template>
   <header class="w-full bg-white font-sans shadow-md">
     <div
-      :style="{ backgroundColor: DARK_GREEN }"
-      class="text-white text-sm flex justify-end px-4 sm:px-8 py-2 rounded-b-xl"
-    >
-      <div class="relative group cursor-pointer">
-        <div
-          class="flex items-center px-3 py-1 rounded-full bg-green-900 bg-opacity-10 hover:bg-opacity-20 transition"
-        >
-          English
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-4 h-4 ml-1 transition-transform text-white"
-          >
-            <path d="m6 9 6 6 6-6" />
-          </svg>
-        </div>
-        <div
-          class="absolute right-0 mt-2 w-32 bg-white text-gray-800 rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300 z-10 overflow-hidden"
-        >
-          <a href="#" class="block px-4 py-2 hover:bg-gray-100">Hausa</a>
-          <a href="#" class="block px-4 py-2 hover:bg-gray-100">Igbo</a>
-          <a href="#" class="block px-4 py-2 hover:bg-gray-100">Yoruba</a>
-        </div>
-      </div>
+  :style="{ backgroundColor: '#004d33' }"
+  class="text-white text-sm flex items-center justify-between px-4 sm:px-8 py-2 rounded-b-xl overflow-hidden"
+>
+  <div class="flex-1 overflow-hidden relative">
+    <div class="marquee-content whitespace-nowrap flex items-center">
+      <span class="mx-4 text-orange-400 font-bold">UPCOMING EVENT:</span>
+      <span class="font-medium">HFN Annual Conference 2026 — March 4th-5th in Lagos. Shaping the Future of Healthcare.</span>
+      <RouterLink 
+        to="/conference" 
+        class="ml-4 bg-orange-500 hover:bg-orange-600 text-white text-[10px] px-3 py-0.5 rounded-full font-black transition-colors uppercase"
+      >
+        Click Here
+      </RouterLink>
+      
+      <span class="mx-12 text-orange-400 font-bold">UPCOMING EVENT:</span>
+      <span class="font-medium">HFN Annual Conference 2026 — March 4th-5th in Lagos. Shaping the Future of Healthcare.</span>
+      <RouterLink 
+        to="/conference" 
+        class="ml-4 bg-orange-500 hover:bg-orange-600 text-white text-[10px] px-3 py-0.5 rounded-full font-black transition-colors uppercase"
+      >
+        Click Here
+      </RouterLink>
     </div>
+  </div>
+
+  <div class="relative group cursor-pointer ml-4">
+    <div class="flex items-center px-3 py-1 rounded-full bg-green-900 bg-opacity-30 hover:bg-opacity-50 transition">
+      English
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="w-4 h-4 ml-1 transition-transform text-white"
+      >
+        <path d="m6 9 6 6 6-6" />
+      </svg>
+    </div>
+    <div class="absolute right-0 mt-2 w-32 bg-white text-gray-800 rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 overflow-hidden">
+      <a href="#" class="block px-4 py-2 hover:bg-gray-100">Hausa</a>
+      <a href="#" class="block px-4 py-2 hover:bg-gray-100">Igbo</a>
+      <a href="#" class="block px-4 py-2 hover:bg-gray-100">Yoruba</a>
+    </div>
+  </div>
+</div>
 
     <nav
       class="flex items-center justify-between p-4 lg:px-8 max-w-7xl mx-auto"
@@ -533,4 +551,35 @@ const toggleDropdown = (title) => {
   </header>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+  .marquee-content {
+  display: inline-flex;
+  animation: marquee 30s linear infinite;
+  min-width: 100%;
+}
+
+.marquee-content:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.relative.overflow-hidden::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 100%;
+  background: linear-gradient(to right, transparent, #004d33);
+  pointer-events: none;
+}
+</style>
