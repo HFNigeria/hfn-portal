@@ -78,7 +78,8 @@ const fetchPayments = async () => {
 const normalizePayment = (item) => {
   return {
     id: item.id,
-    title: item.user?.full_name || item.user?.email || '—',
+    title: item.full_name || '—',
+    email: item.email,
     enrollments: item.payment_type_display || '—',
     completion: item.amount || '—',
     amount: item.amount,
