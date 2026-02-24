@@ -498,10 +498,10 @@ watch(
 
           <select v-model="filters.role" class="filter">
             <option value="">All Roles</option>
-            <option value="individual">Admin</option>
-            <option value="corporate">Member</option>
-            <option value="admin">Learner</option>
-            <option value="admin">Tutor</option>
+            <option value="admin">Admin</option>
+            <option value="member">Member</option>
+            <option value="learner">Learner</option>
+            <option value="Tutor">Tutor</option>
           </select>
 
           <select v-model="filters.status" class="filter">
