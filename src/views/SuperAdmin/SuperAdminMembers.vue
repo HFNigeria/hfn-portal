@@ -41,7 +41,7 @@ const newMemberForm = ref({
   name: "",
   email: "",
   phone: "",
-  membership_type: "",
+  membership_type_id: "",
   role: "",
   payment_method: "",
 });
@@ -134,6 +134,7 @@ const submitNewMember = async () => {
       email: newMemberForm.value.email,
       phone: newMemberForm.value.phone,
       membership_type: newMemberForm.value.membership_type,
+      membership_type_id: Number(newMemberForm.value.membership_type_id),
       role: newMemberForm.value.role,
       payment_method: newMemberForm.value.payment_method,
     };
@@ -686,7 +687,7 @@ watch(
             class="input"
           />
 
-          <select v-model="newMemberForm.membership_type" class="input">
+          <select v-model="newMemberForm.membership_type_id" class="input">
             <option disabled value="">Select Membership Type</option>
             <option
               v-for="type in membershipTypes"
