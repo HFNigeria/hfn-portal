@@ -83,7 +83,7 @@ const handleSignIn = async () => {
 
             handleRoleBasedRedirect(role);
           } catch (err) {
-            console.error("Failed to fetch user profile:", err);
+            console.error("Failed to fetch user profile");
             toast.error("Login failed: unable to load user profile.");
           }
         }
