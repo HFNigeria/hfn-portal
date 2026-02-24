@@ -700,9 +700,10 @@ watch(
 
           <select v-model="newMemberForm.role" class="input">
             <option disabled value="">Select Role</option>
-            <option value="individual">Individual</option>
-            <option value="corporate">Corporate</option>
-            <option value="admin">Admin</option>
+            <option value="tutor">Tutor</option>
+            <option value="editor">Editor</option>
+            <option value="learner">Learner</option>
+            <option value="member">Member</option>
           </select>
 
           <select v-model="newMemberForm.payment_method" class="input">
