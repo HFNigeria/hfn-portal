@@ -236,26 +236,37 @@ const handleRegistration = async () => {
       showCustomAlert(errorMessage, "error");
     }
   } catch (error) {
-    console.error("Registration error:", error);
+  console.error("Registration error:", error);
 
-    if (error.response) {
-      const errorMsg =
-        error.response.data?.messages?.[0] ||
-        error.response.data?.message ||
-        `Error: ${error.response.status}`;
-      showCustomAlert(errorMsg, "error");
-    } else if (error.request) {
-      showCustomAlert(
-        "Network error. Please check your connection and try again.",
-        "error"
-      );
-    } else {
-      showCustomAlert(
-        "An unexpected error occurred. Please try again.",
-        "error"
-      );
+  if (error.response) {
+    const data = error.response.data;
+
+    let errorMsg = "Registration failed. Please try again.";
+
+    if (typeof data === "object") {
+      const firstKey = Object.keys(data)[0];
+
+      if (Array.isArray(data[firstKey])) {
+        errorMsg = data[firstKey][0];
+      } else if (typeof data[firstKey] === "string") {
+        errorMsg = data[firstKey];
+      }
     }
-  } finally {
+
+    showCustomAlert(errorMsg, "error");
+
+  } else if (error.request) {
+    showCustomAlert(
+      "Network error. Please check your connection and try again.",
+      "error"
+    );
+  } else {
+    showCustomAlert(
+      "An unexpected error occurred. Please try again.",
+      "error"
+    );
+  }
+} finally {
     isLoading.value = false;
   }
 };
