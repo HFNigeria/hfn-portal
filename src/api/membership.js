@@ -213,4 +213,13 @@ export default {
       throw error;
     }
   },
+  async createMember(payload) {
+    try {
+      const response = await api.post("/membership/subscriptions/admin-create-member-subscription/", payload);
+      return response.data;
+    } catch (error) {
+      console.error("Create member API error:", error);
+      throw error;
+    }
+  },
 };
