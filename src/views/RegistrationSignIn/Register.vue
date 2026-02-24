@@ -19,7 +19,7 @@ const form = ref({
   confirmEmail: "",
   password: "",
   confirmPassword: "",
-  oragnizationName: "",
+  organizationName: "",
   organizationContactPerson: "",
 });
 
@@ -285,6 +285,7 @@ const showCustomAlert = (message, type = "error") => {
 
 const changeTab = (tab) => {
   activeTab.value = tab;
+  selectedCategoryId.value = ""; 
   form.value = {
     firstName: "",
     otherName: "",
@@ -295,7 +296,7 @@ const changeTab = (tab) => {
     confirmEmail: "",
     password: "",
     confirmPassword: "",
-    oragnizationName: "",
+    organizationName: "",
   };
 };
 </script>
@@ -782,6 +783,40 @@ const changeTab = (tab) => {
         />
       </div>
     </div>
+
+    <div>
+  <label class="block text-sm font-medium text-gray-700">
+    Membership Category*
+  </label>
+
+  <select
+    v-model="selectedCategoryId"
+    required
+    class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm p-2.5"
+  >
+    <option disabled value="">Select a category</option>
+
+    <option
+      v-for="category in membershipCategories"
+      :key="category.id"
+      :value="category.id"
+    >
+      {{ category.name }}
+    </option>
+  </select>
+
+  <p
+    v-if="selectedCategory"
+    class="mt-2 font-semibold text-green-700"
+  >
+    Amount:
+    {{ currencySymbol }}
+    {{ selectedCategory.amount.toLocaleString() }}
+    <span class="text-sm text-gray-500">
+      ({{ selectedCategory.currency }})
+    </span>
+  </p>
+</div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
