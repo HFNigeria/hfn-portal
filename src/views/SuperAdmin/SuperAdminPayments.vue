@@ -64,11 +64,11 @@ const fetchPayments = async () => {
   loading.value = true;
   try {
     if (currentTab.value === 'Registration') {
-      const res = await paymentApi.getPaymentList();
-      registration.value = res.map(normalizePayment);
+      const res = await paymentApi.getUnpaidMembers();
+      registration.value = (res.results || []).map(normalizePayment);
     } else {
       const res = await paymentApi.getPurchases();
-      purchases.value = res.map(normalizePayment);
+      purchases.value = (res.results || []).map(normalizePayment);
     }
   } finally {
     loading.value = false;
