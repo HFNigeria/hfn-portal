@@ -38,7 +38,8 @@ const filters = ref({
 });
 
 const newMemberForm = ref({
-  name: "",
+  first_name: "",
+  last_name: "",
   email: "",
   phone_number: "",
   membership_type_id: "",
@@ -130,7 +131,8 @@ const loadMembershipAnalytics = async () => {
 const submitNewMember = async () => {
   try {
     const payload = {
-      name: newMemberForm.value.name,
+      first_name: newMemberForm.value.first_name,
+      last_name: newMemberForm.value.last_name,
       email: newMemberForm.value.email,
       phone_number: newMemberForm.value.phone_number,
       membership_type: newMemberForm.value.membership_type,
@@ -150,7 +152,8 @@ const submitNewMember = async () => {
 
     // Reset form
     newMemberForm.value = {
-      name: "",
+      first_name: "",
+      last_name: "",
       email: "",
       phone_number: "",
       membership_type: "",
@@ -672,8 +675,13 @@ watch(
 
         <form @submit.prevent="submitNewMember" class="space-y-4">
           <input
-            v-model="newMemberForm.name"
-            placeholder="Full Name"
+            v-model="newMemberForm.first_name"
+            placeholder="First Name"
+            class="input"
+          />
+          <input
+            v-model="newMemberForm.last_name"
+            placeholder="Last Name"
             class="input"
           />
           <input
