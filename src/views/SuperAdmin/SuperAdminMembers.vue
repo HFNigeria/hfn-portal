@@ -40,7 +40,7 @@ const filters = ref({
 const newMemberForm = ref({
   name: "",
   email: "",
-  phone: "",
+  phone_number: "",
   membership_type_id: "",
   role: "",
   payment_method: "",
@@ -132,7 +132,7 @@ const submitNewMember = async () => {
     const payload = {
       name: newMemberForm.value.name,
       email: newMemberForm.value.email,
-      phone: newMemberForm.value.phone,
+      phone_number: newMemberForm.value.phone_number,
       membership_type: newMemberForm.value.membership_type,
       membership_type_id: Number(newMemberForm.value.membership_type_id),
       role: newMemberForm.value.role,
@@ -152,7 +152,7 @@ const submitNewMember = async () => {
     newMemberForm.value = {
       name: "",
       email: "",
-      phone: "",
+      phone_number: "",
       membership_type: "",
       role: "",
       payment_method: "",
@@ -682,7 +682,7 @@ watch(
             class="input"
           />
           <input
-            v-model="newMemberForm.phone"
+            v-model="newMemberForm.phone_number"
             placeholder="Phone Number"
             class="input"
           />
