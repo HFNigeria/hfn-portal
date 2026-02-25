@@ -98,7 +98,7 @@ const agenda = [
       "Keynote Address",
       "Global Health Presentation",
       "Financing Panels",
-      "Private Sector Outlook Launch",
+      "Private Sector  Launch",
       "Women’s Forum (Evening)",
     ],
   },
@@ -386,7 +386,7 @@ const agenda = [
             <h3
               class="text-3xl font-black text-green-900 mb-6 italic leading-tight"
             >
-              Launch of the Nigeria Private Health Sector Outlook 2026
+              Launch of the Nigeria Private Health Sector  2026
             </h3>
             <p class="text-gray-600 text-lg leading-relaxed mb-6">
               A flagship evidence-based publication supported by
