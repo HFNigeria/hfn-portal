@@ -1,7 +1,8 @@
 
 <script setup>
+const outlook = "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772037286/IMG-20260224-WA0000_okdvpl.jpg";  
 const theme =
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771138263/HFN_2026_CONFERENCE_FLYER._mzpw5l.jpg";
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772034620/IMG-20260225-WA0000_up3tka.jpg";
 const heroBg =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770045591/243A7993_wxlzkg.jpg";
 const roundTable =
@@ -97,7 +98,7 @@ const agenda = [
       "Keynote Address",
       "Global Health Presentation",
       "Financing Panels",
-      "Private Sector Outlook Launch",
+      "Private Sector  Launch",
       "Women’s Forum (Evening)",
     ],
   },
@@ -385,7 +386,7 @@ const agenda = [
             <h3
               class="text-3xl font-black text-green-900 mb-6 italic leading-tight"
             >
-              Launch of the Nigeria Private Health Sector Outlook 2026
+              Launch of the Nigeria Private Health Sector  2026
             </h3>
             <p class="text-gray-600 text-lg leading-relaxed mb-6">
               A flagship evidence-based publication supported by
@@ -404,20 +405,10 @@ const agenda = [
               >
             </div>
           </div>
-          <div
-            class="bg-gray-200 aspect-video rounded-3xl overflow-hidden order-1 md:order-2 shadow-2xl"
-          >
-            <div
-              class="w-full h-full bg-gradient-to-br from-green-800 to-green-950 flex items-center justify-center p-12"
-            >
-              <div
-                class="text-white text-center border-4 border-orange-500 p-8"
-              >
-                <h4 class="text-3xl font-black italic">OUTLOOK 2026</h4>
-                <p class="mt-2 opacity-60">Official Unveiling</p>
-              </div>
-            </div>
-          </div>
+          <img
+            :src="outlook"
+            class="relative z-10 aspect-[4/5] object-cover rounded-[3rem] shadow-2xl"
+          />
         </div>
 
         <div class="grid md:grid-cols-2 gap-16 items-center">
