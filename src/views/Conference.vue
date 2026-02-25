@@ -55,8 +55,7 @@ const speakerImages = {
     "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061210/Jane_Egerton-Idehen_cfi3kb.jpg",
   "Dr. Emmanuella Zamba":
     "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061211/Dr_Emmanuella_Zamba_kmo73a.jpg",
-  "Tosin Runsewe":
-    "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061210/Tosin_Runsewe_jl7vzv.png",
+  
 };
 
 const speakers = [
@@ -89,7 +88,6 @@ const speakers = [
   { name: "Dr. Ebere Okereke", role: "Global Health Expert, Chatham House" },
   { name: "Jane Egerton-Idehen", role: "CEO, NIGCOMSAT" },
   { name: "Dr. Emmanuella Zamba", role: "PS & CEO, LASHMA" },
-  { name: "Tosin Runsewe", role: "CEO, AfyA Care" },
 ];
 
 const agenda = [
