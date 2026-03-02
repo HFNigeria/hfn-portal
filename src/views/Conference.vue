@@ -105,7 +105,7 @@ const agenda = [
   {
     day: "Day 2: State Implementation & Innovation",
     items: [
-      "Commissioners’ Roundtable",
+      "Public Sector Roundtable",
       "Innovation Showcase",
       "Emergency Medical Systems Panel",
       "Gala Dinner & Awards Night",
