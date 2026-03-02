@@ -752,23 +752,22 @@ const agenda = [
       </div>
     </section>
 
+    
     <section class="py-12 bg-gray-50 border-b overflow-hidden">
-      <p
-        class="text-center text-xs font-bold text-gray-400 uppercase tracking-[0.3em] mb-8"
-      >
-        Supported By Industry Giants
-      </p>
-      <div class="flex space-x-12 animate-scroll whitespace-nowrap">
-        <div v-for="i in 2" :key="i" class="flex space-x-12 items-center">
-          <img
-            v-for="logo in logos"
-            :key="logo"
-            :src="logo"
-            class="h-12 w-auto"
-          />
-        </div>
+  <p class="text-center text-xs font-bold text-gray-400 uppercase tracking-[0.3em] mb-8">
+    Supported By Industry Giants
+  </p>
+  <div class="flex space-x-12 animate-scroll whitespace-nowrap">
+    <div v-for="i in 2" :key="i" class="flex space-x-12 items-center">
+      <div v-for="logo in logos" :key="logo" class="flex items-center justify-center w-40 h-12">
+        <img
+          :src="logo"
+          class="max-h-full max-w-full object-contain grayscale opacity-70 hover:opacity-100 transition-opacity"
+        />
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
     <section
       class="py-24 bg-orange-600 rounded-t-[5rem] text-center text-white relative overflow-hidden"
