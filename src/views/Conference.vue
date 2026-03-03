@@ -762,12 +762,17 @@ const agenda = [
   </p>
   <div class="flex space-x-12 animate-scroll whitespace-nowrap">
     <div v-for="i in 2" :key="i" class="flex space-x-12 items-center">
-      <div v-for="logo in logos" :key="logo" class="flex items-center justify-center w-40 h-12">
-        <img
-          :src="logo"
-          class="max-h-full max-w-full object-contain grayscale opacity-70 hover:opacity-100 transition-opacity"
-        />
-      </div>
+      <div
+  v-for="logo in logos"
+  :key="logo"
+  class="h-16 w-32 flex items-center justify-center"
+>
+  <img
+    :src="logo"
+    class="max-h-full max-w-full object-contain"
+    alt="Company logo"
+  />
+</div>
     </div>
   </div>
 </section>
