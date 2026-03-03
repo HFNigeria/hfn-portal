@@ -105,7 +105,7 @@ const agenda = [
   {
     day: "Day 2: State Implementation & Innovation",
     items: [
-      "Commissioners’ Roundtable",
+      "Public Sector Roundtable",
       "Innovation Showcase",
       "Emergency Medical Systems Panel",
       "Gala Dinner & Awards Night",
@@ -742,33 +742,35 @@ const agenda = [
       </div>
       <div class="mt-12 text-center">
         <p class="text-gray-400 font-medium italic mb-6">
-          Full Agenda will be available for download soon.
+          Full Agenda is available for download.
         </p>
-        <button
-          class="px-8 py-3 bg-green-900 text-white rounded-xl font-bold opacity-50 cursor-not-allowed"
-        >
-          Download PDF Agenda
-        </button>
+        <a
+    href="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772506006/Program_Brochure_-_HFN_2026_Annual_Conference_tcjzec.pdf"
+    download
+    target="_blank"
+    class="inline-block px-8 py-3 bg-green-900 text-white rounded-xl font-bold hover:bg-green-800 transition"
+  >
+    Download PDF Agenda
+  </a>
       </div>
     </section>
 
+    
     <section class="py-12 bg-gray-50 border-b overflow-hidden">
-      <p
-        class="text-center text-xs font-bold text-gray-400 uppercase tracking-[0.3em] mb-8"
-      >
-        Supported By Industry Giants
-      </p>
-      <div class="flex space-x-12 animate-scroll whitespace-nowrap">
-        <div v-for="i in 2" :key="i" class="flex space-x-12 items-center">
-          <img
-            v-for="logo in logos"
-            :key="logo"
-            :src="logo"
-            class="h-12 w-auto"
-          />
-        </div>
+  <p class="text-center text-xs font-bold text-gray-400 uppercase tracking-[0.3em] mb-8">
+    Supported By Industry Giants
+  </p>
+  <div class="flex space-x-12 animate-scroll whitespace-nowrap">
+    <div v-for="i in 2" :key="i" class="flex space-x-12 items-center">
+      <div v-for="logo in logos" :key="logo" class="flex items-center justify-center w-40 h-12">
+        <img
+          :src="logo"
+          class="max-h-full max-w-full object-contain grayscale opacity-70 hover:opacity-100 transition-opacity"
+        />
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
     <section
       class="py-24 bg-orange-600 rounded-t-[5rem] text-center text-white relative overflow-hidden"
