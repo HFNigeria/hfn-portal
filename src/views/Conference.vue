@@ -25,6 +25,33 @@ const logos = [
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771066720/emzor-B-OOqpe8_bat5fl.png", scale: "scale-155" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771066719/hba-africa-BXqx92lp_j2kbgl.png", scale: "scale-135" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771066720/bridge-BbygTYH0_g9x0si.png", scale: "scale-110" },
+
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535525/1688393209448_n5ksfa.jpg", scale: "scale-100" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535524/BRISTOL_LOGO_2019_guctby.ai", scale: "scale-165" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535524/Capitol_Hill_Logo_hc_azqqrs.png", scale: "scale-100" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535524/Afrimedical_Logo_epd3ol.jpg", scale: "scale-115" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535524/AMCE_LOGO_pyuhzt.pdf", scale: "scale-105" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535513/Cerba_Lancet_obnoqm.jpg", scale: "scale-155" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535511/CH_LOGO_cyints.png", scale: "scale-135" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535511/Codix_Logo_mxkelg.png", scale: "scale-110" },
+{ src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535509/Copy_of_myitura_tygw31.png", scale: "scale-100" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535509/DIgitax_ocdglv.png", scale: "scale-110" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535502/doroki_logo_b1zufs.jpg", scale: "scale-100" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535501/gabbi_Logo_yn9mo3.png", scale: "scale-105" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535500/IHS-Logo-Primary-Large_ia9x2r.png", scale: "scale-105" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535499/Instrat_Global_tmpqt0.jpg", scale: "scale-155" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535481/Iwosan_Logos_2_c4ygwa.png", scale: "scale-135" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535477/PUREHEALTH_1_fjapth.png", scale: "scale-110" },
+{ src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535476/logo_bzsp8z.png", scale: "scale-100" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535476/International_SOS_logo_1_gbseap.png", scale: "scale-110" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535476/Sam_Pharm_LOGO-01_t80vxt.png", scale: "scale-100" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535475/Logo_-_Transparent_-_black_-_horizontal_e2dojm.png", scale: "scale-165" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535475/Medbury_qpgjqm.jpg", scale: "scale-105" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535475/Paga_logo_no_tagline_1_z01viu.png", scale: "scale-105" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535475/R4D_Logo_ngnkfl.png", scale: "scale-135" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535474/Mdoc_Logo_wwu5jj.png", scale: "scale-110" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535474/sfhaccess_logo_ouxu9n.jpg", scale: "scale-110" },
+
 ]
 
 const highlightsStats = [
