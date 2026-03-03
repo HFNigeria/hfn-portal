@@ -437,7 +437,7 @@ const agenda = [
             <h3
               class="text-3xl font-black text-green-900 mb-6 italic leading-tight"
             >
-              Commissioners’ Roundtable
+              Public Sector Roundtable
             </h3>
             <p class="text-gray-600 text-lg leading-relaxed mb-6">
               Convenes State Commissioners for Health to share practical
@@ -745,7 +745,7 @@ const agenda = [
           Full Agenda is available for download.
         </p>
         <a
-    href="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772506006/Program_Brochure_-_HFN_2026_Annual_Conference_tcjzec.pdf"
+    href="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772526251/Program_Brochure_-_HFN_2026_Annual_Conference-2_compressed_1_wgsa2o.pdf"
     download
     target="_blank"
     class="inline-block px-8 py-3 bg-green-900 text-white rounded-xl font-bold hover:bg-green-800 transition"
