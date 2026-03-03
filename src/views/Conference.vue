@@ -742,13 +742,16 @@ const agenda = [
       </div>
       <div class="mt-12 text-center">
         <p class="text-gray-400 font-medium italic mb-6">
-          Full Agenda will be available for download soon.
+          Full Agenda is available for download.
         </p>
-        <button
-          class="px-8 py-3 bg-green-900 text-white rounded-xl font-bold opacity-50 cursor-not-allowed"
-        >
-          Download PDF Agenda
-        </button>
+        <a
+    href="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772506006/Program_Brochure_-_HFN_2026_Annual_Conference_tcjzec.pdf"
+    download
+    target="_blank"
+    class="inline-block px-8 py-3 bg-green-900 text-white rounded-xl font-bold hover:bg-green-800 transition"
+  >
+    Download PDF Agenda
+  </a>
       </div>
     </section>
 
