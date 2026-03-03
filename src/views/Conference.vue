@@ -437,7 +437,7 @@ const agenda = [
             <h3
               class="text-3xl font-black text-green-900 mb-6 italic leading-tight"
             >
-              Commissioners’ Roundtable
+              Public Sector Roundtable
             </h3>
             <p class="text-gray-600 text-lg leading-relaxed mb-6">
               Convenes State Commissioners for Health to share practical
