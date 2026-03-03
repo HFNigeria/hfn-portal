@@ -72,22 +72,19 @@ const imageMap = {
   "hands2.png": hands2,
 };
 
-
-  const resolveImage = (item) => {
+const resolveImage = (item) => {
   if (!item) return "/images/placeholder-news.jpg";
 
   const img =
     item.image ||
     item.thumbnail ||
     item.coverImage ||
-    item.featured_image;
+    item.featured_image ||
+    item.featuredImage;
 
   if (!img) return "/images/placeholder-news.jpg";
-
-  if (img.startsWith("http")) return img;
-
-  return imageMap[img] || "/images/placeholder-news.jpg";
-};
+  return img;
+}; 
   
 const actionRef = ref(null);
 const isVisible = ref(false);
@@ -552,7 +549,7 @@ onMounted(async () => {
         >
           <div class="relative">
             <img
-              :src="featured.image"
+              :src="resolveImage(featured)"
               alt="Featured news"
               class="w-full h-72 object-contain"
             />
@@ -598,7 +595,7 @@ onMounted(async () => {
             <div class="relative w-full sm:w-48">
               
               <img
-                :src="news.image"
+                :src="resolveImage(news)"
                 alt="News image"
                 class="w-full h-40 sm:h-full object-cover"
               />
