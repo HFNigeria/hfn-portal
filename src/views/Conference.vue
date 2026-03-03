@@ -49,6 +49,8 @@ const logos = [
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535475/R4D_Logo_ngnkfl.png", scale: "scale-135" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535474/Mdoc_Logo_wwu5jj.png", scale: "scale-160" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535474/sfhaccess_logo_ouxu9n.jpg", scale: "scale-160" },
+{ src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772552251/AMCE_LOGO_ut8leh.jpg", scale: "scale-150" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772552251/Bristole_Scientific_pydixu.png", scale: "scale-180" },
 
 ]
 
