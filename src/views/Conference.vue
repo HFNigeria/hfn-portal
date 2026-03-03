@@ -7,24 +7,25 @@ const heroBg =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770045591/243A7993_wxlzkg.jpg";
 const roundTable =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770045588/IMG_9090_ugylgj.jpg";
+  
 const logos = [
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061214/SFH_Logo_o0klhu.png",
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061214/pharm-BSXKP_7c_ffhayw.png",
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061213/MTN_Foundation_pawphd.png",
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061213/png-clipart-roche-holding-ag-logo-organization-mysugr-gmbh-multinational-corporation-roche-logo-blue-angle-thumbnail_hld1nd.png",
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061212/Medison_Specialist_mpmexj.jpg",
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061212/tanit_medical_engineering_limited_logo_suno7n.jpg",
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061212/SYNLAB_LOGO_4c_OK_ee6i96.png",
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061212/Marcelle-Ruth-300x156_lgstuj.png",
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061211/Logo_3_l16icg.png",
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061210/eHealth-Africa-Donates-1.9m-to-eha-Impact-Ventures-EIV_avyrmo.png",
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061210/jnci-logo_x2oau2.png",
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061210/HRPayHub_LOGO_wpgja7.png",
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061209/cedarcrest-hospitals-logo-full-color-rgb-1-300x201_plcdzx.png",
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771066720/emzor-B-OOqpe8_bat5fl.png",
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771066719/hba-africa-BXqx92lp_j2kbgl.png",
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771066720/bridge-BbygTYH0_g9x0si.png",
-];
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061214/SFH_Logo_o0klhu.png", scale: "scale-185" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061214/pharm-BSXKP_7c_ffhayw.png", scale: "scale-110" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061213/MTN_Foundation_pawphd.png", scale: "scale-125" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772529613/Hoffmann-La_Roche_logo_gbiyut.png", scale: "scale-90" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061212/Medison_Specialist_mpmexj.jpg", scale: "scale-130" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061212/tanit_medical_engineering_limited_logo_suno7n.jpg", scale: "scale-195" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061212/SYNLAB_LOGO_4c_OK_ee6i96.png", scale: "scale-110" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061212/Marcelle-Ruth-300x156_lgstuj.png", scale: "scale-95" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061211/Logo_3_l16icg.png", scale: "scale-100" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061210/eHealth-Africa-Donates-1.9m-to-eha-Impact-Ventures-EIV_avyrmo.png", scale: "scale-110" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061210/jnci-logo_x2oau2.png", scale: "scale-100" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061210/HRPayHub_LOGO_wpgja7.png", scale: "scale-165" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061209/cedarcrest-hospitals-logo-full-color-rgb-1-300x201_plcdzx.png", scale: "scale-105" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771066720/emzor-B-OOqpe8_bat5fl.png", scale: "scale-155" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771066719/hba-africa-BXqx92lp_j2kbgl.png", scale: "scale-135" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771066720/bridge-BbygTYH0_g9x0si.png", scale: "scale-110" },
+]
 
 const highlightsStats = [
   { title: "500+", desc: "Participants Annually" },
@@ -764,12 +765,15 @@ const agenda = [
     <div v-for="i in 2" :key="i" class="flex space-x-12 items-center">
       <div
   v-for="logo in logos"
-  :key="logo"
+  :key="logo.src"
   class="h-16 w-32 flex items-center justify-center"
 >
   <img
-    :src="logo"
-    class="max-h-full max-w-full object-contain"
+    :src="logo.src"
+    :class="[
+      'max-h-full max-w-full object-contain transition',
+      logo.scale
+    ]"
     alt="Company logo"
   />
 </div>
