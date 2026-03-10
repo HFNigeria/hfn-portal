@@ -213,14 +213,14 @@
 
     <div class="bg-gray-50 p-4 rounded-lg mb-4">
       <p class="text-sm text-gray-700">Price</p>
-      <p class="text-lg font-bold text-green-700">₦15,000</p>
+      <p class="text-lg font-bold text-green-700">Free</p>
     </div>
 
     <div class="bg-green-50 p-4 rounded-lg mb-4">
-      <p class="text-sm font-semibold">Bank Transfer</p>
-      <p class="text-sm">Bank: Access Bank</p>
-      <p class="text-sm">Account Name: Healthcare Federation of Nigeria</p>
-      <p class="text-sm">Account Number: 0123456789</p>
+      <p class="text-sm font-semibold"></p>
+      <p class="text-sm"></p>
+      <p class="text-sm"></p>
+      <p class="text-sm"></p>
     </div>
 
     <div class="mb-4">
