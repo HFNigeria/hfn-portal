@@ -241,7 +241,7 @@
       @click="confirmPayment"
       class="w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800"
     >
-      I Have Made Payment
+      Send
     </button>
 
     <button
@@ -264,7 +264,7 @@
     </h3>
 
     <p class="text-gray-600 mb-6">
-      Your document will be emailed to you shortly after payment confirmation.
+      Your document will be emailed to you shortly.
     </p>
 
     <button
