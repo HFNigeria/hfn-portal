@@ -167,9 +167,7 @@
           </p>
 
           <a
-            :href="pub.pdfUrl"
-            target="_blank"
-            download
+            @click="handleDownload(pub)"
             class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors"
           >
             Download
@@ -201,13 +199,133 @@
       </div>
     </main>
   </div>
+  <!-- PAYMENT MODAL -->
+<div v-if="showPaymentDialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl p-8 w-[420px] shadow-xl">
+    
+    <h3 class="text-xl font-bold mb-4 text-gray-900">
+      Purchase Document
+    </h3>
+
+    <p class="text-gray-600 mb-4">
+      Nigeria Private Health Sector Market Outlook 2026
+    </p>
+
+    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+      <p class="text-sm text-gray-700">Price</p>
+      <p class="text-lg font-bold text-green-700">₦15,000</p>
+    </div>
+
+    <div class="bg-green-50 p-4 rounded-lg mb-4">
+      <p class="text-sm font-semibold">Bank Transfer</p>
+      <p class="text-sm">Bank: Access Bank</p>
+      <p class="text-sm">Account Name: Healthcare Federation of Nigeria</p>
+      <p class="text-sm">Account Number: 0123456789</p>
+    </div>
+
+    <div class="mb-4">
+      <label class="text-sm font-medium text-gray-700">Your Email</label>
+      <input
+        v-model="buyerEmail"
+        type="email"
+        class="w-full border rounded-lg px-3 py-2 mt-1"
+        placeholder="Enter email to receive document"
+      />
+    </div>
+
+    <p class="text-xs text-gray-500 mb-4">
+      Session expires in {{ timer }} seconds
+    </p>
+
+    <button
+      @click="confirmPayment"
+      class="w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800"
+    >
+      I Have Made Payment
+    </button>
+
+    <button
+      @click="showPaymentDialog = false"
+      class="w-full mt-3 text-sm text-gray-500"
+    >
+      Cancel
+    </button>
+
+  </div>
+</div>
+
+
+<!-- SUCCESS MODAL -->
+<div v-if="showSuccessDialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl p-8 w-[380px] text-center shadow-xl">
+
+    <h3 class="text-xl font-bold text-green-700 mb-3">
+      Payment Confirmation
+    </h3>
+
+    <p class="text-gray-600 mb-6">
+      Your document will be emailed to you shortly after payment confirmation.
+    </p>
+
+    <button
+      @click="showSuccessDialog = false"
+      class="bg-green-700 text-white px-6 py-2 rounded-lg"
+    >
+      OK
+    </button>
+
+  </div>
+</div>
 </template>
 
 <script setup>
 import hands from "@/assets/hands.png";
 import latest from "@/assets/latest_news.png";
 import newsletter from "@/assets/newsletter.png";
+import { ref } from "vue";
 
+const showPaymentDialog = ref(false);
+const showSuccessDialog = ref(false);
+
+const buyerEmail = ref("");
+const timer = ref(300); // 5 minutes
+
+let interval = null;
+
+const handleDownload = (pub) => {
+  if (pub.title === "Nigeria Private Health Sector Market Outlook 2026") {
+    showPaymentDialog.value = true;
+    startTimer();
+  } else {
+    window.open(pub.pdfUrl, "_blank");
+  }
+};
+
+const startTimer = () => {
+  timer.value = 300;
+
+  interval = setInterval(() => {
+    if (timer.value > 0) {
+      timer.value--;
+    } else {
+      clearInterval(interval);
+      showPaymentDialog.value = false;
+    }
+  }, 1000);
+};
+
+const confirmPayment = () => {
+  if (!buyerEmail.value) {
+    alert("Please enter your email.");
+    return;
+  }
+
+  clearInterval(interval);
+  showPaymentDialog.value = false;
+  showSuccessDialog.value = true;
+
+  console.log("User email for document:", buyerEmail.value);
+};
 const getPdfPreview = (url) => {
   return url.replace(".pdf", ".jpg");
 };
