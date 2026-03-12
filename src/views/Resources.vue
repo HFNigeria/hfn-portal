@@ -355,6 +355,24 @@ const getPdfPreview = (url) => {
 
 const publications = [
   {
+    title: "HFN 2025 Year in Review",
+    description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
+    pdfUrl:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772817006/Nigeria_Private_Health_Sector_Market_Outlook_2026_c4ql1j.pdf",
+  },
+  {
+    title: "AGM Impact Brief",
+    description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
+    pdfUrl:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1773302477/AGM_Impact_Brief_cuw7td.pdf",
+  },
+  {
+    title: "Nigeria Private Health Sector Market Outlook 2026",
+    description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
+    pdfUrl:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772817006/Nigeria_Private_Health_Sector_Market_Outlook_2026_c4ql1j.pdf",
+  },
+  {
     title:
       "Transforming Nigeria’s Healthcare Landscape Through Strategic Advocacy and Private Sector Leadership",
     description:
@@ -383,12 +401,7 @@ const publications = [
     pdfUrl:
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067783/hfn-report_roundtable-on-local-manufacturing_esqq68.pdf",
   },
-  {
-    title: "Nigeria Private Health Sector Market Outlook 2026",
-    description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
-    pdfUrl:
-      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772817006/Nigeria_Private_Health_Sector_Market_Outlook_2026_c4ql1j.pdf",
-  },
+  
 ];
 
 const newsletters = [
