@@ -193,37 +193,7 @@ const handleForgotPassword = () => {
           </div>
         </div>
 
-        <button
-          @click="handleGoogleSignIn"
-          :disabled="isLoading"
-          class="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <svg
-            class="w-5 h-5 mr-3"
-            viewBox="0 0 48 48"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill="#FFC107"
-              d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.312-5.748 7.257-10.666 7.257-6.046 0-10.923-4.908-10.923-10.953 0-6.045 4.877-10.953 10.923-10.953 3.03 0 5.673 1.25 7.627 3.097l5.48-5.353C33.723 9.47 28.536 7 24 7c-9.06 0-16.398 7.373-16.398 16.423 0 9.05 7.338 16.423 16.398 16.423 9.324 0 16.634-6.52 16.634-16.22C40.634 22.924 43.431 20.835 43.611 20.083z"
-            />
-            <path
-              fill="#FF3D00"
-              d="M7.674 24.327l-.004-.004L7.673 24.321C7.397 23.376 7.25 22.395 7.25 21.378c0-1.02.147-2.003.424-2.95l-.004-.004L3.65 14.54l-.005.011C2.56 16.409 2 18.804 2 21.378c0 2.574.56 4.969 1.645 6.828l4.029-3.834z"
-            />
-            <path
-              fill="#4CAF50"
-              d="M24 39.75c6.241 0 11.458-4.321 12.868-10.038H24v-7.917h17.653c.123.70.187 1.432.187 2.183 0 1.93-.357 3.792-1.033 5.487-.71 1.83-1.64 3.498-2.825 5.044-3.564 4.79-8.995 7.917-15.982 7.917z"
-            />
-            <path
-              fill="#1976D2"
-              d="M24 8.75c3.27 0 6.27.79 8.94 2.164l5.48-5.354C34.78 3.518 29.593 1 24 1 18.96 1 14.28 2.872 10.667 6.036l4.029 3.833C17.31 8.5 20.59 7.75 24 7.75z"
-            />
-          </svg>
-          Sign in with Google
-        </button>
-
+        
         <div class="relative flex justify-center text-xs uppercase">
           <span class="bg-white px-2 text-gray-500"> OR </span>
           <div class="absolute inset-0 flex items-center" aria-hidden="true">
