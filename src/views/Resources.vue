@@ -167,9 +167,7 @@
           </p>
 
           <a
-            :href="pub.pdfUrl"
-            target="_blank"
-            download
+            @click="handleDownload(pub)"
             class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors"
           >
             Download
@@ -201,18 +199,179 @@
       </div>
     </main>
   </div>
+  <!-- PAYMENT MODAL -->
+<div v-if="showPaymentDialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl p-8 w-[420px] shadow-xl">
+    
+    <h3 class="text-xl font-bold mb-4 text-gray-900">
+      Purchase Document
+    </h3>
+
+    <p class="text-gray-600 mb-4">
+      Nigeria Private Health Sector Market Outlook 2026
+    </p>
+
+    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+      <p class="text-sm text-gray-700">Price</p>
+      <p class="text-lg font-bold text-green-700">Free</p>
+    </div>
+
+    <div class="bg-green-50 p-4 rounded-lg mb-4">
+      <p class="text-sm font-semibold"></p>
+      <p class="text-sm"></p>
+      <p class="text-sm"></p>
+      <p class="text-sm"></p>
+    </div>
+
+    <div class="mb-4">
+      <label class="text-sm font-medium text-gray-700">Your Email</label>
+      <input
+        v-model="form.buyerEmail"
+        type="email"
+        class="w-full border rounded-lg px-3 py-2 mt-1"
+        placeholder="Enter email to receive document"
+      />
+    </div>
+    <div class="mb-4">
+      <label class="text-sm font-medium text-gray-700">Your Name</label>
+      <input
+        v-model="form.name"
+        type="name"
+        class="w-full border rounded-lg px-3 py-2 mt-1"
+        placeholder="Enter name"
+      />
+    </div>
+<div class="mb-4">
+      <label class="text-sm font-medium text-gray-700">Your Organization</label>
+      <input
+        v-model="form.organization"
+        type="organization"
+        class="w-full border rounded-lg px-3 py-2 mt-1"
+        placeholder="Enter Organization"
+      />
+    </div>
+
+
+    <p class="text-xs text-gray-500 mb-4">
+      Session expires in {{ timer }} seconds
+    </p>
+
+    <button
+      @click="confirmPayment"
+      class="w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800"
+    >
+      Send
+    </button>
+
+    <button
+      @click="showPaymentDialog = false"
+      class="w-full mt-3 text-sm text-gray-500"
+    >
+      Cancel
+    </button>
+
+  </div>
+</div>
+
+
+<!-- SUCCESS MODAL -->
+<div v-if="showSuccessDialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl p-8 w-[380px] text-center shadow-xl">
+
+    <h3 class="text-xl font-bold text-green-700 mb-3">
+      Payment Confirmation
+    </h3>
+
+    <p class="text-gray-600 mb-6">
+      Your document will be emailed to you shortly.
+    </p>
+
+    <button
+      @click="showSuccessDialog = false"
+      class="bg-green-700 text-white px-6 py-2 rounded-lg"
+    >
+      OK
+    </button>
+
+  </div>
+</div>
 </template>
 
 <script setup>
 import hands from "@/assets/hands.png";
 import latest from "@/assets/latest_news.png";
 import newsletter from "@/assets/newsletter.png";
+import { ref } from "vue";
 
+const showPaymentDialog = ref(false);
+const showSuccessDialog = ref(false);
+
+const form = ref({
+  buyerEmail: "",
+  name: "",
+  organization: ""
+})
+
+const timer = ref(300); // 5 minutes
+
+let interval = null;
+
+const handleDownload = (pub) => {
+  if (pub.title === "Nigeria Private Health Sector Market Outlook 2026") {
+    showPaymentDialog.value = true;
+    startTimer();
+  } else {
+    window.open(pub.pdfUrl, "_blank");
+  }
+};
+
+const startTimer = () => {
+  timer.value = 300;
+
+  interval = setInterval(() => {
+    if (timer.value > 0) {
+      timer.value--;
+    } else {
+      clearInterval(interval);
+      showPaymentDialog.value = false;
+    }
+  }, 1000);
+};
+
+const confirmPayment = () => {
+  if (!form.value.buyerEmail || !form.value.name || !form.value.organization) {
+    alert("Please enter your details.");
+    return;
+  }
+
+  clearInterval(interval);
+  showPaymentDialog.value = false;
+  showSuccessDialog.value = true;
+
+};
 const getPdfPreview = (url) => {
   return url.replace(".pdf", ".jpg");
 };
 
 const publications = [
+  {
+    title: "HFN 2025 Year in Review",
+    description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
+    pdfUrl:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772817006/Nigeria_Private_Health_Sector_Market_Outlook_2026_c4ql1j.pdf",
+  },
+  {
+    title: "AGM Impact Brief",
+    description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
+    pdfUrl:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1773302477/AGM_Impact_Brief_cuw7td.pdf",
+  },
+  {
+    title: "Nigeria Private Health Sector Market Outlook 2026",
+    description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
+    pdfUrl:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772817006/Nigeria_Private_Health_Sector_Market_Outlook_2026_c4ql1j.pdf",
+  },
   {
     title:
       "Transforming Nigeria’s Healthcare Landscape Through Strategic Advocacy and Private Sector Leadership",
@@ -242,12 +401,7 @@ const publications = [
     pdfUrl:
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067783/hfn-report_roundtable-on-local-manufacturing_esqq68.pdf",
   },
-  {
-    title: "Nigeria Private Health Sector Market Outlook 2026",
-    description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
-    pdfUrl:
-      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772817006/Nigeria_Private_Health_Sector_Market_Outlook_2026_c4ql1j.pdf",
-  },
+  
 ];
 
 const newsletters = [

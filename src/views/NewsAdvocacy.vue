@@ -44,9 +44,9 @@
         <select
           class="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 text-sm"
         >
-          <option>December 2025</option>
-          <option>November 2025</option>
-          <option>October 2025</option>
+          <option>January 2026</option>
+          <option>February 2026</option>
+          <option>March 2026</option>
         </select>
       </div>
 
@@ -259,6 +259,11 @@ const imageMap = {
 };
 
 const videos = [
+  {
+    title: "Special Address by NCDC DG Dr. Jide Idris | HFN Annual Conference 2026",
+    date: "March 11, 2026",
+    url: "https://www.youtube.com/watch?v=-EE2utpBKng&t=6s",
+  },
   {
     title: "HFN Healthcare Policy Roundtable",
     date: "October 20, 2025",

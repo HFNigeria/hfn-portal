@@ -123,23 +123,13 @@ const toggleDropdown = (title) => {
 >
   <div class="flex-1 overflow-hidden relative">
     <div class="marquee-content whitespace-nowrap flex items-center">
-      <span class="mx-4 text-orange-400 font-bold">UPCOMING EVENT:</span>
-      <span class="font-medium">HFN Annual Conference 2026 — March 4th-5th in Lagos. Shaping the Future of Healthcare.</span>
-      <RouterLink 
-        to="/conference" 
-        class="ml-4 bg-orange-500 hover:bg-orange-600 text-white text-[10px] px-3 py-0.5 rounded-full font-black transition-colors uppercase"
-      >
-        Click Here
-      </RouterLink>
+      <span class="mx-4 text-orange-400 font-bold"></span>
+      <span class="font-medium"></span>
       
-      <span class="mx-12 text-orange-400 font-bold">UPCOMING EVENT:</span>
-      <span class="font-medium">HFN Annual Conference 2026 — March 4th-5th in Lagos. Shaping the Future of Healthcare.</span>
-      <RouterLink 
-        to="/conference" 
-        class="ml-4 bg-orange-500 hover:bg-orange-600 text-white text-[10px] px-3 py-0.5 rounded-full font-black transition-colors uppercase"
-      >
-        Click Here
-      </RouterLink>
+      
+      <span class="mx-12 text-orange-400 font-bold"></span>
+      <span class="font-medium"></span>
+      
     </div>
   </div>
 
