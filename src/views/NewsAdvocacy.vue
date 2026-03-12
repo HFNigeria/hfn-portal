@@ -260,6 +260,11 @@ const imageMap = {
 
 const videos = [
   {
+    title: "Special Address by NCDC DG Dr. Jide Idris | HFN Annual Conference 2026",
+    date: "March 11, 2026",
+    url: "https://www.youtube.com/watch?v=-EE2utpBKng&t=6s",
+  },
+  {
     title: "HFN Healthcare Policy Roundtable",
     date: "October 20, 2025",
     url: "https://www.youtube.com/watch?v=Usug5WLXWRM",
