@@ -358,7 +358,7 @@ const publications = [
     title: "HFN 2025 Year in Review",
     description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
     pdfUrl:
-      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772817006/Nigeria_Private_Health_Sector_Market_Outlook_2026_c4ql1j.pdf",
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1773326667/HFN_2025_Year_in_Review__eicos6.pdf",
   },
   {
     title: "AGM Impact Brief",
