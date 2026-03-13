@@ -3,6 +3,7 @@ import analyticsApi from "@/api/dashboard.js";
 import membershipAPI from "@/api/membership.js";
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import { computed, onMounted, watch } from "vue";
+import { useToast } from "@/composables/useToast";
 
 import {
   ChevronLeft,
@@ -18,6 +19,7 @@ import { ref } from "vue";
 const showAddMemberModal = ref(false);
 const membershipTypes = ref([]);
  const showMembershipTypeModal = ref(false)
+const { showToast } = useToast();
 
  const newMembershipType = ref({
   name: '',
