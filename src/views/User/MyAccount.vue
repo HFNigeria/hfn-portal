@@ -200,7 +200,7 @@ const fetchUserData = async () => {
       interests.splice(0, interests.length, ...(data.profile.interests || []));
     }
 
-    subscription.hasSubscription = data.is_membership_active || false;
+    subscription.hasSubscription = data.is_active;
     subscription.type = data.membership_type || '';
     subscription.expiryDate = data.membership_expires_at
       ? new Date(data.membership_expires_at).toLocaleDateString()
