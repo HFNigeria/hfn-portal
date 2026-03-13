@@ -318,6 +318,7 @@ let interval = null;
 
 const handleDownload = (pub) => {
   if (pub.title === "Nigeria Private Health Sector Market Outlook 2026") {
+    selectedPublication.value = pub;
     showPaymentDialog.value = true;
     startTimer();
   } else {
@@ -346,6 +347,15 @@ const confirmPayment = () => {
 
   clearInterval(interval);
   showPaymentDialog.value = false;
+
+  if (selectedPublication.value) {
+    const link = document.createElement("a");
+    link.href = selectedPublication.value.pdfUrl;
+    link.download = selectedPublication.value.title + ".pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
   showSuccessDialog.value = true;
 
 };
