@@ -3,6 +3,7 @@ import analyticsApi from "@/api/dashboard.js";
 import membershipAPI from "@/api/membership.js";
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import { computed, onMounted, watch } from "vue";
+import { useToast } from "@/composables/useToast";
 
 import {
   ChevronLeft,
@@ -18,6 +19,7 @@ import { ref } from "vue";
 const showAddMemberModal = ref(false);
 const membershipTypes = ref([]);
  const showMembershipTypeModal = ref(false)
+const { showToast } = useToast();
 
  const newMembershipType = ref({
   name: '',
@@ -128,6 +130,7 @@ const loadMembershipAnalytics = async () => {
   }
 };
 
+
 const submitNewMember = async () => {
   try {
     const payload = {
@@ -135,35 +138,48 @@ const submitNewMember = async () => {
       last_name: newMemberForm.value.last_name,
       email: newMemberForm.value.email,
       phone_number: newMemberForm.value.phone_number,
-      membership_type: newMemberForm.value.membership_type,
       membership_type_id: Number(newMemberForm.value.membership_type_id),
-      role: newMemberForm.value.role,
-      payment_method: newMemberForm.value.payment_method,
+      payment_method: newMemberForm.value.payment_method
     };
 
-    const application = await membershipAPI.createApplication(payload);
+    const response = await membershipAPI.createMember(payload);
 
-    await membershipAPI.approveApplication(application.id, {
-      approved_by_admin: true,
-    });
+    if (response.status === "success") {
 
-    showAddMemberModal.value = false;
-    fetchMembers();
+      showAddMemberModal.value = false;
 
-    // Reset form
-    newMemberForm.value = {
-      first_name: "",
-      last_name: "",
-      email: "",
-      phone_number: "",
-      membership_type: "",
-      role: "",
-      payment_method: "",
-    };
+      showToast("Member added successfully", "success");
+
+      // Reload members
+      fetchMembers();
+
+      // Reset form
+      newMemberForm.value = {
+        first_name: "",
+        last_name: "",
+        email: "",
+        phone_number: "",
+        membership_type_id: "",
+        payment_method: ""
+      };
+    }
+
   } catch (error) {
+
+    const errors = error?.response?.data;
+
+    if (errors) {
+      const firstError = Object.values(errors)[0]?.[0];
+
+      showToast(firstError || "Failed to add member", "error");
+    } else {
+      showToast("Something went wrong", "error");
+    }
+
     console.error("Failed to add member", error);
   }
 };
+  
 
 const fetchMembers = async () => {
   try {

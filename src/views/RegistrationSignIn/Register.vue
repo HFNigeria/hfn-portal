@@ -7,6 +7,8 @@ import { useToast } from "vue-toastification";
 
 const router = useRouter();
 const toast = useToast();
+  const showSuccessDialog = ref(false)
+  
 const registerImage =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769798445/HFN_Office_h0se9v.jpg";
 const form = ref({
@@ -24,17 +26,24 @@ const form = ref({
 });
 
 const membershipCategories = ref([
-  { id: 1, name: "Individual", amount: 50000, currency: "NGN" },
-  { id: 2, name: "Association", amount: 150000, currency: "NGN" },
-  { id: 3, name: "Corporate", amount: 200000, currency: "NGN" },
-  { id: 4, name: "Multinational", amount: 750000, currency: "NGN" },
-  { id: 5, name: "Diaspora", amount: 50, currency: "USD" },
-]);
+  { id: 1, name: "Individual", type: "individual", amount: 50000, currency: "NGN" },
+  { id: 2, name: "Association", type: "organization", amount: 150000, currency: "NGN" },
+  { id: 3, name: "Corporate", type: "organization", amount: 200000, currency: "NGN" },
+  { id: 4, name: "Multinational", type: "organization", amount: 750000, currency: "NGN" },
+  { id: 5, name: "Diaspora (Individual)", type: "individual", amount: 50, currency: "USD" },
+  { id: 6, name: "Diaspora (Organization)", type: "organization", amount: 100, currency: "USD" },
+]); 
+
+ const filteredCategories = computed(() => {
+  return membershipCategories.value.filter(
+    (category) => category.type === activeTab.value
+  );
+}); 
 
 const selectedCategoryId = ref("");
 
 const selectedCategory = computed(() =>
-  membershipCategories.value.find((c) => c.id === selectedCategoryId.value)
+  .value.find((c) => c.id === selectedCategoryId.value)
 );
 
 const currencySymbol = computed(() => {
@@ -202,18 +211,56 @@ const handleRegistration = async () => {
     if (response.status === "success") {
       toast.success(response.messages?.[0] || "Registration successful!");
 
-      if (selectedCategory.value) {
-        localStorage.setItem(
-          "membership_payment",
-          JSON.stringify({
-            category_id: selectedCategory.value.id,
-            category_name: selectedCategory.value.name,
-            amount: selectedCategory.value.amount,
-            currency: selectedCategory.value.currency,
-            email: payload.email,
-          })
-        );
-      }
+      if (activeTab.value === "individual") {
+
+    showSuccessDialog.value = true;
+
+    form.value = {
+      firstName: "",
+      otherName: "",
+      lastName: "",
+      phone: "",
+      alternatePhone: "",
+      email: "",
+      confirmEmail: "",
+      password: "",
+      confirmPassword: "",
+      organizationName: "",
+      organizationContactPerson: "",
+    };
+
+    return;
+  }
+
+  if (activeTab.value === "organization") {
+
+    if (selectedCategory.value) {
+      localStorage.setItem(
+        "membership_payment",
+        JSON.stringify({
+          category_id: selectedCategory.value.id,
+          category_name: selectedCategory.value.name,
+          amount: selectedCategory.value.amount,
+          currency: selectedCategory.value.currency,
+          email: payload.email,
+        })
+      );
+    }
+
+    router.push("/registration-payment");
+  }
+      // if (selectedCategory.value) {
+      //   localStorage.setItem(
+      //     "membership_payment",
+      //     JSON.stringify({
+      //       category_id: selectedCategory.value.id,
+      //       category_name: selectedCategory.value.name,
+      //       amount: selectedCategory.value.amount,
+      //       currency: selectedCategory.value.currency,
+      //       email: payload.email,
+      //     })
+      //   );
+      // }
 
       // If email verification is required
       if (response.actions_required?.includes("verify_email")) {
@@ -605,7 +652,7 @@ const changeTab = (tab) => {
                   <option disabled value="">Select a category</option>
 
                   <option
-                    v-for="category in membershipCategories"
+                    v-for="category in filteredCategories"
                     :key="category.id"
                     :value="category.id"
                   >
@@ -797,7 +844,7 @@ const changeTab = (tab) => {
     <option disabled value="">Select a category</option>
 
     <option
-      v-for="category in membershipCategories"
+      v-for="category in filteredCategories"
       :key="category.id"
       :value="category.id"
     >
@@ -872,6 +919,29 @@ const changeTab = (tab) => {
       </div>
     </div>
   </div>
+  <div v-if="showSuccessDialog" class="fixed inset-0 flex items-center justify-center bg-black/40">
+
+  <div class="bg-white rounded-xl p-6 max-w-md text-center">
+
+    <h3 class="text-xl font-bold text-green-700 mb-3">
+      Application Submitted
+    </h3>
+
+    <p class="text-gray-600">
+      Your membership registration has been received.
+      Our team will review your application before approval.
+    </p>
+
+    <button
+      @click="showSuccessDialog = false"
+      class="mt-6 bg-green-700 text-white px-6 py-2 rounded-lg"
+    >
+      Okay
+    </button>
+
+  </div>
+
+</div>
 </template>
 
 <style scoped>

@@ -32,7 +32,7 @@ const viewCertificateInNewTab = () => {
 const subscription = computed(() => ({
   type: user.value?.membership_type || 'None',
   expiresAt: user.value?.membership_expires_at,
-  isActive: user.value?.is_membership_active,
+  isActive: user.value?.is_active,
   invoices: [],
   totalPages: 1,
   currentPage: 1,
