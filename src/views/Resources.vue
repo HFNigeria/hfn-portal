@@ -305,13 +305,12 @@ import { ref } from "vue";
 
 const showPaymentDialog = ref(false);
 const showSuccessDialog = ref(false);
-
-const form = ref({
+const selectedPublication = ref(null);
+  const form = ref({
   buyerEmail: "",
   name: "",
   organization: ""
 })
-
 const timer = ref(300); // 5 minutes
 
 let interval = null;
@@ -341,13 +340,13 @@ const startTimer = () => {
 
 const confirmPayment = () => {
   if (!form.value.buyerEmail || !form.value.name || !form.value.organization) {
-    alert("Please enter your details.");
+    alert("Please enter your email.");
     return;
   }
 
   clearInterval(interval);
   showPaymentDialog.value = false;
-
+  
   if (selectedPublication.value) {
     const link = document.createElement("a");
     link.href = selectedPublication.value.pdfUrl;
@@ -356,11 +355,16 @@ const confirmPayment = () => {
     link.click();
     document.body.removeChild(link);
   }
+
   showSuccessDialog.value = true;
 
 };
-const getPdfPreview = (url) => {
-  return url.replace(".pdf", ".jpg");
+
+//   const getPdfPreview = (url) => {
+//   return url.replace(".pdf", ".jpg");
+// };
+  const getPdfPreview = (url) => {
+  return url.replace("/upload/", "/upload/pg_1,w_600/").replace(".pdf", ".jpg");
 };
 
 const publications = [
