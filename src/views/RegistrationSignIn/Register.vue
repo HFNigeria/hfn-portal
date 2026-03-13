@@ -26,17 +26,24 @@ const form = ref({
 });
 
 const membershipCategories = ref([
-  { id: 1, name: "Individual", amount: 50000, currency: "NGN" },
-  { id: 2, name: "Association", amount: 150000, currency: "NGN" },
-  { id: 3, name: "Corporate", amount: 200000, currency: "NGN" },
-  { id: 4, name: "Multinational", amount: 750000, currency: "NGN" },
-  { id: 5, name: "Diaspora", amount: 50, currency: "USD" },
-]);
+  { id: 1, name: "Individual", type: "individual", amount: 50000, currency: "NGN" },
+  { id: 2, name: "Association", type: "organization", amount: 150000, currency: "NGN" },
+  { id: 3, name: "Corporate", type: "organization", amount: 200000, currency: "NGN" },
+  { id: 4, name: "Multinational", type: "organization", amount: 750000, currency: "NGN" },
+  { id: 5, name: "Diaspora (Individual)", type: "individual", amount: 50, currency: "USD" },
+  { id: 6, name: "Diaspora (Organization)", type: "organization", amount: 100, currency: "USD" },
+]); 
+
+ const filteredCategories = computed(() => {
+  return membershipCategories.value.filter(
+    (category) => category.type === activeTab.value
+  );
+}); 
 
 const selectedCategoryId = ref("");
 
 const selectedCategory = computed(() =>
-  membershipCategories.value.find((c) => c.id === selectedCategoryId.value)
+  .value.find((c) => c.id === selectedCategoryId.value)
 );
 
 const currencySymbol = computed(() => {
@@ -645,7 +652,7 @@ const changeTab = (tab) => {
                   <option disabled value="">Select a category</option>
 
                   <option
-                    v-for="category in membershipCategories"
+                    v-for="category in filteredCategories"
                     :key="category.id"
                     :value="category.id"
                   >
@@ -837,7 +844,7 @@ const changeTab = (tab) => {
     <option disabled value="">Select a category</option>
 
     <option
-      v-for="category in membershipCategories"
+      v-for="category in filteredCategories"
       :key="category.id"
       :value="category.id"
     >
