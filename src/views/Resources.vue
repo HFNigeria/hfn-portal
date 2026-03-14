@@ -283,7 +283,7 @@
     </h3>
 
     <p class="text-gray-600 mb-6">
-      Your document will be emailed to you shortly.
+      Your document will be downloaded shortly.
     </p>
 
     <button
