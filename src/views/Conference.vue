@@ -208,11 +208,7 @@ const agenda = [
   </button>
 </a>
 
-            <!-- <button
-              class="px-10 py-5 border-2 border-white/30 text-white font-bold rounded-2xl hover:bg-white hover:text-green-950 transition-all backdrop-blur-sm"
-            >
-              Sponsorship Deck
-            </button> -->
+            
           </div>
         </div>
       </div>
