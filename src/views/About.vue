@@ -1,6 +1,5 @@
 <script setup>
 import pagesApi from "@/api/pageManagement";
-// import aboutImage from "@/assets/about-us.png";
 import ayodele from "@/assets/ayodele.png";
 import babarinde from "@/assets/babarinde.png";
 import chinyere from "@/assets/chinyere.png";
