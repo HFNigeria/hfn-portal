@@ -452,13 +452,7 @@ const handleImageError = (e) => {
   e.target.onerror = null;
   e.target.src = newsletter_placeholder;
 };
-// const getPdfPreview = (url) => {
-//   if (!url) return newsletter_placeholder;
 
-//   if (url.match(/\.(jpg|jpeg|png)$/i)) return url;
-
-//   return url.replace("/upload/", "/upload/pg_1,w_600/").replace(".pdf", ".jpg");
-// };
 const getPdfPreview = (url) => {
   if (!url) return newsletter_placeholder;
 
