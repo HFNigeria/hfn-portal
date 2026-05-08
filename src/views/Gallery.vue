@@ -196,14 +196,6 @@ const currentPage = ref(1);
 const hasMore = ref(true);
 const loadingMore = ref(false);
 
-// const resolveImage = (item) => {
-//   if (item.image) return item.image;
-//   if (item.images && item.images.length) return item.images[0];
-//   if (item.file) return item.file;
-//   return "";
-// };
-
-
 const resolveImage = (item) => {
   if (item.cover_image) return item.cover_image;
 
@@ -251,7 +243,7 @@ const fetchGalleryFromApi = async (loadMore = false) => {
     if (loadMore) {
       galleryItems.value = [...galleryItems.value, ...mappedApiItems];
     } else {
-      galleryItems.value = [...dummyGalleryItems, ...mappedApiItems];
+      galleryItems.value = [...mappedApiItems, ...dummyGalleryItems];
     }
 
     const totalResults = allRes.count || 0;
