@@ -1,6 +1,6 @@
 <template>
   <div class="bg-[#f8fdf9] min-h-screen">
-    <section class="bg-[#F2F9F3] py-16 lg:py-24">
+    <section v-if="!page.hero?.is_hidden" class="bg-[#F2F9F3] py-16 lg:py-24">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
           <div class="mb-12 lg:mb-0">
@@ -30,7 +30,7 @@
       </div>
     </section>
 
-    <section class="py-24 max-w-7xl mx-auto px-4">
+    <section v-if="!page.boardOfTrustees?.is_hidden" class="py-24 max-w-7xl mx-auto px-4">
       <div class="flex items-center gap-4 mb-16">
         <h2 class="text-3xl font-black text-gray-900 uppercase tracking-tight">
           {{ page.boardOfTrustees.title }}
@@ -103,7 +103,7 @@
       </div>
     </section>
 
-    <section
+    <section v-if="!page.executiveCommittee?.is_hidden"
       class="py-24 bg-white rounded-t-[5rem] shadow-[-20px_0_60px_rgba(0,0,0,0.05)]"
     >
       <div class="max-w-7xl mx-auto px-4">
@@ -174,7 +174,8 @@
 <script setup>
 // import { trustees, executives, chair } from "@/data/leadership.js";
 import { governanceSchema } from "@/schemas/pages/governance.schema";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import pagesApi from "@/api/pageManagement";
 
 const pageFromApi = ref(null); 
 const page = computed(() => {
@@ -218,4 +219,22 @@ const handsJoining =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769896360/IMG_9238_vxq385.jpg";
 const chairImage =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Bola_Adesola_lr8vif.png";
+
+onMounted(async () => {
+  try {
+    const res = await pagesApi.getPageByType("governance");
+    const content = res?.content || null;
+    if (content?._hidden) {
+      for (const key of content._hidden) {
+        if (content[key]) {
+          content[key].is_hidden = true;
+        }
+      }
+      delete content._hidden;
+    }
+    pageFromApi.value = content;
+  } catch (e) {
+    console.warn("Using local governance schema fallback");
+  }
+});
 </script>

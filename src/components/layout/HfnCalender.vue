@@ -33,7 +33,8 @@ const eventThumb4 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v17697
         image: e.banner_image || eventThumb,
         excerpt: e.description || "",
         details: e.description || "",
-        slug: e.slug 
+        slug: e.slug,
+        meeting_url: e.meeting_url,
       };
     });
 
@@ -369,12 +370,29 @@ function isToday(date) {
               </p>
 
               <div class="flex items-center gap-3">
-                <router-link to="/conference" class="px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800">
+                <a
+                  v-if="selectedEvent.meeting_url"
+                  :href="selectedEvent.meeting_url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800"
+                >
+                  RSVP
+                </a>
+                <router-link
+                  v-else-if="selectedEvent.slug"
+                  :to="`/events/${selectedEvent.slug}/register-events`"
+                  class="px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800"
+                >
                   RSVP
                 </router-link>
-                <!-- <a href="#" class="text-sm text-green-700 underline">
-                  View full event page
-                </a> -->
+                <router-link
+                  v-else
+                  to="/conference"
+                  class="px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800"
+                >
+                  RSVP
+                </router-link>
               </div>
             </div>
           </div>

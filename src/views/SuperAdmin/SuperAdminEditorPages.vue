@@ -8,7 +8,6 @@ import SuperAdminSidebar from "./SuperAdminSidebar.vue";
 
 import HomeAboutEditor from "./components/cms/home/HomeAboutEditor.vue";
 import HomeExecutivesEditor from "./components/cms/home/HomeExecutivesEditor.vue";
-import HomeFaqsEditor from "./components/cms/home/HomeFaqsEditor.vue";
 import HomeMandateEditor from "./components/cms/home/HomeMandateEditor.vue";
 import HomeNewsEditor from "./components/cms/home/HomeNewsEditor.vue";
 import HomePartnerEditor from "./components/cms/home/HomePartnerEditor.vue";
@@ -74,7 +73,6 @@ const currentSectionData = ref(null);
 const componentMap = {
   home: {
     hero: HomeHeroEditor,
-    faqs: HomeFaqsEditor,
     about: HomeAboutEditor,
     mandate: HomeMandateEditor,
     news: HomeNewsEditor,
@@ -176,7 +174,7 @@ const createPage = async (pageName) => {
       ...newPage,
       title: newPage.name,
       slug: `/${pageType}`,
-      sections: schema,
+      sections: structuredClone(schema),
     });
     await fetchPages();
     editPage(newPage);
@@ -188,11 +186,27 @@ const createPage = async (pageName) => {
 const fetchPages = async () => {
   isLoading.value = true;
   try {
+    const deepMerge = (schemaObj, apiObj) => {
+      if (!apiObj || typeof apiObj !== 'object' || Array.isArray(apiObj)) return apiObj ?? schemaObj;
+      const result = { ...schemaObj };
+      for (const key of Object.keys(apiObj)) {
+        if (typeof apiObj[key] === 'object' && !Array.isArray(apiObj[key]) && apiObj[key] !== null &&
+            typeof schemaObj[key] === 'object' && !Array.isArray(schemaObj[key]) && schemaObj[key] !== null) {
+          result[key] = deepMerge(schemaObj[key], apiObj[key]);
+        } else {
+          result[key] = apiObj[key];
+        }
+      }
+      return result;
+    };
+
     const rawPages = await pagesApi.listPages();
     pages.value = rawPages.map((page) => {
       const schema = pageSchemas[page.page_type?.toLowerCase()] ?? {};
 
       const content = structuredClone(schema ?? {});
+
+      const pageTypeLower = page.page_type?.toLowerCase();
 
       if (
         schema &&
@@ -202,11 +216,38 @@ const fetchPages = async () => {
       ) {
         for (const sectionKey in schema) {
           if (page.content?.[sectionKey]) {
-            content[sectionKey] = {
-              ...schema[sectionKey],
-              ...page.content[sectionKey],
-            };
+            content[sectionKey] = deepMerge(schema[sectionKey], page.content[sectionKey]);
           }
+        }
+      }
+
+      if (page.content?._hidden) {
+        for (const key of page.content._hidden) {
+          if (content[key]) {
+            content[key].is_hidden = true;
+          }
+        }
+      }
+
+      if (pageTypeLower === 'governance') {
+        if (content.boardOfTrustees) {
+          content.boardOfTrustees = {
+            ...schema.boardOfTrustees,
+            ...content.boardOfTrustees,
+            chair: { ...schema.boardOfTrustees.chair, ...(content.boardOfTrustees.chair || {}) },
+            trustees: content.boardOfTrustees.trustees?.length
+              ? content.boardOfTrustees.trustees
+              : schema.boardOfTrustees.trustees,
+          };
+        }
+        if (content.executiveCommittee) {
+          content.executiveCommittee = {
+            ...schema.executiveCommittee,
+            ...content.executiveCommittee,
+            executives: content.executiveCommittee.executives?.length
+              ? content.executiveCommittee.executives
+              : schema.executiveCommittee.executives,
+          };
         }
       }
 
@@ -233,6 +274,13 @@ const sectionKeys = computed(() => {
   return Object.keys(activePage.value.sections);
 });
 
+const toggleSectionVisibility = (key) => {
+  const section = activePage.value.sections[key];
+  if (section) {
+    section.is_hidden = !section.is_hidden;
+  }
+};
+
 const newPageTitle = ref("");
 
 const viewPage = (page) => {
@@ -257,6 +305,9 @@ const uploadSectionImage = async (event, sectionKey) => {
 
 const editPage = (page) => {
   activePage.value = page;
+  if (!activePage.value.sections) {
+    activePage.value.sections = activePage.value.content || {};
+  }
   activeSection.value = "hero";
   currentView.value = "editor";
 };
@@ -583,7 +634,7 @@ watch(activePage, (page) => {
             v-for="key in sectionKeys"
             :key="key"
             @click="activeSection = key"
-            class="px-4 py-3 text-sm font-medium transition duration-200 whitespace-nowrap"
+            class="px-4 py-3 text-sm font-medium transition duration-200 whitespace-nowrap flex items-center gap-2"
             :class="{
               'text-green-700 border-b-2 border-green-700 bg-green-50':
                 activeSection === key,
@@ -591,10 +642,47 @@ watch(activePage, (page) => {
                 activeSection !== key,
             }"
           >
-            {{
-              activePage.sections[key]?.name ||
-              key.replace("section", "Section ")
-            }}
+            <span :class="{ 'opacity-40': activePage.sections[key]?.is_hidden }">
+              {{
+                activePage.sections[key]?.name ||
+                key.replace("section", "Section ")
+              }}
+            </span>
+            <span
+              @click.stop="toggleSectionVisibility(key)"
+              class="cursor-pointer hover:scale-110 transition-transform"
+              :title="activePage.sections[key]?.is_hidden ? 'Show this section' : 'Hide this section'"
+            >
+              <svg
+                v-if="!activePage.sections[key]?.is_hidden"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              <svg
+                v-else
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4 text-gray-400"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+                <line x1="1" y1="1" x2="23" y2="23" />
+              </svg>
+            </span>
           </button>
         </div>
 

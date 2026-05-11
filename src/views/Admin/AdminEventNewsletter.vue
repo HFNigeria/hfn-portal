@@ -64,8 +64,8 @@ const editArticle = (article) => {
     external_link: article.external_link || '',
     is_external: article.is_external ?? false,
     publish_date: article.publish_date
-    ? article.publish_date.split("T")[0]
-    : "",
+  ? article.publish_date.split("T")[0]
+  : "",
   };
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -153,6 +153,11 @@ const publishArticle = async (slug) => {
 const saveNews = async () => {
   try {
     const formData = new FormData();
+    if (!newsForm.value.publish_date) {
+  newsForm.value.publish_date = new Date()
+    .toISOString()
+    .split("T")[0];
+}
 
     if (!newsForm.value.publish_date) {
   newsForm.value.publish_date = new Date()
@@ -897,6 +902,21 @@ const closeSidebar = () => (showSidebar.value = false);
               class="input"
               placeholder="Excerpt"
             />
+            <div>
+  <label class="block mb-2 font-medium text-gray-700">
+    Publish Date
+  </label>
+
+  <input
+    type="date"
+    v-model="newsForm.publish_date"
+    class="input"
+  />
+
+  <p class="text-xs text-gray-500 mt-1">
+    Leave empty to use today's date
+  </p>
+</div>
 
             <div>
   <label class="block mb-2 font-medium text-gray-700">

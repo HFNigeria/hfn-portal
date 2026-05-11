@@ -200,6 +200,11 @@ const publishArticle = async (slug) => {
 const saveNews = async () => {
   try {
     const formData = new FormData();
+    if (!newsForm.value.publish_date) {
+  newsForm.value.publish_date = new Date()
+    .toISOString()
+    .split("T")[0];
+}
 
     if (!newsForm.value.publish_date) {
   newsForm.value.publish_date = new Date()
@@ -294,7 +299,7 @@ const newsForm = ref({
   videos: [],
   external_link: "",
   is_external: false,
-    publish_date: "",
+  publish_date: "",
 });
 
 const videoInput = ref("");

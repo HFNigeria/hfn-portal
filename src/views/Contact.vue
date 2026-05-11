@@ -21,7 +21,16 @@ const pageFromApi = ref(null);
 onMounted(async () => {
   try {
     const res = await pagesApi.getPageByType("contact");
-    pageFromApi.value = res?.content || null;
+    const content = res?.content || null;
+    if (content?._hidden) {
+      for (const key of content._hidden) {
+        if (content[key]) {
+          content[key].is_hidden = true;
+        }
+      }
+      delete content._hidden;
+    }
+    pageFromApi.value = content;
   } catch (e) {
     console.warn("Using local Contact schema fallback");
   } finally {
@@ -81,7 +90,7 @@ const submitForm = async () => {
 
 <template>
   <div>
-    <section class="bg-[#F2F9F3] py-16 lg:py-24" :class="page.hero.backgroundColor || 'bg-[#F2F9F3]'">
+    <section v-if="!page.hero?.is_hidden" class="bg-[#F2F9F3] py-16 lg:py-24" :class="page.hero.backgroundColor || 'bg-[#F2F9F3]'">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center py-16">
           <div class="mb-12 lg:mb-0">
@@ -142,7 +151,7 @@ const submitForm = async () => {
         </div>
       </div>
     </section>
-    <section class="py-16 sm:py-24 bg-white">
+    <section v-if="!page.form?.is_hidden" class="py-16 sm:py-24 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
           <h2
@@ -389,7 +398,7 @@ const submitForm = async () => {
         </div>
       </div>
     </section>
-    <section class="py-16 sm:py-24 bg-white">
+    <section v-if="!page.map?.is_hidden" class="py-16 sm:py-24 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
           class="max-w-6xl mx-auto rounded-[20px] overflow-hidden shadow-2xl border-4 border-green-200"

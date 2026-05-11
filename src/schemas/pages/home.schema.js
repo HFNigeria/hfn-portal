@@ -67,28 +67,24 @@ export const homePageSchema = {
         description:
           'We engage policymakers to shape evidence-based reforms that enable effective regulation, sustainable financing, and private sector participation in health system strengthening.',
         icon: 'ScaleIcon',
-        tags: ['Policy', 'Reform'],
       },
       {
         title: 'Stakeholder Convening',
         description:
-          'We bring together private sector actors, government institutions, and development partners to align priorities and drive collective action.',
+          'We bring together private sector actors, government institutions, and development partners to align priorities, share knowledge, and drive collective action.',
         icon: 'UserGroupIcon',
-        tags: ['Networking', 'Unity'],
       },
       {
         title: 'Sector Intelligence & Thought Leadership',
         description:
-          'We generate insights, reports, and high-level dialogues that inform policy decisions and investment across the health sector.',
+          'We generate insights, reports, and high-level dialogues that inform policy decisions, investment, and strategic engagement across the health sector.',
         icon: 'LightBulbIcon',
-        tags: ['Data', 'Insights'],
       },
       {
         title: 'Public–Private Collaboration',
         description:
-          'We support partnerships that leverage private sector capacity to improve service delivery and emergency care, and access to quality healthcare.',
+          'We support partnerships that leverage private sector capacity to improve service delivery, emergency care, and access to quality healthcare.',
         icon: 'HandRaisedIcon',
-        tags: ['Partnership', 'Delivery'],
       },
     ],
   },
@@ -277,26 +273,5 @@ export const homePageSchema = {
     },
   ],
 
-  faqs: [
-    {
-      question: 'What paves the Healthcare Federation of Nigeria (HFN) on?',
-      answer:
-        'HFN is paved on the mission to provide a unified voice for the private healthcare sector in Nigeria, fostering collaboration, promoting best practices, and driving policy change to achieve universal health coverage.',
-    },
-    {
-      question: 'How can I join HFN?',
-      answer:
-        "Membership is open to all legitimate private sector entities and individuals involved in the healthcare value chain, including hospitals, pharmaceutical companies, insurance providers, and technical service organizations. You can find the application form on our 'Membership' page.",
-    },
-    {
-      question: 'What are the benefits of HFN membership?',
-      answer:
-        'Benefits include policy advocacy, networking opportunities with key industry leaders, access to exclusive research and reports, training programs, and a platform to influence the future of healthcare policy in Nigeria.',
-    },
-    {
-      question: 'What does HFN do?',
-      answer:
-        'Healthcare Federation Of Nigeria is independent of any governmental/political ideology, economic interest, religious affiliation; and is mission is centered on advocacy, capacity building, and improving access to finance for the private sector, all in collaboration with the public sector.',
-    },
-  ],
+
 };

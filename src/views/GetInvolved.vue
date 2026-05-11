@@ -1,6 +1,6 @@
 <template>
   <div class="get-involved-page font-sans bg-white overflow-x-hidden">
-    <section
+    <section v-if="!page.hero?.is_hidden"
       class="bg-[#f2f9f3] pt-12 pb-20 relative overflow-hidden"
       :style="{ backgroundColor: page.hero.backgroundColor || '#f2f9f3' }"
     >
@@ -44,7 +44,7 @@
     </section>
 
     <main class="container mx-auto px-4 md:px-8 py-16">
-      <section class="mb-24">
+      <section v-if="!page.donations?.is_hidden" class="mb-24">
         <div
           class="flex flex-col md:flex-row gap-12 items-center bg-white p-8 md:p-12 rounded-3xl border border-gray-100 shadow-sm"
         >
@@ -115,7 +115,7 @@
         </div>
       </section>
 
-      <section class="mb-24">
+      <section v-if="!page.partnerships?.is_hidden" class="mb-24">
         <div class="text-center mb-12">
           <h3 class="text-3xl font-bold text-gray-900">
             {{ page.partnerships?.title || "Partnerships & Sponsorships" }}
@@ -185,7 +185,7 @@
         </div>
       </section>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+      <div v-if="!page.opportunities?.is_hidden" class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
         <div class="bg-gray-50 p-8 rounded-3xl">
           <h3 class="text-2xl font-bold text-gray-900 mb-4">
             {{
@@ -234,7 +234,7 @@
         </div>
       </div>
 
-      <section
+      <section v-if="!page.volunteering?.is_hidden"
         class="text-white rounded-[2rem] p-10 md:p-16 relative overflow-hidden"
         :style="{
           backgroundColor: page.volunteering?.backgroundColor || '#14532D',
@@ -325,7 +325,16 @@ const resolveImage = (image) => imageMap[image] || image;
 onMounted(async () => {
   try {
     const res = await pagesApi.getPageByType("getinvolved");
-    pageFromApi.value = res?.content || null;
+    const content = res?.content || null;
+    if (content?._hidden) {
+      for (const key of content._hidden) {
+        if (content[key]) {
+          content[key].is_hidden = true;
+        }
+      }
+      delete content._hidden;
+    }
+    pageFromApi.value = content;
   } catch (e) {
     console.warn("Using local GetInvolved schema fallback");
   } finally {

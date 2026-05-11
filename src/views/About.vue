@@ -57,7 +57,16 @@ const loading = ref(true);
 onMounted(async () => {
   try {
     const res = await pagesApi.getPageByType("about");
-    pageFromApi.value = res?.content || null;
+    const content = res?.content || null;
+    if (content?._hidden) {
+      for (const key of content._hidden) {
+        if (content[key]) {
+          content[key].is_hidden = true;
+        }
+      }
+      delete content._hidden;
+    }
+    pageFromApi.value = content;
   } catch (e) {
     console.warn("Using local About schema fallback");
   } finally {
@@ -107,7 +116,7 @@ const resolveImage = (image) => imageMap[image] || image;
 </script>
 <template>
   <div>
-    <section class="relative bg-green-50 pb-16 pt-16 sm:pb-24 overflow-hidden">
+    <section v-if="!page.hero?.is_hidden" class="relative bg-green-50 pb-16 pt-16 sm:pb-24 overflow-hidden">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="lg:grid lg:grid-cols-12 lg:gap-12 items-center">
           <div class="lg:col-span-6 xl:col-span-5 mb-10 lg:mb-0">
@@ -159,7 +168,7 @@ const resolveImage = (image) => imageMap[image] || image;
     </section>
 
     
-    <section class="bg-white py-16 lg:py-24">
+    <section v-if="!page.story?.is_hidden" class="bg-white py-16 lg:py-24">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
        
         <div class="mb-16">
@@ -282,7 +291,7 @@ const resolveImage = (image) => imageMap[image] || image;
       </div>
     </section>
 
-    <section class="py-20 bg-white">
+    <section v-if="!page.roleSection?.is_hidden" class="py-20 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="lg:grid lg:grid-cols-2 gap-16 items-center">
           <div class="space-y-6">
@@ -348,7 +357,7 @@ const resolveImage = (image) => imageMap[image] || image;
       </div>
     </section>
 
-    <section class="py-20 bg-[#004d33] text-white overflow-hidden relative">
+    <section v-if="!page.history?.is_hidden" class="py-20 bg-[#004d33] text-white overflow-hidden relative">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
     <div class="space-y-16">
@@ -392,10 +401,8 @@ const resolveImage = (image) => imageMap[image] || image;
   ></div>
 </section>
 
-    <section class="py-24 bg-white">
+    <section v-if="!page.governance?.is_hidden" class="py-24 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <!-- <h3 class="text-[#004d33] font-black uppercase tracking-[0.3em] text-xs mb-4">Accountability</h3>
-      <h2 class="text-4xl font-black text-gray-900 mb-12">Governance & Leadership</h2> -->
         <div class="mb-16">
           <div
             class="w-full px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-50 bg-white shadow-md text-center"
@@ -442,7 +449,7 @@ const resolveImage = (image) => imageMap[image] || image;
     </section>
 
     
-    <section class="bg-white py-16">
+    <section v-if="!page.ctaSection?.is_hidden" class="bg-white py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-10">
           <div
@@ -571,7 +578,7 @@ const resolveImage = (image) => imageMap[image] || image;
         </div>
       </div>
     </section>
-    <section class="pb-24 px-4">
+    <section v-if="!page.commitment?.is_hidden" class="pb-24 px-4">
       <div
         class="max-w-7xl mx-auto bg-[#f2f9f3] rounded-[4rem] p-12 md:p-20 relative overflow-hidden"
       >

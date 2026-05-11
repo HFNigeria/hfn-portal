@@ -1,6 +1,6 @@
 <template>
   <div class="news-page font-sans bg-white">
-    <section class="bg-[#E87A1814] pt-10 pb-16">
+    <section v-if="!page.hero?.is_hidden" class="bg-[#E87A1814] pt-10 pb-16">
       <div class="container mx-auto px-4 md:px-8">
         <div
           class="flex flex-col lg:flex-row items-start lg:items-center justify-between"
@@ -35,7 +35,7 @@
       </div>
     </section>
 
-    <main class="container mx-auto px-4 md:px-8 py-16">
+    <main v-if="!page.latestNewsSection?.is_hidden" class="container mx-auto px-4 md:px-8 py-16">
       <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">
         {{ page.latestNewsSection.title }}
       </h2>
@@ -285,100 +285,102 @@
         </div>
       </section>
 
-      <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">
-        {{ page.policyAdvocacySection.title }}
-      </h2>
+      <template v-if="!page.policyAdvocacySection?.is_hidden">
+        <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">
+          {{ page.policyAdvocacySection.title }}
+        </h2>
 
-      <div
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16 py-10 px-10 bg-[#F2F9F3] rounded-3xl"
-      >
         <div
-          v-for="item in paginatedPolicy"
-          :key="item.slug"
-          class="flex flex-col text-center"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16 py-10 px-10 bg-[#F2F9F3] rounded-3xl"
         >
           <div
-            class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md"
+            v-for="item in paginatedPolicy"
+            :key="item.slug"
+            class="flex flex-col text-center"
           >
-            <img
-              :src="
-                item.image.startsWith('http')
-                  ? item.image
-                  : imageMap[item.image]
-              "
-              :alt="item.title"
-            />
+            <div
+              class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md"
+            >
+              <img
+                :src="
+                  item.image.startsWith('http')
+                    ? item.image
+                    : imageMap[item.image]
+                "
+                :alt="item.title"
+              />
+            </div>
+
+            <h4 class="text-lg font-semibold text-gray-900 mb-2">
+              {{ item.title }}
+            </h4>
+
+            <p class="text-gray-600 text-sm mb-3">
+              {{ item.description }}
+            </p>
+
+            <RouterLink
+              :to="`/blog/${item.slug}`"
+              class="text-orange-600 text-sm font-medium hover:text-orange-700 transition mx-auto"
+            >
+              Learn more →
+            </RouterLink>
           </div>
-
-          <h4 class="text-lg font-semibold text-gray-900 mb-2">
-            {{ item.title }}
-          </h4>
-
-          <p class="text-gray-600 text-sm mb-3">
-            {{ item.description }}
-          </p>
-
-          <RouterLink
-            :to="`/blog/${item.slug}`"
-            class="text-orange-600 text-sm font-medium hover:text-orange-700 transition mx-auto"
-          >
-            Learn more →
-          </RouterLink>
         </div>
-      </div>
 
-      <div class="flex justify-center items-center space-x-4 text-gray-600">
-        <button
-          @click="goToPrevPagePolicy"
-          :disabled="currentPagePolicy === 1"
-          :class="{ 'opacity-50 cursor-not-allowed': currentPagePolicy === 1 }"
-          class="flex items-center space-x-1 text-green-700 hover:underline disabled:hover:no-underline"
-        >
-          <svg
-            class="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
+        <div class="flex justify-center items-center space-x-4 text-gray-600">
+          <button
+            @click="goToPrevPagePolicy"
+            :disabled="currentPagePolicy === 1"
+            :class="{ 'opacity-50 cursor-not-allowed': currentPagePolicy === 1 }"
+            class="flex items-center space-x-1 text-green-700 hover:underline disabled:hover:no-underline"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 19l-7-7 7-7"
-            ></path>
-          </svg>
-          <span>Prev</span>
-        </button>
-        <span class="text-sm"
-          >Page {{ currentPagePolicy }} of {{ totalPolicyPages }}</span
-        >
-        <button
-          @click="goToNextPagePolicy"
-          :disabled="currentPagePolicy >= totalPolicyPages"
-          :class="{
-            'opacity-50 cursor-not-allowed':
-              currentPagePolicy >= totalPolicyPages,
-          }"
-          class="flex items-center space-x-1 text-green-700 hover:underline disabled:hover:no-underline"
-        >
-          <span>Next</span>
-          <svg
-            class="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+            <span>Prev</span>
+          </button>
+          <span class="text-sm"
+            >Page {{ currentPagePolicy }} of {{ totalPolicyPages }}</span
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            ></path>
-          </svg>
-        </button>
-      </div>
+          <button
+            @click="goToNextPagePolicy"
+            :disabled="currentPagePolicy >= totalPolicyPages"
+            :class="{
+              'opacity-50 cursor-not-allowed':
+                currentPagePolicy >= totalPolicyPages,
+            }"
+            class="flex items-center space-x-1 text-green-700 hover:underline disabled:hover:no-underline"
+          >
+            <span>Next</span>
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </template>
     </main>
   </div>
 </template>
@@ -390,6 +392,7 @@ import { newsPageSchema } from "@/schemas/pages/news.schema";
 import { ref, reactive, computed, onMounted, watch } from "vue";
 import contentUploadApi from "@/api/contentUploadsApi";
 import newsModule from "@/api/newsModule";
+import pagesApi from "@/api/pageManagement";
 
 const currentPage = ref(1);
 const itemsPerPage = 4;
@@ -403,7 +406,14 @@ const totalPages = computed(() => {
   return Math.ceil(filteredArticles.value.length / itemsPerPage) || 1;
 });
 
-const page = newsPageSchema;
+const pageFromApi = ref(null);
+const page = computed(() => ({
+  ...newsPageSchema,
+  ...(pageFromApi.value || {}),
+  hero: { ...newsPageSchema.hero, ...(pageFromApi.value?.hero || {}) },
+  latestNewsSection: { ...newsPageSchema.latestNewsSection, ...(pageFromApi.value?.latestNewsSection || {}) },
+  policyAdvocacySection: { ...newsPageSchema.policyAdvocacySection, ...(pageFromApi.value?.policyAdvocacySection || {}) },
+}));
 const sortedArticles = computed(() => {
   return [...newsPageSchema.latestNewsSection.articles].sort((a, b) => {
     const dateA = new Date(a.created_at || a.date).getTime();
@@ -412,7 +422,7 @@ const sortedArticles = computed(() => {
   });
 });
 // const policyUpdates = newsPageSchema.news.policyAdvocacySection.updates;
-const policyUpdates = computed(() => page.policyAdvocacySection.updates);
+const policyUpdates = computed(() => page.value.policyAdvocacySection.updates);
 const latest =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769896360/243A8355_r47c3t.jpg";
 const event =
@@ -692,7 +702,22 @@ const getEmbedUrl = (youtubeUrl) => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
+  try {
+    const res = await pagesApi.getPageByType("latestnews");
+    const content = res?.content || null;
+    if (content?._hidden) {
+      for (const key of content._hidden) {
+        if (content[key]) {
+          content[key].is_hidden = true;
+        }
+      }
+      delete content._hidden;
+    }
+    pageFromApi.value = content;
+  } catch (e) {
+    console.warn("Using local news schema fallback");
+  }
   fetchArticles();
   fetchVideos();
 });
