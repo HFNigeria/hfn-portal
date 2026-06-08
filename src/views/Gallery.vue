@@ -45,7 +45,7 @@
         </div>
       </div>
 
-      <div v-else class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+      <div v-else-if="galleryItems.lenght > 0" class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
         <div v-for="(item, i) in galleryItems" :key="i" class="break-inside-avoid">
           <RouterLink :to="`/gallery/${item.slug}`" class="block group">
             <div class="relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-300">
@@ -60,6 +60,16 @@
           </RouterLink>
         </div>
       </div>
+      <div v-else class="flex justify-center items-center py-20">
+  <div class="text-center">
+    <p class="text-xl font-semibold text-gray-600">
+      No gallery images available.
+    </p>
+    <p class="text-sm text-gray-500 mt-2">
+      Gallery images will appear here once they are uploaded.
+    </p>
+  </div>
+</div>
 
       <div v-if="hasMore" class="flex justify-center mt-12">
         <button @click="loadMorePhotos" :disabled="loadingMore" class="px-8 py-3 bg-green-700 text-white rounded-full hover:bg-green-800 transition disabled:opacity-50">
@@ -112,14 +122,14 @@ const resolveImage = (item) => {
   return "";
 };
 
-const dummyGalleryItems = [
-  { slug: "digital-skills-bootcamp-2025", title: "Digital Skills Bootcamp 2025", category: "Workshop", date: "November 20, 2025", cover: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739050/850a9bd13a177b57467b2c6d7c3dfec3_L_g8tmki.jpg" },
-  { slug: "women-in-tech-summit", title: "Women in Tech Summit", category: "Conference", date: "December 5, 2025", cover: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769738844/675362aef61a36df3271398e6ff1e414_S_c6duhw.jpg" },
-  { slug: "community-outreach-lagos", title: "Community Outreach Lagos", category: "Social", date: "October 12, 2025", cover: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739050/646e54f3224499907f10b9e476e85f82_S_xa0w1q.jpg" },
-  { slug: "health-wellness-webinar", title: "Health & Wellness Webinar", category: "Webinar", date: "January 12, 2026", cover: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739049/1327d600f17579e414edbf44c080e3b5_L_1_p2vdpq.jpg" },
-  { slug: "annual-leadership-awards", title: "Annual Leadership Awards", category: "Gala", date: "December 20, 2025", cover: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739049/47ed312dbee39b4feb4a261300270374_M_1_jqdrbm.jpg" },
-  { slug: "tech-innovation-expo", title: "Tech Innovation Expo", category: "Conference", date: "March 15, 2026", cover: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739049/176305b02b8b14f75f2e6c696c06f6d6_M_fyowa4.jpg" },
-];
+// const dummyGalleryItems = [
+//   { slug: "digital-skills-bootcamp-2025", title: "Digital Skills Bootcamp 2025", category: "Workshop", date: "November 20, 2025", cover: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739050/850a9bd13a177b57467b2c6d7c3dfec3_L_g8tmki.jpg" },
+//   { slug: "women-in-tech-summit", title: "Women in Tech Summit", category: "Conference", date: "December 5, 2025", cover: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769738844/675362aef61a36df3271398e6ff1e414_S_c6duhw.jpg" },
+//   { slug: "community-outreach-lagos", title: "Community Outreach Lagos", category: "Social", date: "October 12, 2025", cover: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739050/646e54f3224499907f10b9e476e85f82_S_xa0w1q.jpg" },
+//   { slug: "health-wellness-webinar", title: "Health & Wellness Webinar", category: "Webinar", date: "January 12, 2026", cover: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739049/1327d600f17579e414edbf44c080e3b5_L_1_p2vdpq.jpg" },
+//   { slug: "annual-leadership-awards", title: "Annual Leadership Awards", category: "Gala", date: "December 20, 2025", cover: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739049/47ed312dbee39b4feb4a261300270374_M_1_jqdrbm.jpg" },
+//   { slug: "tech-innovation-expo", title: "Tech Innovation Expo", category: "Conference", date: "March 15, 2026", cover: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739049/176305b02b8b14f75f2e6c696c06f6d6_M_fyowa4.jpg" },
+// ];
 
 const formatDate = (dateStr) => {
   if (!dateStr) return "";
@@ -153,11 +163,15 @@ const fetchGalleryFromApi = async (loadMore = false) => {
     if (loadMore) {
       galleryItems.value = [...galleryItems.value, ...mappedApiItems];
     } else {
-      galleryItems.value = [...mappedApiItems, ...dummyGalleryItems];
+      galleryItems.value = mappedApiItems;
     }
+     const totalResults =
+  (allRes.count || 0) +
+  (nonMembersRes.count || 0);
 
-    const totalResults = allRes.count || 0;
-    hasMore.value = galleryItems.value.length < totalResults;
+hasMore.value =
+  galleryItems.value.length > 0 &&
+  galleryItems.value.length < totalResults;
   } catch (err) {
     console.error("Failed to load gallery", err);
     error.value = "Failed to load gallery items";
