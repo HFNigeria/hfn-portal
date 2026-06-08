@@ -175,7 +175,7 @@ hasMore.value =
   } catch (err) {
     console.error("Failed to load gallery", err);
     error.value = "Failed to load gallery items";
-    galleryItems.value = [...dummyGalleryItems];
+    galleryItems.value = [];
   } finally {
     loading.value = false;
     loadingMore.value = false;
