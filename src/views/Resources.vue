@@ -462,7 +462,7 @@ const getPdfPreview = (url) => {
 
   if (url.match(/\.(jpg|jpeg|png)$/i)) return url;
 
-  return url.replace("/upload/", "/upload/pg_1,w_600/").replace(".pdf", ".jpg");
+  return url.replace("/upload/", "/upload/pg_1,w_600/").replace("/\.pdf($|\?)/i", ".jpg$1");
 };
 
 
