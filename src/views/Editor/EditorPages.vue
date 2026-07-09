@@ -397,26 +397,20 @@ const toggleSecondaryContent = (itemId) => {
 
 const saveChanges = async () => {
   try {
-    const sectionData = {
-      ...currentSectionData.value,
+    activePage.value.sections[activeSection.value] = {
+      ...JSON.parse(JSON.stringify(currentSectionData.value)),
       is_hidden: activePage.value.sections[activeSection.value]?.is_hidden ?? false,
     };
+
     const payload = {
-      content: {
-        [activeSection.value]: sectionData,
-      },
+      content: activePage.value.sections,
     };
 
-    await pagesApi.partialUpdatePage(activePage.value.page_type, payload);
-
-    activePage.value.sections[activeSection.value] = {
-      ...structuredClone(currentSectionData.value),
-      is_hidden: sectionData.is_hidden,
-    };
+    await pagesApi.updatePage(activePage.value.page_type, payload);
 
     goBackToManager();
   } catch (e) {
-    console.error("Failed to save section", e);
+    console.error("Failed to save page", e);
   }
 };
 

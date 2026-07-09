@@ -396,9 +396,10 @@ const toggleSecondaryContent = (itemId) => {
 
 const saveChanges = async () => {
   try {
-    activePage.value.sections[activeSection.value] = JSON.parse(
-      JSON.stringify(currentSectionData.value)
-    );
+    activePage.value.sections[activeSection.value] = {
+      ...JSON.parse(JSON.stringify(currentSectionData.value)),
+      is_hidden: activePage.value.sections[activeSection.value]?.is_hidden ?? false,
+    };
 
     const payload = {
       content: activePage.value.sections,
