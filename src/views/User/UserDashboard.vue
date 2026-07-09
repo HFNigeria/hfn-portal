@@ -164,8 +164,10 @@ const fetchVideos = async () => {
 const getPdfPreview = (url) => {
   if (!url) return newsletter_placeholder;
 
-  if (url.endsWith(".pdf")) {
-    return url.replace(".pdf", ".jpg");
+  if (url.match(/\.(jpg|jpeg|png)$/i)) return url;
+
+  if (url.includes('/image/upload/')) {
+    return url.replace("/image/upload/", "/image/upload/pg_1,w_600/").replace(/\.pdf(\?|$)/i, ".jpg$1");
   }
 
   return url;

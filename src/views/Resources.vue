@@ -47,14 +47,14 @@
           class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 flex flex-col"
         >
           <div class="relative group h-60 overflow-hidden bg-gray-100">
-            <img
-              :src="getPdfPreview(item.pdfUrl)"
-              alt="Newsletter Preview"
-              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-              @error="handleImageError"
-            />
+            <iframe
+              :src="`https://docs.google.com/viewer?url=${encodeURIComponent(item.pdfUrl)}&embedded=true`"
+              class="w-full h-full pointer-events-none"
+              frameborder="0"
+              title="Newsletter Preview"
+            ></iframe>
             <div
-              class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+              class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none"
             >
               <span class="text-white bg-green-700 px-3 py-1 rounded text-xs"
                 >View Document</span
@@ -178,12 +178,12 @@
             style="display: inline-table"
             class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md flex items-center justify-center bg-white"
           >
-            <img
-              :src="getPdfPreview(pub.pdfUrl)"
-              alt="Publication preview"
-              class="w-full h-full object-contain"
-              @error="(e) => (e.target.src = report_img)"
-            />
+            <iframe
+              :src="`https://docs.google.com/viewer?url=${encodeURIComponent(pub.pdfUrl)}&embedded=true`"
+              class="w-full h-full pointer-events-none"
+              frameborder="0"
+              title="Publication preview"
+            ></iframe>
           </div>
 
           <h4 class="text-lg font-semibold text-gray-900 mb-2">
@@ -363,9 +363,6 @@
 import contentUploadApi from "@/api/contentUploadsApi";
 import postDownload from "@/api/memberResources";
 import pagesApi from "@/api/pageManagement";
-import hands from "@/assets/hands.png";
-import report_img from  "@/assets/report.jpg"; 
-import newsletter_placeholder from "@/assets/newsletter-placeholder.jpeg";
 import latest from "@/assets/latest_news.png";
 import { resourcesPageSchema } from "@/schemas/pages/resources.schema";
 import { computed, onMounted, ref } from "vue";
@@ -453,17 +450,7 @@ const confirmPayment = async () => {
   }
 };
 
-const handleImageError = (e) => {
-  e.target.onerror = null;
-  e.target.src = newsletter_placeholder;
-};
-const getPdfPreview = (url) => {
-  if (!url) return newsletter_placeholder;
 
-  if (url.match(/\.(jpg|jpeg|png)$/i)) return url;
-
-  return url.replace("/upload/", "/upload/pg_1,w_600/").replace(".pdf", ".jpg");
-};
 
 
 const dummyPublications = [
