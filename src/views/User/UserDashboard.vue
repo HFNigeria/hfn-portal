@@ -4,7 +4,6 @@ import eventsApi from "@/api/events.js";
 import newsApi from "@/api/newsModule.js";
 import authApi from "@/api/userRegister.js";
 import blogh from "@/assets/blogh.png";
-import newsletter_placeholder from "@/assets/newsletter-placeholder.jpeg";
 import UserSidebar from "@/components/layout/UserSidebar.vue";
 import { computed, onMounted, ref } from "vue";
 
@@ -159,18 +158,6 @@ const fetchVideos = async () => {
   } catch (err) {
     console.error("Failed to fetch videos", err);
   }
-};
-
-const getPdfPreview = (url) => {
-  if (!url) return newsletter_placeholder;
-
-  if (url.match(/\.(jpg|jpeg|png)$/i)) return url;
-
-  if (url.includes('/image/upload/')) {
-    return url.replace("/image/upload/", "/image/upload/pg_1,w_600/").replace(/\.pdf(\?|$)/i, ".jpg$1");
-  }
-
-  return url;
 };
 
 const newsletterPdfs = ref([
@@ -735,14 +722,14 @@ onMounted(() => {
             class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 flex flex-col"
           >
             <div class="relative group h-60 overflow-hidden bg-gray-100">
-              <img
-                :src="getPdfPreview(item.pdfUrl)"
-                alt="Newsletter Preview"
-                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                @error="(e) => (e.target.src = newsletter_placeholder)"
-              />
+              <iframe
+                :src="`https://docs.google.com/viewer?url=${encodeURIComponent(item.pdfUrl)}&embedded=true`"
+                class="w-full h-full pointer-events-none"
+                frameborder="0"
+                title="Newsletter Preview"
+              ></iframe>
               <div
-                class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none"
               >
                 <span class="text-white bg-green-700 px-3 py-1 rounded text-xs">
                   View Document
