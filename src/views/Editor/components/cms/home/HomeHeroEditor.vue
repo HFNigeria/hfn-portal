@@ -1,16 +1,62 @@
 
 <script setup>
-import { ref } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 
-const heroUploadRef = ref(null)            
+const heroUploadRef = ref(null)
 const props = defineProps({
   modelValue: Object
 })
 
 const emit = defineEmits(['update:modelValue'])
+let isSyncingFromProp = false
+
+const currentSectionData = ref({
+  titleHighlight: '',
+  titleMain: '',
+  introLine: '',
+  introText: '',
+  slides: [],
+  ctaText: '',
+  ctaLink: '',
+  heroImage: '',
+  heroImagePreview: '',
+  backgroundColor: '#F2F9F3',
+  ...props.modelValue
+})
+
+watch(
+  () => props.modelValue,
+  async (val) => {
+    isSyncingFromProp = true
+    currentSectionData.value = {
+      titleHighlight: '',
+      titleMain: '',
+      introLine: '',
+      introText: '',
+      slides: [],
+      ctaText: '',
+      ctaLink: '',
+      heroImage: '',
+      heroImagePreview: '',
+      backgroundColor: '#F2F9F3',
+      ...val
+    }
+    await nextTick()
+    isSyncingFromProp = false
+  },
+  { immediate: true }
+)
+
+watch(currentSectionData, (val) => {
+  if (!isSyncingFromProp) {
+    emit('update:modelValue', val)
+  }
+}, { deep: true })
+
 const resetHeroColor = () => {
-  props.modelValue.backgroundColor = '#FFFFFF'
+  currentSectionData.value.backgroundColor = '#FFFFFF'
 }
+
 const handleHeroImageUpload = (event) => {
   const file = event.target.files[0];
   if (!file) return;
@@ -28,8 +74,6 @@ const handleHeroImageUpload = (event) => {
   };
   reader.readAsDataURL(file);
 };
-
-            
 </script>
 
 <template>
@@ -44,7 +88,7 @@ const handleHeroImageUpload = (event) => {
                     Highlight Title
                   </label>
                   <input
-                    v-model="modelValue.titleHighlight"
+                    v-model="currentSectionData.titleHighlight"
                     type="text"
                     class="w-full text-lg border-none focus:ring-0 p-0 m-0"
                     placeholder="Healthcare"
@@ -59,7 +103,7 @@ const handleHeroImageUpload = (event) => {
                     Main Title
                   </label>
                   <input
-                    v-model="modelValue.titleMain"
+                    v-model="currentSectionData.titleMain"
                     type="text"
                     class="w-full text-lg border-none focus:ring-0 p-0 m-0"
                     placeholder="Advocacy."
@@ -74,7 +118,7 @@ const handleHeroImageUpload = (event) => {
                     Intro Line
                   </label>
                   <textarea
-                    v-model="modelValue.introLine"
+                    v-model="currentSectionData.introLine"
                     rows="2"
                     class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
                   />
@@ -88,7 +132,7 @@ const handleHeroImageUpload = (event) => {
                     Intro Text
                   </label>
                   <textarea
-                    v-model="modelValue.introText"
+                    v-model="currentSectionData.introText"
                     rows="2"
                     class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
                   />
@@ -102,8 +146,8 @@ const handleHeroImageUpload = (event) => {
                     Slide urls
                   </label>
                   
-                    <div v-for="(slide, i) in modelValue.slides" :key="i" class="mt-2">
-              <input v-model="modelValue.slides[i]" type="text" class="w-full text-xs border rounded p-2 bg-slate-50 font-mono" />
+                    <div v-for="(slide, i) in currentSectionData.slides" :key="i" class="mt-2">
+              <input v-model="currentSectionData.slides[i]" type="text" class="w-full text-xs border rounded p-2 bg-slate-50 font-mono" />
             </div>
                 </div>
 
@@ -115,7 +159,7 @@ const handleHeroImageUpload = (event) => {
                     CTA Text
                   </label>
                   <input
-                    v-model="modelValue.ctaText"
+                    v-model="currentSectionData.ctaText"
                     type="text"
                     class="w-full text-base border-none focus:ring-0 p-0 m-0"
                   />
@@ -129,7 +173,7 @@ const handleHeroImageUpload = (event) => {
                     CTA Link
                   </label>
                   <input
-                    v-model="modelValue.ctaLink"
+                    v-model="currentSectionData.ctaLink"
                     type="text"
                     class="w-full text-base border-none focus:ring-0 p-0 m-0"
                     placeholder="/register"
@@ -156,8 +200,8 @@ const handleHeroImageUpload = (event) => {
                     @click="heroUploadRef.click()"
                   >
                     <img
-                      v-if="modelValue.heroImagePreview"
-                      :src="modelValue.heroImagePreview"
+                      v-if="currentSectionData.heroImagePreview"
+                      :src="currentSectionData.heroImagePreview"
                       class="h-full object-contain"
                     />
 
@@ -188,13 +232,13 @@ const handleHeroImageUpload = (event) => {
 
                   <div class="flex items-center space-x-2">
                     <input
-                      v-model="modelValue.backgroundColor"
+                      v-model="currentSectionData.backgroundColor"
                       type="color"
                       class="w-8 h-8 rounded border-none p-0 cursor-pointer"
                     />
 
                     <input
-                      v-model="modelValue.backgroundColor"
+                      v-model="currentSectionData.backgroundColor"
                       type="text"
                       class="flex-grow text-base border-none focus:ring-0 p-0 m-0 font-mono uppercase"
                     />

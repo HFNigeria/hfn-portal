@@ -22,21 +22,22 @@ const footer = computed(() => ({
 }));
 
 onMounted(async () => {
-  try {
-    const res = await pagesApi.getPageByType("footer");
-    const content = res?.content || null;
-    if (content) {
-      if (content._hidden) {
-        for (const key of content._hidden) {
-          if (content[key]) content[key].is_hidden = true;
-        }
-        delete content._hidden;
-      }
-      footerFromApi.value = content;
-    }
-  } catch (e) {
-    console.warn("Using local footer schema fallback");
-  }
+  // TODO: Footer API not yet available in backend
+  // try {
+  //   const res = await pagesApi.getPageByType("footer");
+  //   const content = res?.content || null;
+  //   if (content) {
+  //     if (content._hidden) {
+  //       for (const key of content._hidden) {
+  //         if (content[key]) content[key].is_hidden = true;
+  //       }
+  //       delete content._hidden;
+  //     }
+  //     footerFromApi.value = content;
+  //   }
+  // } catch (e) {
+  //   console.warn("Using local footer schema fallback");
+  // }
 });
 
 const navigate = (url) => {

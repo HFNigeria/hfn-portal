@@ -45,7 +45,6 @@ const handleSignIn = async () => {
     };
 
     const response = await userRegister.loginUser(payload);
-    console.log("Login payload:", response);
     if (response?.status === "success") {
       toast.success(response.messages?.[0] || "Login successful!");
 
