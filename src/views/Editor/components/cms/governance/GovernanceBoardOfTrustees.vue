@@ -1,11 +1,12 @@
 <script setup>
-import { ref, watch } from "vue";
+import { nextTick, ref, watch } from "vue";
 
 const props = defineProps({
   modelValue: Object,
 });
 
 const emit = defineEmits(["update:modelValue"]);
+let isSyncingFromProp = false;
 
 const getDefaultData = () => ({
   title: "",
@@ -27,7 +28,8 @@ const currentSectionData = ref({
 
 watch(
   () => props.modelValue,
-  (val) => {
+  async (val) => {
+    isSyncingFromProp = true;
     const defaultData = getDefaultData();
 
     currentSectionData.value = {
@@ -51,18 +53,17 @@ watch(
         ...t,
       })),
     };
+    await nextTick();
+    isSyncingFromProp = false;
   },
   { immediate: true }
 );
 
-
-watch(
-  currentSectionData,
-  (val) => {
+watch(currentSectionData, (val) => {
+  if (!isSyncingFromProp) {
     emit("update:modelValue", val);
-  },
-  { deep: true }
-);
+  }
+}, { deep: true });
 
 const addTrustee = () => {
   if (!currentSectionData.value.trustees) {

@@ -1,11 +1,12 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 
 const props = defineProps({
   modelValue: Object
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(["update:modelValue"])
+let isSyncingFromProp = false
 
 const currentSectionData = ref({
   titleHighlight: '',
@@ -18,7 +19,8 @@ const currentSectionData = ref({
 
 watch(
   () => props.modelValue,
-  (val) => {
+  async (val) => {
+    isSyncingFromProp = true
     currentSectionData.value = {
       titleHighlight: '',
       titleMain: '',
@@ -27,16 +29,17 @@ watch(
       backgroundColor: '#F2F9F3',
       ...val
     }
+    await nextTick()
+    isSyncingFromProp = false
   }
 )
 
-watch(
-  currentSectionData,
-  (val) => {
-    emit('update:modelValue', val)
-  },
-  { deep: true }
-)
+watch(currentSectionData, (val) => {
+  if (!isSyncingFromProp) {
+    emit("update:modelValue", val)
+  }
+}, { deep: true })
+
 </script>
 
 <template>
