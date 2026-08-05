@@ -195,6 +195,12 @@ const imageMap = {
 
 const resolveImage = (image) => imageMap[image] || image;
 
+const parseDate = (value) => {
+  if (!value) return new Date(0);
+  const d = value instanceof Date ? value : new Date(String(value).replace(/(\d+)(st|nd|rd|th)/gi, '$1'));
+  return isNaN(d.getTime()) ? new Date(0) : d;
+};
+
 const fetchUpcomingEvents = async () => {
   loadingUpcoming.value = true;
   try {
@@ -240,7 +246,7 @@ const fetchPastEvents = async () => {
       return endDate && new Date(endDate) < now;
     });
     const mappedApiEvents = pastApiEvents.map((e) => {
-      const startDate = new Date(e.start_datetime || e.start_date || e.date || e.created_at);
+      const startDate = parseDate(e.start_datetime || e.start_date || e.date || e.created_at);
       return {
         id: e.id,
         title: e.title,
@@ -248,9 +254,11 @@ const fetchPastEvents = async () => {
         date: startDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
         theme: e.theme || e.description || '',
         image: e.banner_image || breakfast2025,
+        _sortDate: startDate,
       };
     });
-    pastEvents.value = [...mappedApiEvents, ...staticPastEvents];
+    pastEvents.value = [...mappedApiEvents, ...staticPastEvents.map((s) => ({ ...s, _sortDate: parseDate(s.date) }))]
+      .sort((a, b) => b._sortDate - a._sortDate);
   } catch (error) {
     console.error('Failed to fetch past events:', error);
     pastEvents.value = [...staticPastEvents];
