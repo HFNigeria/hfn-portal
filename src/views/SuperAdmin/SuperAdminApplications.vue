@@ -78,6 +78,15 @@ const getApplicationDate = (app) => {
   return app.created_at || app.date_joined || null;
 };
 
+const resolveUserId = (app) => {
+  if (!app) return null;
+  if (app.created_user) return app.created_user;
+  if (app.user_id) return app.user_id;
+  if (app.user?.id) return app.user.id;
+  if (app.member_category === "association" || app.member_category === "corporate" || app.member_category === "individual") return app.id;
+  return null;
+};
+
 const getApplicationStatus = (app) => {
   if (app.status) return app.status;
   if (app.is_active === true) return "approved";
@@ -211,7 +220,7 @@ const goToCreateTransaction = () => {
 
 const resetTransactionForm = () => {
   transactionForm.value = {
-    user_id: selectedApplication.value?.created_user || null,
+    user_id: resolveUserId(selectedApplication.value),
     membership_type_id: "",
     start_date: "",
     end_date: "",
@@ -241,8 +250,6 @@ const handleMembershipTypeChange = () => {
 
 const openTransactionFromApproved = (application) => {
   selectedApplication.value = application;
-
-  transactionForm.value.user_id = application.created_user;
 
   resetTransactionForm();
   showTransactionModal.value = true;
