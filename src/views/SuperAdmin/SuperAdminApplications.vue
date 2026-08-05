@@ -14,6 +14,7 @@ const loading = ref(false);
 const searchQuery = ref("");
 const filterDateFrom = ref("");
 const filterDateTo = ref("");
+const filterCategory = ref("");
 const currentPage = ref(1);
 const itemsPerPage = 10;
 
@@ -105,7 +106,17 @@ const filteredApplications = computed(() => {
       matchesDateTo = new Date(appDate) <= toEnd;
     }
 
-    return matchesSearch && matchesDateFrom && matchesDateTo;
+    let matchesCategory = true;
+    if (filterCategory.value === "corporate") {
+      matchesCategory =
+        app.member_category === "association" ||
+        app.member_category === "corporate";
+    } else if (filterCategory.value === "individual") {
+      matchesCategory =
+        !app.member_category || app.member_category === "individual";
+    }
+
+    return matchesSearch && matchesDateFrom && matchesDateTo && matchesCategory;
   });
 });
 
@@ -263,7 +274,7 @@ const showSidebar = ref(false);
 const toggleSidebar = () => (showSidebar.value = !showSidebar.value);
 const closeSidebar = () => (showSidebar.value = false);
 
-watch([searchQuery, filterDateFrom, filterDateTo], () => { currentPage.value = 1; });
+watch([searchQuery, filterDateFrom, filterDateTo, filterCategory], () => { currentPage.value = 1; });
 
 onMounted(() => {
   fetchApplications();
@@ -334,6 +345,14 @@ onMounted(() => {
                 class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors"
               />
             </div>
+            <select
+              v-model="filterCategory"
+              class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-[#00cc66] focus:border-[#00cc66]"
+            >
+              <option value="">All</option>
+              <option value="corporate">Corporate</option>
+              <option value="individual">Individual</option>
+            </select>
             <div class="flex items-center gap-2">
               <label class="text-sm text-gray-600 whitespace-nowrap">From:</label>
               <input

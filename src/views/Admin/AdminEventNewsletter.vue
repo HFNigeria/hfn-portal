@@ -720,7 +720,7 @@ const closeSidebar = () => (showSidebar.value = false);
               placeholder="Select event type"
             >
               <option value="webinar">Webinar</option>
-              <option value="physical">Physical</option>
+              <option value="workshop">Physical</option>
             </select>
 
             <select
