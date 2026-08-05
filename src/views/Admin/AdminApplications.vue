@@ -255,13 +255,15 @@ const createTransaction = async () => {
     fetchApplications();
   } catch (error) {
     console.error("Failed to create transaction:", error);
+    const data = error.response?.data;
     const message =
-      error.response?.data?.detail ||
-      error.response?.data?.error ||
-      error.response?.data?.message ||
-      error.response?.data?.non_field_errors?.[0] ||
+      (Array.isArray(data) && data[0]) ||
+      data?.detail ||
+      data?.error ||
+      data?.message ||
+      data?.non_field_errors?.[0] ||
       "Failed to create transaction";
-    toast.error(Array.isArray(message) ? message[0] : message);
+    toast.error(message);
   } finally {
     actionLoading.value = null;
   }
