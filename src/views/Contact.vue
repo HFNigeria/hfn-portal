@@ -18,6 +18,10 @@ const errorMessage = ref("");
 const loadingPage = ref(true);
 const pageFromApi = ref(null);
 
+const honeypot = ref("");
+const formRenderedAt = ref(Date.now());
+const MIN_SUBMIT_MS = 3000;
+
 onMounted(async () => {
   try {
     const res = await pagesApi.getPageByType("contact");
@@ -65,6 +69,19 @@ const submitForm = async () => {
   loading.value = true;
   successMessage.value = "";
   errorMessage.value = "";
+
+  if (honeypot.value || Date.now() - formRenderedAt.value < MIN_SUBMIT_MS) {
+    successMessage.value =
+      "Thank you for reaching out. Our team will get back to you within 24 hours.";
+    form.value = {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    };
+    loading.value = false;
+    return;
+  }
 
   try {
     await contactApi.contactForm(form.value);
@@ -241,6 +258,18 @@ const submitForm = async () => {
                 class="p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm font-semibold"
               >
                 {{ errorMessage }}
+              </div>
+
+              <div class="absolute left-[-9999px] top-auto" aria-hidden="true">
+                <label for="website">Website</label>
+                <input
+                  type="text"
+                  id="website"
+                  name="website"
+                  v-model="honeypot"
+                  tabindex="-1"
+                  autocomplete="off"
+                />
               </div>
 
               <div class="pt-2">
