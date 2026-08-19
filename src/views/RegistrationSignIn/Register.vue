@@ -1,6 +1,7 @@
 <script setup>
 // import registerImage from "@/assets/register.jpg";
 import userRegister from "@/api/userRegister";
+import { getRecaptchaToken } from "@/utils/recaptcha";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
@@ -276,14 +277,18 @@ const handleRegistration = async () => {
   try {
     isLoading.value = true;
 
+    const recaptchaToken = await getRecaptchaToken("register");
+
     let payload;
     let response;
 
     if (activeTab.value === "individual") {
       payload = prepareIndividualPayload();
+      payload.recaptcha_token = recaptchaToken;
       response = await userRegister.createApplication(payload);
     } else {
       payload = prepareOrganizationPayload();
+      payload.recaptcha_token = recaptchaToken;
       response = await userRegister.createUser(payload);
     }
 

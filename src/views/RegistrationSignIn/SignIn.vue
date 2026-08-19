@@ -2,6 +2,7 @@
 import userRegister from "@/api/userRegister";
 // import registerImage from '@/assets/register.jpg';
 import { useAuth } from "@/store/authStore";
+import { getRecaptchaToken } from "@/utils/recaptcha";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
@@ -39,10 +40,13 @@ const handleSignIn = async () => {
   try {
     isLoading.value = true;
 
+    const recaptchaToken = await getRecaptchaToken("login");
+
     const payload = {
       email: username.value.trim(),
       password: password.value,
       remember_me: rememberMe.value,
+      recaptcha_token: recaptchaToken,
     };
 
     const response = await userRegister.loginUser(payload);
