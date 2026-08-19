@@ -692,8 +692,9 @@ watch(currentPage, () => {
                     <Eye class="w-full h-full text-gray-500 hover:text-blue-500" />
                   </button>
                   <button @click="handleAction('Edit', member.id)"
-                    class="w-6 h-6 transform hover:text-green-500 hover:scale-110 transition-transform p-0.5">
-                    <Edit2 class="w-full h-full text-gray-500 hover:text-green-500" />
+                    disabled
+                    class="w-6 h-6 transform hover:scale-110 transition-transform p-0.5 opacity-30 cursor-not-allowed">
+                    <Edit2 class="w-full h-full text-gray-500" />
                   </button>
                   <button @click="handleAction('Delete', member.id)"
                     class="w-6 h-6 transform hover:text-red-500 hover:scale-110 transition-transform p-0.5">
@@ -780,10 +781,9 @@ watch(currentPage, () => {
       </div>
 
       <div class="flex justify-between pt-6">
-        <button @click="openUpdateModal(selectedMember)" class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#005528]">
+        <button disabled class="px-4 py-2 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed">
           Update
         </button>
-
         <button @click="showMemberDetailsModal = false" class="px-4 py-2 border rounded-lg">
           Close
         </button>
