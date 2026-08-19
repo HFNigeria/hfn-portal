@@ -43,6 +43,7 @@ const countries = [
 ];
 const certificates = ref([]);
 const certificateUrl = ref('');
+const userRole = ref('');
 
 const profileImage = ref(null);
 const selectedFile = ref(null);
@@ -489,6 +490,7 @@ const fetchUserData = async () => {
 
     subscription.hasSubscription = data.is_active;
     subscription.type = data.membership_type || '';
+    userRole.value = data.member_category || data.role || '';
     subscription.expiryDate = data.membership_expires_at
       ? new Date(data.membership_expires_at).toLocaleDateString()
       : '';
@@ -879,7 +881,7 @@ onMounted(() => {
           <div class="p-10 bg-[#F2F9F3] rounded-xl shadow-lg text-center border-2 border-green-300">
             <h3 class="text-3xl font-sans text-[#333] mb-2">
               Subscription Type:
-              <span class="text-[#004D33] font-bold">Individual</span>
+              <span class="text-[#004D33] font-bold">{{ userRole || '' }}</span>
             </h3>
 
             <p class="text-sm text-gray-700 mb-10">

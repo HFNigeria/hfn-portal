@@ -178,11 +178,11 @@ const submitNewMember = async () => {
     const errors = error?.response?.data;
 
     if (errors) {
-      const firstError = Object.values(errors)[0]?.[0];
-
-      toast.error(firstError || "Failed to add member", "error");
+      const firstValue = Object.values(errors)[0];
+      const message = Array.isArray(firstValue) ? firstValue[0] : firstValue;
+      toast.error(message || "Failed to add member");
     } else {
-      toast.error("Something went wrong", "error");
+      toast.error("Something went wrong");
     }
 
     console.error("Failed to add member");
@@ -229,7 +229,7 @@ const updateMember = async () => {
       email: updateMemberForm.value.email,
       phone_number: updateMemberForm.value.phone_number,
       membership_type_id: updateMemberForm.value.membership_type_id ? Number(updateMemberForm.value.membership_type_id) : undefined,
-      role: updateMemberForm.value.role
+      role: updateMemberForm.value.member_category
     };
 
     const response = await membershipAPI.updateUser(selectedMember.value.id, payload);
@@ -243,10 +243,11 @@ const updateMember = async () => {
   } catch (error) {
     const errors = error?.response?.data;
     if (errors) {
-      const firstError = Object.values(errors)[0]?.[0];
-      toast.error(firstError || "Failed to update member", "error");
+      const firstValue = Object.values(errors)[0];
+      const message = Array.isArray(firstValue) ? firstValue[0] : firstValue;
+      toast.error(message || "Failed to update member");
     } else {
-      toast.error("Something went wrong", "error");
+      toast.error("Something went wrong");
     }
     console.error("Failed to update member");
   } finally {
@@ -262,7 +263,7 @@ const openUpdateModal = (member) => {
     email: member.email || "",
     phone_number: member.phone_number || "",
     membership_type_id: member.membership_type_id || "",
-    role: member.role || ""
+    role: member.member_category || ""
   };
   showUpdateMemberModal.value = true;
   showMemberDetailsModal.value = false;
@@ -388,7 +389,7 @@ const filteredMembers = computed(() => {
       (m.membership_type || "").toLowerCase().includes(term);
 
     // Role Filter
-    const matchesRole = filters.value.role ? m.role === filters.value.role : true;
+    const matchesRole = filters.value.member_category ? m.member_category === filters.value.member_category : true;
 
     const matchesMembership = filters.value.membership_type
       ? m.membership_type === filters.value.membership_type || m.membership_type_id === Number(filters.value.membership_type)
@@ -583,12 +584,12 @@ watch(currentPage, () => {
             </option>
           </select>
 
-          <select v-model="filters.role" class="filter">
-            <option value="">All Roles</option>
-            <option value="admin">Admin</option>
-            <option value="member">Member</option>
-            <option value="learner">Learner</option>
-            <option value="Tutor">Tutor</option>
+          <select v-model="filters.member_category" class="filter">
+            <option value="">All Categories</option>
+            <option value="individual">Individual</option>
+            <option value="corporate">Corporate</option>
+            <option value="multinational">Multinational</option>
+            <option value="diaspora">Diaspora</option>
           </select>
 
           <select v-model="filters.status" class="filter">
@@ -674,7 +675,7 @@ watch(currentPage, () => {
                 {{ member.email }}
               </td>
               <td class="py-3 px-3">
-                {{ member.membership_type || member.role || '-' }}
+                {{ member.membership_type || member.member_category || '-' }}
               </td>
               <td class="py-3 px-3">
                 {{ member.phone_number || '-' }}
@@ -773,7 +774,7 @@ watch(currentPage, () => {
         <p><strong>Email:</strong> {{ selectedMember.email }}</p>
         <p><strong>Phone:</strong> {{ selectedMember.phone_number }}</p>
         <p><strong>Membership Type:</strong> {{ selectedMember.membership_type }}</p>
-        <p><strong>Role:</strong> {{ selectedMember.role }}</p>
+        <p><strong>Role:</strong> {{ selectedMember.member_category }}</p>
         <p><strong>Status:</strong> {{ selectedMember.status }}</p>
         <p><strong>Date Joined:</strong> {{ selectedMember.date_joined }}</p>
       </div>
@@ -811,12 +812,12 @@ watch(currentPage, () => {
           </option>
         </select>
 
-        <select v-model="updateMemberForm.role" class="input">
-          <option disabled value="">Select Role</option>
-          <option value="admin">Admin</option>
-          <option value="member">Member</option>
-          <option value="learner">Learner</option>
-          <option value="Tutor">Tutor</option>
+        <select v-model="updateMemberForm.member_category" class="input">
+          <option disabled value="">Select Category</option>
+          <option value="individual">Individual</option>
+          <option value="corporate">Corporate</option>
+          <option value="multinational">Multinational</option>
+          <option value="diaspora">Diaspora</option>
         </select>
 
         <div class="flex justify-end space-x-3 pt-4">

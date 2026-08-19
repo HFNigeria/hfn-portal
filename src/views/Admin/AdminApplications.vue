@@ -90,6 +90,13 @@ const resolveUserId = (app) => {
   return null;
 };
 
+const getApplicationStatus = (app) => {
+  if (app.status) return app.status;
+  if (app.is_active === true) return "approved";
+  if (app.is_active === false) return "rejected";
+  return "pending";
+};
+
 const filteredApplications = computed(() => {
   return applications.value.filter((app) => {
     const matchesSearch =
@@ -420,20 +427,20 @@ onMounted(() => {
                 <td class="py-3 px-4 text-sm">
                   <span
                     :class="{
-                      'bg-yellow-100 text-yellow-800': application.status === 'pending',
-                      'bg-green-100 text-green-800': application.status === 'approved',
-                      'bg-red-100 text-red-800': application.status === 'rejected',
+                      'bg-yellow-100 text-yellow-800': getApplicationStatus(application) === 'pending',
+                      'bg-green-100 text-green-800': getApplicationStatus(application) === 'approved',
+                      'bg-red-100 text-red-800': getApplicationStatus(application) === 'rejected',
                     }"
                     class="px-2 py-1 rounded-full text-xs font-medium"
                   >
-                    {{ application.status || 'pending' }}
+                    {{ getApplicationStatus(application) }}
                   </span>
                 </td>
                 <td class="py-3 px-4 text-sm text-gray-800">
                   {{ getApplicationDate(application) ? new Date(getApplicationDate(application)).toLocaleDateString() : '-' }}
                 </td>
                 <td class="py-3 px-4 text-center" @click.stop>
-                  <div v-if="application.status === 'pending'" class="flex justify-center space-x-2">
+                  <div v-if="getApplicationStatus(application) === 'pending'" class="flex justify-center space-x-2">
                       <button
                         @click="openSuccessModal(application)"
                         :disabled="actionLoading === application.id"
@@ -459,7 +466,7 @@ onMounted(() => {
                       </button>
                     </div>
                   <div
-                    v-else-if="application.status === 'approved'"
+                    v-else-if="getApplicationStatus(application) === 'approved'"
                     class="flex justify-center space-x-2"
                   >
                     <span class="text-green-600 text-sm font-medium"

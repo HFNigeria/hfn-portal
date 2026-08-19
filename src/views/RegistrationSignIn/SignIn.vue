@@ -42,6 +42,7 @@ const handleSignIn = async () => {
     const payload = {
       email: username.value.trim(),
       password: password.value,
+      remember_me: rememberMe.value,
     };
 
     const response = await userRegister.loginUser(payload);
@@ -68,8 +69,15 @@ const handleSignIn = async () => {
         }, 1500);
       } else {
         if (response.tokens) {
-          localStorage.setItem("token", response.tokens.access);
-          localStorage.setItem("refresh", response.tokens.refresh);
+          const tokenStorage = rememberMe.value ? localStorage : sessionStorage;
+          tokenStorage.setItem("token", response.tokens.access);
+          tokenStorage.setItem("refresh", response.tokens.refresh);
+
+          if (rememberMe.value) {
+            localStorage.setItem("rememberedEmail", username.value.trim());
+          } else {
+            localStorage.removeItem("rememberedEmail");
+          }
 
           const role = (response.role || "member").toLowerCase();
 
@@ -86,7 +94,7 @@ const handleSignIn = async () => {
             login({
               role,
               user: normalizedUser,
-            });
+            }, rememberMe.value);
 
             handleRoleBasedRedirect(role);
           } catch (err) {
@@ -140,6 +148,12 @@ const handleSignIn = async () => {
 onMounted(() => {
   if (route.query.message === "session-expired") {
     toast.error("Your session has expired. Please login.");
+  }
+
+  const rememberedEmail = localStorage.getItem("rememberedEmail");
+  if (rememberedEmail) {
+    username.value = rememberedEmail;
+    rememberMe.value = true;
   }
 });
 
