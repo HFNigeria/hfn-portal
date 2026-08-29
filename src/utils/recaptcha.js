@@ -10,7 +10,7 @@ export const getRecaptchaToken = async (action = "register") => {
 
     window.grecaptcha.ready(() => {
       window.grecaptcha
-        .execute(6Lc9L58tAAAAAKrC55NoSzXfMDlsFg7sgFwDijkF, { action })
+        .execute(RECAPTCHA_SITE_KEY, { action })
         .then((token) => resolve(token))
         .catch((err) => {
           console.error("reCAPTCHA error:", err);
