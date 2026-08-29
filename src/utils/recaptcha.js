@@ -1,4 +1,4 @@
-const RECAPTCHA_SITE_KEY = "6Lc9L58tAAAAAKrC55NoSzXfMDlsFg7sgFwDijkF";
+const RECAPTCHA_SITE_KEY = "6Lc9L58tAAAAAKrC55NoSzXfMDIsFg7sgFwDijkF";
 
 export const getRecaptchaToken = async (action = "register") => {
   return new Promise((resolve, reject) => {
