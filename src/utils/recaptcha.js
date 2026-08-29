@@ -1,4 +1,4 @@
-const RECAPTCHA_SITE_KEY = "RECAPTCHA_SITE_KEY";
+const RECAPTCHA_SITE_KEY = "6Lc9L58tAAAAAKrC55NoSzXfMDlsFg7sgFwDijkF";
 
 export const getRecaptchaToken = async (action = "register") => {
   return new Promise((resolve, reject) => {
@@ -10,7 +10,7 @@ export const getRecaptchaToken = async (action = "register") => {
 
     window.grecaptcha.ready(() => {
       window.grecaptcha
-        .execute(RECAPTCHA_SITE_KEY, { action })
+        .execute(6Lc9L58tAAAAAKrC55NoSzXfMDlsFg7sgFwDijkF, { action })
         .then((token) => resolve(token))
         .catch((err) => {
           console.error("reCAPTCHA error:", err);
