@@ -26,6 +26,7 @@ import { newsPageSchema } from './pages/news.schema.js';
 import { resourcesPageSchema } from './pages/resources.schema.js';
 import { programsPageSchema } from './pages/programs.schema.js';
 import { footerSchema } from './pages/footer.schema.js';
+import { customPageSchema } from './pages/custom.schema.js';
 
 
 const eventImage =
@@ -58,4 +59,5 @@ export const pageSchemas = {
   programs: programsPageSchema,
   resources: resourcesPageSchema,
   footer: footerSchema,
+  custom: customPageSchema,
 };
