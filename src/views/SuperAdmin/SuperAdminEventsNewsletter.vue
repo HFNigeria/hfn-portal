@@ -442,6 +442,7 @@ const uploadForm = ref({
   audience: "all",
   media_type: "image",
   youtube_url: "",
+  date: "",
   files: [],
   bannerIndex: 0,
 });
@@ -547,6 +548,7 @@ const resetUploadForm = () => {
     audience: "all",
     media_type: "image",
     youtube_url: "",
+    date: "",
     files: [],
     bannerIndex: 0,
   };
@@ -568,6 +570,7 @@ const createUpload = async () => {
     formData.append("audience", uploadForm.value.audience);
     formData.append("media_type", uploadForm.value.media_type);
     formData.append("type", uploadForm.value.type);
+    formData.append("date", uploadForm.value.date);
 
     if (uploadForm.value.type === "video" && uploadForm.value.media_type === "youtube") {
       if (!uploadForm.value.youtube_url) return;
@@ -1165,6 +1168,18 @@ const closeSidebar = () => (showSidebar.value = false);
               <option value="members">Members Only</option>
               <option value="non_members">Non Members Only</option>
             </select>
+
+            <div class="mb-3">
+              <label for="upload-date" class="block mb-1 text-sm font-medium text-gray-700">
+                Date
+              </label>
+              <input
+                id="upload-date"
+                v-model="uploadForm.date"
+                type="date"
+                class="input"
+              />
+            </div>
 
             <textarea
               v-model="uploadForm.summary"
