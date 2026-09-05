@@ -111,4 +111,8 @@ export const membershipPageSchema = {
       ],
     },
   ],
+
+  memberDirectory: {
+    title: 'Member Directory',
+  },
 };

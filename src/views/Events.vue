@@ -169,7 +169,7 @@ const staticPastEvents = [
     id: "static-past-4",
     title: "2026 HFN Annual Conference",
     category: "Member Only",
-    date: "Wednesday, March 4th 2026",
+    date: "March 4, 2026",
     time: "10:00 AM",
     location: "Lagos Oriental Hotel Lagos, LA",
     frequency: "Free for Members",
@@ -204,6 +204,13 @@ const parseDate = (value) => {
   return isNaN(d.getTime()) ? new Date(0) : d;
 };
 
+const formatDate = (value) =>
+  parseDate(value).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+
 const fetchUpcomingEvents = async () => {
   loadingUpcoming.value = true;
   try {
@@ -218,8 +225,8 @@ const fetchUpcomingEvents = async () => {
     const mappedApiEvents = filteredApiEvents.map((e) => {
       const startDate = new Date(e.start_datetime || e.start_date || e.date || e.created_at);
       const endDate = e.end_datetime || e.end_date ? new Date(e.end_datetime || e.end_date) : null;
-      let formattedDate = startDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-      formattedDate += endDate ? ` - ${endDate.toLocaleDateString('en-US', { day: 'numeric', year: 'numeric' })}` : `, ${startDate.getFullYear()}`;
+      let formattedDate = formatDate(startDate);
+      formattedDate += endDate ? ` - ${formatDate(endDate)}` : '';
       return {
         id: e.id,
         title: e.title,
@@ -254,7 +261,7 @@ const fetchPastEvents = async () => {
         id: e.id,
         title: e.title,
         category: e.event_type || 'Conference',
-        date: startDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+        date: formatDate(startDate),
         theme: e.theme || e.description || '',
         image: e.banner_image || breakfast2025,
         _sortDate: startDate,

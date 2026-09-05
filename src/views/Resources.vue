@@ -557,6 +557,17 @@ const isPublicContent = (item) => {
   return item.audience === "all" || item.audience === "non-members";
 };
 
+const formatDate = (value) => {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? ""
+    : date.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+};
+
 const fetchDocuments = async () => {
   try {
     const [newslettersRes, publicationsRes] = await Promise.all([
@@ -577,7 +588,7 @@ const fetchDocuments = async () => {
       .map((item) => ({
         text: item.title,
         pdfUrl: item.file || item.pdf || item.document,
-        date: new Date(item.created_at).toDateString(),
+        date: formatDate(item.created_at),
         created_at: new Date(item.created_at),
       }));
 

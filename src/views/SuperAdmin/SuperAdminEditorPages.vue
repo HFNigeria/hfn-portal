@@ -51,6 +51,7 @@ import GetinvolvedPartnershipsEditor from "./components/cms/getinvolved/Getinvol
 import GetinvolvedVolunteeringEditor from "./components/cms/getinvolved/GetinvolvedVolunteeringEditor.vue";
 
 import MemberCategoriesEditor from "./components/cms/member/MemberCategoriesEditor.vue";
+import MemberDirectoryEditor from "./components/cms/member/MemberDirectoryEditor.vue";
 import MemberHeroEditor from "./components/cms/member/MemberHeroEditor.vue";
 
 import ContactDetailsEditor from "./components/cms/contact/ContactDetailsEditor.vue";
@@ -137,6 +138,7 @@ const componentMap = {
   member: {
     hero: MemberHeroEditor,
     categories: MemberCategoriesEditor,
+    memberDirectory: MemberDirectoryEditor,
   },
   contact: {
     hero: ContactHeroEditor,
@@ -152,19 +154,28 @@ const componentMap = {
   footer: {
     main: FooterEditor,
   },
+  custom: {
+    hero: AboutHeroEditor,
+    main: AboutStoryEditor,
+  },
 };
 
 const availablePageTypes = computed(() => Object.keys(pageSchemas));
 
 const pages = ref([]);
 const isLoading = ref(false);
+const selectedPageType = ref("");
+const newPageName = ref("");
 
-const createPage = async (pageName) => {
+const createPage = async () => {
   try {
-    const pageType = pageName.toLowerCase().trim().replace(/\s+/g, "-");
-    const schema = structuredClone(pageSchemas[pageType]);
+    const pageName = newPageName.value.trim();
+    const templateType = selectedPageType.value;
+    const pageType = "others";
+    if (!templateType || !pageName) return;
+    const schema = structuredClone(pageSchemas[templateType]);
 
-    const exists = pages.value.some((p) => p.page_type === pageType);
+    const exists = pages.value.some((p) => p.name?.toLowerCase() === pageName.toLowerCase());
     if (exists) {
       console.log(`${pageName} page already exists`);
       return;
@@ -183,7 +194,7 @@ const createPage = async (pageName) => {
     pages.value.push({
       ...newPage,
       title: newPage.name,
-      slug: `/${pageType}`,
+      slug: `/${pageName.toLowerCase().replace(/\s+/g, "-")}`,
       sections: structuredClone(schema),
     });
     await fetchPages();
@@ -212,7 +223,7 @@ const fetchPages = async () => {
 
     const rawPages = await pagesApi.listPages();
     pages.value = rawPages.map((page) => {
-      const schema = pageSchemas[page.page_type?.toLowerCase()] ?? {};
+      const schema = pageSchemas[page.page_type?.toLowerCase()] ?? pageSchemas.custom ?? {};
 
       const content = structuredClone(schema ?? {});
 
@@ -284,14 +295,17 @@ const sectionKeys = computed(() => {
   return Object.keys(activePage.value.sections);
 });
 
+const pageEditorType = computed(() => {
+  const pageType = activePage.value?.page_type?.toLowerCase();
+  return pageSchemas[pageType] ? pageType : "custom";
+});
+
 const toggleSectionVisibility = (key) => {
   const section = activePage.value.sections[key];
   if (section) {
     section.is_hidden = !section.is_hidden;
   }
 };
-
-const newPageTitle = ref("");
 
 const viewPage = (page) => {
   router.push({
@@ -429,7 +443,7 @@ watch(
     currentSectionData.value =
       section ??
       structuredClone(
-        pageSchemas[activePage.value.page_type?.toLowerCase()]?.[
+        (pageSchemas[activePage.value.page_type?.toLowerCase()] ?? pageSchemas.custom)?.[
           activeSection.value
         ]
       );
@@ -441,7 +455,7 @@ const toggleVisibility = async (page) => {
   page.is_visible = !page.is_visible;
   try {
     await pagesApi.updatePageVisibility(
-      page.page_type.toLowerCase(),
+      page.page_type,
       page.is_visible
     );
   } catch (e) {
@@ -459,7 +473,7 @@ watch(activePage, (page) => {
     return;
   }
 
-  const schema = pageSchemas[pageType];
+  const schema = pageSchemas[pageType] ?? pageSchemas.custom;
   const firstSection = schema ? Object.keys(schema)[0] : "hero";
 
   activeSection.value = firstSection;
@@ -514,7 +528,7 @@ watch(activePage, (page) => {
         </div>
         <div class="flex items-center space-x-3 mb-6">
           <select
-            @change="createPage($event.target.value)"
+            v-model="selectedPageType"
             class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
           >
             <option value="" disabled selected>Select page type</option>
@@ -526,7 +540,20 @@ watch(activePage, (page) => {
               {{ type.toUpperCase() }}
             </option>
           </select>
-          <p>Create page by selecting page type</p>
+          <input
+            v-model="newPageName"
+            type="text"
+            placeholder="Page name"
+            class="border border-gray-300 rounded-lg px-3 py-2 text-sm"
+          />
+          <button
+            type="button"
+            :disabled="!selectedPageType || !newPageName.trim()"
+            @click="createPage"
+            class="px-4 py-2 rounded-lg bg-green-700 text-white text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Create Page
+          </button>
         </div>
 
         <div class="space-y-3">
@@ -954,6 +981,11 @@ watch(activePage, (page) => {
           <component
             v-if="activePage.page_type.toLowerCase() === 'footer'"
             :is="componentMap.footer?.[activeSection]"
+            v-model="currentSectionData"
+          />
+          <component
+            v-if="pageEditorType === 'custom'"
+            :is="componentMap.custom?.[activeSection]"
             v-model="currentSectionData"
           />
 

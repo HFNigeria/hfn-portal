@@ -1,12 +1,14 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import ImageUploader from '@/components/layout/ImageUploader.vue'
 
 const props = defineProps({
   modelValue: Object
 })
 
 const emit = defineEmits(['update:modelValue'])
+
 const currentSectionData = ref(props.modelValue || {})
 
 watch(

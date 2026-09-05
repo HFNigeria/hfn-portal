@@ -74,6 +74,7 @@ import Homepage from '../views/Homepage.vue';
 import GalleryDetail from '@/views/GalleryDetail.vue';
 import TeamDetail from '@/views/TeamDetail.vue';
 import Governance from '@/views/Governance.vue';
+import CustomPage from '@/views/CustomPage.vue';
 
 import Buttons from '@/components/layout/Buttons.vue';
 import SuperAdminEditorPages from '@/views/SuperAdmin/SuperAdminEditorPages.vue';
@@ -421,6 +422,11 @@ const routes = [
     path: '/learner/support',
     name: 'LearnerSupport',
     component: LearnerSupport,
+  },
+  {
+    path: '/:slug',
+    name: 'CustomPage',
+    component: CustomPage,
   },
 ];
 
