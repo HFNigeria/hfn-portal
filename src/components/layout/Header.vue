@@ -1,7 +1,8 @@
 <script setup>
 // import hfn_logo from "@/assets/hfn-health.png";
+import axios from "axios";
 import { useAuth } from "@/store/authStore";
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
 const route = useRoute();
@@ -68,7 +69,7 @@ const isLinkActive = (link) => {
   return false;
 };
 
-const navLinks = [
+const staticNavLinks = [
   { title: "Home", path: "/", hasDropdown: false },
   {
     title: "About Us",
@@ -101,6 +102,73 @@ const navLinks = [
   },
   { title: "Contact Us", path: "/contact", hasDropdown: false },
 ];
+
+const dynamicPages = ref([]);
+
+const loadDynamicPages = async () => {
+  try {
+    const publicApi = axios.create({
+      baseURL: "https://hfn-backend-production.up.railway.app/api",
+      timeout: 15000,
+    });
+    const res = await publicApi.get("/pages/");
+    const rawPages = res.data || [];
+    dynamicPages.value = rawPages
+      .filter((p) => p.menu && p.is_visible)
+      .map((p) => ({
+        menu: p.menu,
+        title: p.name,
+        path: `/${(p.name ?? "")
+          .toLowerCase()
+          .replace(/\s+/g, "-")}`,
+      }));
+  } catch (e) {
+    console.warn("Failed to load dynamic nav pages", e);
+  }
+};
+
+onMounted(loadDynamicPages);
+
+const navLinks = computed(() => {
+  const links = structuredClone(staticNavLinks);
+  const addTop = [];
+  const addTo = {
+    about: [],
+    news: [],
+    membership: [],
+  };
+
+  for (const page of dynamicPages.value) {
+    if (page.menu === "top") {
+      addTop.push({
+        title: page.title,
+        path: page.path,
+        hasDropdown: false,
+      });
+    } else if (addTo[page.menu]) {
+      addTo[page.menu].push({ title: page.title, path: page.path });
+    }
+  }
+
+  const merged = [];
+
+  for (const link of links) {
+    const key = link.title.toLowerCase();
+    if (addTo.about && key === "about us") {
+      link.dropdownItems = [...link.dropdownItems, ...addTo.about];
+    } else if (key === "news & updates") {
+      link.dropdownItems = [...link.dropdownItems, ...addTo.news];
+    } else if (key === "membership") {
+      link.dropdownItems = [...link.dropdownItems, ...addTo.membership];
+    }
+    merged.push(link);
+    if (key === "contact us") {
+      merged.push(...addTop);
+    }
+  }
+
+  return merged;
+});
 
 watch(
   () => route.path,
