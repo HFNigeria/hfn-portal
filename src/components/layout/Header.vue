@@ -75,7 +75,14 @@ const navLinks = [
     path: "/about",
     hasDropdown: true,
 
-    dropdownItems: [{ title: "Governance", path: "/governance" }],
+    dropdownItems: [
+      { title: "Governance", path: "/governance" },
+      {
+        title: "Health Guardian",
+        path: "https://hfn-health-guardians.netlify.app/",
+        external: true,
+      },
+    ],
   },
   {
     title: "News & Updates",
@@ -211,15 +218,26 @@ const toggleDropdown = (title) => {
             v-if="link.hasDropdown"
             class="absolute left-0 mt-2 w-56 bg-white border border-gray-100 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-20"
           >
-            <RouterLink
-              v-for="item in link.dropdownItems"
-              :key="item.title"
-              :to="item.path"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-[#F2F9F3] hover:text-[#004d33]"
-              @click="handleLinkClick(item.path)"
-            >
-              {{ item.title }}
-            </RouterLink>
+            <template v-for="item in link.dropdownItems" :key="item.title">
+              <a
+                v-if="item.external"
+                :href="item.path"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-[#F2F9F3] hover:text-[#004d33]"
+                @click="handleLinkClick(item.path)"
+              >
+                {{ item.title }}
+              </a>
+              <RouterLink
+                v-else
+                :to="item.path"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-[#F2F9F3] hover:text-[#004d33]"
+                @click="handleLinkClick(item.path)"
+              >
+                {{ item.title }}
+              </RouterLink>
+            </template>
           </div>
         </div>
       </div>
@@ -491,15 +509,26 @@ const toggleDropdown = (title) => {
           </div>
 
           <div v-if="openDropdown === link.title" class="pl-6 pr-4 pb-2 bg-gray-50 space-y-2">
-            <RouterLink 
-              v-for="item in link.dropdownItems" 
-              :key="item.title" 
-              :to="item.path" 
-              class="block py-3 text-sm text-gray-700 border-b border-gray-100 last:border-0 hover:text-[#004d33]" 
-              @click="handleLinkClick(item.path)"
-            >
-              {{ item.title }}
-            </RouterLink>
+              <template v-for="item in link.dropdownItems" :key="item.title">
+                <a
+                  v-if="item.external"
+                  :href="item.path"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="block py-3 text-sm text-gray-700 border-b border-gray-100 last:border-0 hover:text-[#004d33]"
+                  @click="handleLinkClick(item.path)"
+                >
+                  {{ item.title }}
+                </a>
+                <RouterLink
+                  v-else
+                  :to="item.path"
+                  class="block py-3 text-sm text-gray-700 border-b border-gray-100 last:border-0 hover:text-[#004d33]"
+                  @click="handleLinkClick(item.path)"
+                >
+                  {{ item.title }}
+                </RouterLink>
+              </template>
           </div>
         </div>
       </div>
