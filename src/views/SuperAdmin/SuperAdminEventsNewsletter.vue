@@ -443,6 +443,7 @@ const uploadForm = ref({
   audience: "all",
   media_type: "image",
   youtube_url: "",
+  date: "",
   files: [],
   bannerIndex: 0,
 });
@@ -465,6 +466,7 @@ const fetchUploads = async () => {
       type: "newsletter",
       file: n.file,
       created_at: n.created_at,
+      date: n.date,
       slug: n.slug,
     }));
 
@@ -476,6 +478,7 @@ const fetchUploads = async () => {
         type: "publications",
         file: n.file,
         created_at: n.created_at,
+        date: n.date,
         slug: n.slug,
       }));
 
@@ -485,6 +488,7 @@ const fetchUploads = async () => {
       type: "minute",
       file: m.file,
       created_at: m.created_at,
+      date: m.date,
       slug: m.slug,
     }));
 
@@ -495,6 +499,7 @@ const fetchUploads = async () => {
       file: d.file,
       slug: d.slug,
       created_at: d.created_at,
+      date: d.date,
     }));
 
     const normalizedGalleries = galleries.map((g) => ({
@@ -503,6 +508,7 @@ const fetchUploads = async () => {
       type: "gallery",
       file: g.image,
       created_at: g.created_at,
+      date: g.date,
       slug: g.slug,
     }));
 
@@ -513,6 +519,7 @@ const fetchUploads = async () => {
       file: v.video_file,
       youtube_url: v.youtube_url,
       created_at: v.created_at,
+      date: v.date,
     }));
 
     uploads.value = [
@@ -549,6 +556,7 @@ const resetUploadForm = () => {
     audience: "all",
     media_type: "image",
     youtube_url: "",
+    date: "",
     files: [],
     bannerIndex: 0,
   };
@@ -571,6 +579,7 @@ const createUpload = async () => {
     formData.append("audience", uploadForm.value.audience);
     formData.append("media_type", uploadForm.value.media_type);
     formData.append("type", uploadForm.value.type);
+    formData.append("date", uploadForm.value.date);
 
     if (uploadForm.value.type === "video" && uploadForm.value.media_type === "youtube") {
       if (!uploadForm.value.youtube_url) return;
@@ -1181,6 +1190,9 @@ const closeSidebar = () => (showSidebar.value = false);
               placeholder="Description"
             ></textarea>
 
+            <label class="block mb-1 text-sm font-medium text-gray-700">Date</label>
+            <input v-model="uploadForm.date" type="date" class="input mb-3" />
+
             <select v-model="uploadForm.media_type" class="input mb-3">
               <option value="image">Upload File</option>
               <option value="youtube">YouTube Video</option>
@@ -1274,6 +1286,7 @@ const closeSidebar = () => (showSidebar.value = false);
                 <tr>
                   <th class="p-3">Title</th>
                   <th>Type</th>
+                  <th class="p-3">Date</th>
                   <th class="p-3">Preview / File</th>
                   <th class="p-3">Action</th>
                 </tr>
@@ -1303,6 +1316,7 @@ const closeSidebar = () => (showSidebar.value = false);
                       {{ item.type }}
                     </span>
                   </td>
+                  <td class="p-3">{{ item.date || item.created_at || "-" }}</td>
 
                   <td class="p-3">
                     <!-- IMAGE -->
