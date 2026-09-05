@@ -388,6 +388,7 @@ const uploads = ref([]);
 
 const uploadForm = ref({
   title: '',
+  date: '',
   type: 'newsletter',
   description: '',
   summary: '',
@@ -493,6 +494,7 @@ const fileInputRef = ref(null);
 const resetUploadForm = () => {
   uploadForm.value = {
     title: '',
+    date: '',
     type: 'newsletter',
     description: '',
     summary: '',
@@ -516,6 +518,7 @@ const createUpload = async () => {
     const formData = new FormData();
 
     formData.append('title', uploadForm.value.title);
+    formData.append('date', uploadForm.value.date);
     formData.append('summary', uploadForm.value.summary);
     formData.append('audience', uploadForm.value.audience);
     formData.append('media_type', uploadForm.value.media_type);
@@ -1141,6 +1144,12 @@ const closeSidebar = () => (showSidebar.value = false);
               v-model="uploadForm.title"
               class="input mb-3"
               placeholder="Title"
+            />
+
+            <input
+              v-model="uploadForm.date"
+              type="date"
+              class="input mb-3"
             />
 
             <select v-model="uploadForm.type" class="input mb-3">
