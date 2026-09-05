@@ -60,6 +60,9 @@
               <img :src="event.image" alt="Event image" class="object-cover w-full h-full rounded-lg" />
             </div>
             <div class="lg:w-1/2 p-6 md:p-8 flex flex-col justify-center">
+              <h4 class="text-2xl font-bold text-gray-900 mb-3">
+                {{ event.title }}
+              </h4>
               <div class="self-start inline-block text-[10px] font-semibold uppercase text-orange-600 bg-white rounded-full px-3 py-1 shadow-sm border border-orange-100">
                 {{ event.category || 'Open Events' }}
               </div>

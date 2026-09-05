@@ -293,6 +293,7 @@ const toggleDropdown = (title) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-[#F2F9F3] hover:text-[#004d33]"
+                @click="handleLinkClick(item.path)"
               >
                 {{ item.title }}
               </a>
@@ -575,26 +576,27 @@ const toggleDropdown = (title) => {
             </button>
           </div>
 
-<div v-if="openDropdown === link.title" class="pl-6 pr-4 pb-2 bg-gray-50 space-y-2">
-            <template v-for="item in link.dropdownItems" :key="item.title">
-              <a
-                v-if="item.external"
-                :href="item.path"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="block py-3 text-sm text-gray-700 border-b border-gray-100 last:border-0 hover:text-[#004d33]"
-              >
-                {{ item.title }}
-              </a>
-              <RouterLink
-                v-else
-                :to="item.path"
-                class="block py-3 text-sm text-gray-700 border-b border-gray-100 last:border-0 hover:text-[#004d33]"
-                @click="handleLinkClick(item.path)"
-              >
-                {{ item.title }}
-              </RouterLink>
-            </template>
+          <div v-if="openDropdown === link.title" class="pl-6 pr-4 pb-2 bg-gray-50 space-y-2">
+              <template v-for="item in link.dropdownItems" :key="item.title">
+                <a
+                  v-if="item.external"
+                  :href="item.path"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="block py-3 text-sm text-gray-700 border-b border-gray-100 last:border-0 hover:text-[#004d33]"
+                  @click="handleLinkClick(item.path)"
+                >
+                  {{ item.title }}
+                </a>
+                <RouterLink
+                  v-else
+                  :to="item.path"
+                  class="block py-3 text-sm text-gray-700 border-b border-gray-100 last:border-0 hover:text-[#004d33]"
+                  @click="handleLinkClick(item.path)"
+                >
+                  {{ item.title }}
+                </RouterLink>
+              </template>
           </div>
         </div>
       </div>
