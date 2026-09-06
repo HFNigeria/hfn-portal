@@ -195,7 +195,7 @@ const createPage = async () => {
       page_type: pageType,
       name: pageName,
       status: "draft",
-      is_visible: false,
+      is_visible: true,
       menu: selectedMenu.value,
       content: schema,
     };
@@ -427,6 +427,8 @@ const saveChanges = async () => {
     };
 
     const payload = {
+      status: activePage.value.status || 'draft',
+      is_visible: activePage.value.is_visible ?? true,
       content: activePage.value.sections,
     };
 
