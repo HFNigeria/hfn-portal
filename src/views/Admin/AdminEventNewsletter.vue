@@ -402,7 +402,7 @@ const uploadForm = ref({
 
 const fetchUploads = async () => {
   try {
-    const [newsletters, minutes, documents, galleries, publications, videos] =
+    const [newsletters, minutes, documents, galleries, publications, videos, editorials] =
       await Promise.all([
         uploadsApi.listNewsletters(),
         uploadsApi.getMinutes(),
@@ -410,6 +410,7 @@ const fetchUploads = async () => {
         uploadsApi.gallery(),
         uploadsApi.listPublications(),
         uploadsApi.getVideos(),
+        uploadsApi.listEditorials(),
       ]);
 
     const normalizedNewsletters = newsletters.map((n) => ({
@@ -474,6 +475,16 @@ const fetchUploads = async () => {
       date: v.date,
     }));
 
+    const normalizedEditorials = editorials.map((e) => ({
+      id: e.id,
+      title: e.title,
+      type: 'editorial',
+      file: e.file,
+      slug: e.slug,
+      created_at: e.created_at,
+      date: e.date,
+    }));
+
     uploads.value = [
       ...normalizedNewsletters,
       ...normalizedMinutes,
@@ -481,6 +492,7 @@ const fetchUploads = async () => {
       ...normalizedGalleries,
       ...normalizedPublications,
       ...normalizedVideos,
+      ...normalizedEditorials,
     ];
   } catch (error) {
     console.error('Failed to fetch uploads');
@@ -591,6 +603,10 @@ const createUpload = async () => {
         await uploadsApi.createPublications(formData);
         break;
 
+      case 'editorial':
+        await uploadsApi.createEditorials(formData);
+        break;
+
       case 'newsletter':
         await uploadsApi.createNewsletters(formData);
         break;
@@ -641,6 +657,9 @@ const handleDeleteUpload = (item) => {
           break;
         case 'publications':
           await uploadsApi.deletepublications(item.slug);
+          break;
+        case 'editorial':
+          await uploadsApi.deleteEditorials(item.slug);
           break;
         case 'video':
           await uploadsApi.deleteVideo(item.slug);
@@ -1167,6 +1186,7 @@ const closeSidebar = () => (showSidebar.value = false);
               <option value="gallery">Gallery</option>
               <option value="minute">Minute</option>
               <option value="publications">Publications</option>
+              <option value="editorial">Editorial</option>
               <option value="video">Video</option>
             </select>
 
@@ -1300,6 +1320,8 @@ const closeSidebar = () => (showSidebar.value = false);
                           item.type === 'publications',
                         'bg-purple-100 text-purple-700':
                           item.type === 'gallery',
+                        'bg-yellow-100 text-yellow-700':
+                          item.type === 'editorial',
                       }"
                     >
                       {{ item.type }}

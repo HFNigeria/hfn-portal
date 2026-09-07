@@ -84,6 +84,7 @@
                   {{ event.location }}
                 </span>
               </div>
+              <h4 class="text-2xl font-bold text-gray-900 mb-3">{{ event.title }}</h4>
               <p class="text-gray-600 mb-6">{{ event.description }}</p>
               <a
                 v-if="event.registerLink"

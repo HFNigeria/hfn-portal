@@ -251,6 +251,108 @@
         </button>
       </div>
       </template>
+
+      <template v-if="!page.editorialSection?.is_hidden">
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
+          {{ page.editorialSection.title || 'Editorials' }}
+        </h2>
+
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16 py-10 px-10 rounded-3xl"
+          :style="{ backgroundColor: page.editorialSection.backgroundColor || '#F2F9F3' }"
+        >
+          <div
+            v-for="(ed, index) in paginatedEditorials"
+            :key="index"
+            class="flex flex-col text-center"
+          >
+            <div
+              style="display: inline-table"
+              class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md flex items-center justify-center bg-white"
+            >
+              <iframe
+                :src="`https://docs.google.com/viewer?url=${encodeURIComponent(ed.pdfUrl)}&embedded=true`"
+                class="w-full h-full pointer-events-none"
+                frameborder="0"
+                title="Editorial preview"
+              ></iframe>
+            </div>
+
+            <h4 class="text-lg font-semibold text-gray-900 mb-1">
+              {{ ed.title }}
+            </h4>
+
+            <p class="text-sm text-orange-500 mb-4">
+              {{ ed.date }}
+            </p>
+
+            <a
+              :href="ed.pdfUrl"
+              target="_blank"
+              class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors"
+            >
+              Download
+            </a>
+          </div>
+
+          <p
+            v-if="paginatedEditorials.length === 0"
+            class="col-span-full text-center text-gray-500"
+          >
+            No editorials available yet.
+          </p>
+        </div>
+        <div
+          v-if="totalEditorialPages > 1"
+          class="flex justify-center items-center space-x-4 text-gray-600 mb-20"
+        >
+          <button
+            @click="editorialPage--"
+            :disabled="editorialPage === 1"
+            :class="{ 'opacity-50 cursor-not-allowed': editorialPage === 1 }"
+            class="flex items-center space-x-1 text-green-700 hover:underline disabled:hover:no-underline"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+            <span>Prev</span>
+          </button>
+          <span class="text-sm">Page {{ editorialPage }} of {{ totalEditorialPages }}</span>
+          <button
+            @click="editorialPage++"
+            :disabled="editorialPage === totalEditorialPages"
+            :class="{ 'opacity-50 cursor-not-allowed': editorialPage === totalEditorialPages }"
+            class="flex items-center space-x-1 text-green-700 hover:underline disabled:hover:no-underline"
+          >
+            <span>Next</span>
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </template>
     </main>
   </div>
   <!-- PAYMENT MODAL -->
@@ -370,8 +472,10 @@ import { useToast } from "vue-toastification";
 
 const newsletters = ref([]);
 const publications = ref([]);
+const editorials = ref([]);
 const newsletterPage = ref(1);
 const publicationPage = ref(1);
+const editorialPage = ref(1);
 const itemsPerPage = 8;
 const showPaymentDialog = ref(false);
 const showSuccessDialog = ref(false);
@@ -570,9 +674,10 @@ const formatDate = (value) => {
 
 const fetchDocuments = async () => {
   try {
-    const [newslettersRes, publicationsRes] = await Promise.all([
+    const [newslettersRes, publicationsRes, editorialsRes] = await Promise.all([
       contentUploadApi.listNewsletters(),
       contentUploadApi.listPublications(),
+      contentUploadApi.listEditorials(),
     ]);
 
     const newslettersData = Array.isArray(newslettersRes)
@@ -582,6 +687,10 @@ const fetchDocuments = async () => {
     const publicationsData = Array.isArray(publicationsRes)
       ? publicationsRes
       : publicationsRes.results || [];
+
+    const editorialsData = Array.isArray(editorialsRes)
+      ? editorialsRes
+      : editorialsRes.results || [];
 
     const apiNewsletters = newslettersData
       .filter(isPublicContent)
@@ -633,6 +742,20 @@ const fetchDocuments = async () => {
       (a, b) => b.created_at - a.created_at
     );
 
+    const apiEditorials = editorialsData
+      .filter(isPublicContent)
+      .map((item) => ({
+        title: item.title,
+        pdfUrl: item.file || item.pdf || item.document,
+        description: item.caption || item.description || "",
+        created_at: item.created_at ? new Date(item.created_at) : new Date(0),
+        date: formatDate(item.created_at),
+      }));
+
+    editorials.value = apiEditorials.sort(
+      (a, b) => b.created_at - a.created_at
+    );
+
   } catch (error) {
     console.error("Error fetching documents");
 
@@ -681,6 +804,10 @@ const page = computed(() => {
       ...resourcesPageSchema.publicationsSection,
       ...(pageFromApi.value?.publicationsSection || {}),
     },
+    editorialSection: {
+      ...resourcesPageSchema.editorialSection,
+      ...(pageFromApi.value?.editorialSection || {}),
+    },
   };
 });
 
@@ -702,8 +829,15 @@ const paginatedPublications = computed(() => {
   return publications.value.slice(start, end);
 });
 
+const paginatedEditorials = computed(() => {
+  const start = (editorialPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return editorials.value.slice(start, end);
+});
+
 const totalNewsletterPages = computed(() => Math.ceil(newsletters.value.length / itemsPerPage) || 1);
 const totalPublicationPages = computed(() => Math.ceil(publications.value.length / itemsPerPage) || 1);
+const totalEditorialPages = computed(() => Math.ceil(editorials.value.length / itemsPerPage) || 1);
 </script>
 
 
