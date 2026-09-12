@@ -506,6 +506,32 @@ export default {
     }
   },
 
+  async retrieveEditorials(slug) {
+    try {
+      const { data } = await api.get(`/media/editorials/${slug}/`);
+      return data;
+    } catch (error) {
+      console.error('Retrieve editorial error');
+      throw error;
+    }
+  },
+
+  async updateEditorials(slug, payload) {
+    try {
+      const { data } = await api.patch(
+        `/media/editorials/${slug}/`,
+        payload,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      );
+      return data;
+    } catch (error) {
+      console.error('Update editorial error');
+      throw error;
+    }
+  },
+
   async deleteEditorials(slug) {
     try {
       const { data } = await api.delete(`/media/editorials/${slug}/`);
