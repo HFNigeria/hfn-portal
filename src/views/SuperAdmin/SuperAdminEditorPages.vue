@@ -516,7 +516,7 @@ watch(activePage, (page) => {
 </script>
 
 <template>
-  <div class="flex min-h-screen font-sans relative">
+  <div class="flex min-h-screen items-stretch font-sans relative">
     <button
       @click="toggleSidebar"
       class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
@@ -533,10 +533,8 @@ watch(activePage, (page) => {
     ></div>
 
     <div
-      :class="[
-        'fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 w-72 max-w-full lg:translate-x-0 lg:w-64 pt-16 lg:pt-0',
-        showSidebar ? 'translate-x-0' : '-translate-x-full'
-      ]"
+      class="fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:translate-x-0 pt-16 lg:pt-0"
+      :class="showSidebar ? 'translate-x-0' : '-translate-x-full'"
     >
       <SuperAdminSidebar @closeSidebar="closeSidebar" class="h-full" />
     </div>
