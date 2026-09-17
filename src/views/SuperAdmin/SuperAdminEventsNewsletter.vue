@@ -644,6 +644,7 @@ const createUpload = async () => {
       formData.append("audience", uploadForm.value.audience);
       formData.append("status", uploadForm.value.status);
       formData.append("type", "editorial");
+      formData.append("file", uploadForm.value.files?.[0] || null);
 
       if (uploadForm.value.publish_date) {
         formData.append("publish_date", uploadForm.value.publish_date);

@@ -66,9 +66,6 @@
               <div class="self-start inline-block text-[10px] font-semibold uppercase text-orange-600 bg-white rounded-full px-3 py-1 shadow-sm border border-orange-100">
                 {{ event.category || 'Open Events' }}
               </div>
-              <h4 class="text-2xl font-bold text-gray-900 mt-4 leading-tight">
-                {{ event.title }}
-              </h4>
               <div class="flex items-center space-x-4 text-sm text-orange-500 mb-4 mt-4">
                 <span class="flex items-center">
                   <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -84,7 +81,6 @@
                   {{ event.location }}
                 </span>
               </div>
-              <h4 class="text-2xl font-bold text-gray-900 mb-3">{{ event.title }}</h4>
               <p class="text-gray-600 mb-6">{{ event.description }}</p>
               <a
                 v-if="event.registerLink"
