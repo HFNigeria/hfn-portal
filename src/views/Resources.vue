@@ -293,6 +293,12 @@
             >
               Download
             </a>
+            <RouterLink
+              :to="`/editorial/${ed.slug}`"
+              class="inline-block border border-green-700 text-green-700 text-sm px-5 py-2 rounded-full hover:bg-green-50 transition-colors ml-2"
+            >
+              View
+            </RouterLink>
           </div>
 
           <p
@@ -747,7 +753,9 @@ const fetchDocuments = async () => {
       .map((item) => ({
         title: item.title,
         pdfUrl: item.file || item.pdf || item.document,
+        slug: item.slug,
         description: item.caption || item.description || "",
+        content: item.content || "",
         created_at: item.created_at ? new Date(item.created_at) : new Date(0),
         date: formatDate(item.created_at),
       }));

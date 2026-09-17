@@ -10,6 +10,7 @@ import NewsAdvocacy from '@/views/NewsAdvocacy.vue';
 import Programs from '@/views/Programs.vue';
 import Payment from '@/views/Payment.vue';
 import Resources from '@/views/Resources.vue';
+import EditorialDetails from '@/views/EditorialDetails.vue';
 import RegisterEvents from '@/views/RegisterEvents.vue';
 import Conference from '@/views/Conference.vue';
 import EditorPages from '@/views/Editor/EditorPages.vue';
@@ -108,6 +109,11 @@ const routes = [
   { path: '/news', name: 'NewsAdvocacy', component: NewsAdvocacy },
   { path: '/buttons', name: 'Buttons', component: Buttons },
   { path: '/resources', name: 'Resources', component: Resources },
+  {
+    path: '/editorial/:slug',
+    name: 'EditorialDetails',
+    component: EditorialDetails,
+  },
 
   {
     path: '/blog/:slug',

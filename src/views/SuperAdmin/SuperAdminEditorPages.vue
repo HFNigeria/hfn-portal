@@ -534,7 +534,7 @@ watch(activePage, (page) => {
 
     <div
       :class="[
-        'fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 w-72 max-w-full lg:static lg:translate-x-0 lg:w-64 lg:min-h-screen lg:h-full',
+        'fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 w-72 max-w-full lg:translate-x-0 lg:w-64 pt-16 lg:pt-0',
         showSidebar ? 'translate-x-0' : '-translate-x-full'
       ]"
     >
