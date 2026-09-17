@@ -516,7 +516,7 @@ watch(activePage, (page) => {
 </script>
 
 <template>
-  <div class="relative flex min-h-screen items-stretch font-sans">
+  <div class="flex min-h-screen font-sans relative">
     <button
       @click="toggleSidebar"
       class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
