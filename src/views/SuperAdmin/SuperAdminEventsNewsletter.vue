@@ -677,7 +677,6 @@ const createUpload = async () => {
     formData.append("audience", uploadForm.value.audience);
     formData.append("media_type", uploadForm.value.media_type);
     formData.append("type", uploadForm.value.type);
-    formData.append("date", uploadForm.value.date);
 
     if (uploadForm.value.type === "video" && uploadForm.value.media_type === "youtube") {
       if (!uploadForm.value.youtube_url) return;
@@ -1342,12 +1341,6 @@ const closeSidebar = () => (showSidebar.value = false);
             </template>
 
             <template v-else>
-            <input
-              v-model="uploadForm.date"
-              type="date"
-              class="input mb-3"
-            />
-
             <select v-model="uploadForm.audience" class="input mb-3">
               <option value="all">All</option>
               <option value="members">Members Only</option>
@@ -1371,9 +1364,6 @@ const closeSidebar = () => (showSidebar.value = false);
               class="input mb-3"
               placeholder="Description"
             ></textarea>
-
-            <label class="block mb-1 text-sm font-medium text-gray-700">Date</label>
-            <input v-model="uploadForm.date" type="date" class="input mb-3" />
 
             <select v-model="uploadForm.media_type" class="input mb-3">
               <option value="image">Upload File</option>
