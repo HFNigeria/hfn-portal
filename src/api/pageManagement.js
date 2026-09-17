@@ -74,9 +74,9 @@ export default {
     }
   },
 
-  async deletePage(pageType) {
+  async deletePage(slug) {
     try {
-      const response = await api.delete(`/pages/${pageType}/`);
+      const response = await api.delete(`/pages/${slug}/`);
       return response.data;
     } catch (error) {
       console.error('Delete Page API error');

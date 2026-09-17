@@ -3,6 +3,7 @@ import pagesApi from "@/api/pageManagement";
 import { pageSchemas } from "@/schemas/pageSchemas";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import ConfirmModal from "@/components/layout/ConfirmModal.vue";
 import HomeHeroEditor from "./components/cms/home/HomeHeroEditor.vue";
 import SuperAdminSidebar from "./SuperAdminSidebar.vue";
 
@@ -68,6 +69,8 @@ const currentView = ref("manager");
 const activePage = ref(null);
 const activeSection = ref("hero");
 const showSidebar = ref(false);
+const showDeleteModal = ref(false);
+const pageToDelete = ref(null);
 
 const toggleSidebar = () => {
   showSidebar.value = !showSidebar.value;
@@ -285,7 +288,7 @@ const fetchPages = async () => {
       return {
         ...page,
         title: page.name ?? page.page_type_display,
-        slug: `/${(page.name ?? page.page_type)
+        slug: page.slug || `/${(page.name ?? page.page_type)
           .toLowerCase()
           .replace(/\s+/g, "-")}`,
         sections: content,
@@ -351,14 +354,27 @@ const goBackToManager = () => {
   activePage.value = null;
 };
 
-const deletePage = async (id) => {
-  if (!confirm("Are you sure you want to delete this page?")) return;
+const requestDeletePage = (page) => {
+  pageToDelete.value = page;
+  showDeleteModal.value = true;
+};
+
+const cancelDeletePage = () => {
+  pageToDelete.value = null;
+  showDeleteModal.value = false;
+};
+
+const deletePage = async () => {
+  const page = pageToDelete.value;
+  if (!page) return;
 
   try {
-    await pagesApi.deletePage(id);
-    pages.value = pages.value.filter((page) => page.id !== id);
-    fetchPages();
-    console.log(`Deleted page with slug: ${id}`);
+    const slug = (page.slug || page.name || page.page_type).replace(/^\//, "");
+    await pagesApi.deletePage(slug);
+    pages.value = pages.value.filter((currentPage) => currentPage.id !== page.id);
+    cancelDeletePage();
+    await fetchPages();
+    console.log(`Deleted page with slug: ${slug}`);
   } catch (e) {
     console.error("Failed to delete page", e);
   }
@@ -677,7 +693,7 @@ watch(activePage, (page) => {
               </button>
 
               <button
-                @click="deletePage(page.page_type)"
+                @click="requestDeletePage(page)"
                 class="text-red-500 hover:text-red-700 transition duration-200 p-2 rounded-full hover:bg-red-50"
                 aria-label="Delete Page"
                 title="Delete Page"
@@ -702,6 +718,14 @@ watch(activePage, (page) => {
           </div>
         </div>
       </div>
+
+      <ConfirmModal
+        v-if="showDeleteModal"
+        title="Delete Page"
+        :message="`Are you sure you want to delete ${pageToDelete?.title || 'this page'}?`"
+        @cancel="cancelDeletePage"
+        @confirm="deletePage"
+      />
 
       <div v-else-if="currentView === 'editor' && activePage">
         <div
