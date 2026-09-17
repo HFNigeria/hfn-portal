@@ -222,7 +222,11 @@ const fetchUpcomingEvents = async () => {
       const compareDate = endDate || startDate;
       return compareDate && new Date(compareDate) >= now;
     });
-    const mappedApiEvents = filteredApiEvents.map((e) => {
+    const uniqueApiEvents = filteredApiEvents.filter((event, index, events) => {
+      const normalizedTitle = event.title?.trim().toLowerCase();
+      return index === events.findIndex((candidate) => candidate.title?.trim().toLowerCase() === normalizedTitle);
+    });
+    const mappedApiEvents = uniqueApiEvents.map((e) => {
       const startDate = new Date(e.start_datetime || e.start_date || e.date || e.created_at);
       const endDate = e.end_datetime || e.end_date ? new Date(e.end_datetime || e.end_date) : null;
       let formattedDate = formatDate(startDate);
