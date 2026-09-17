@@ -1,4 +1,5 @@
 export const customPageSchema = {
+  layout: 'split',
   hero: {
     titleHighlight: 'Championing',
     titleMain: 'Healthcare in Nigeria',

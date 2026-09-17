@@ -55,6 +55,7 @@ const newMemberForm = ref({
   last_name: "",
   email: "",
   phone_number: "",
+  organization: "",
   membership_type_id: "",
   payment_method: "",
 });
@@ -147,6 +148,7 @@ const submitNewMember = async () => {
       last_name: newMemberForm.value.last_name,
       email: newMemberForm.value.email,
       phone_number: newMemberForm.value.phone_number,
+      organization: newMemberForm.value.organization,
       membership_type_id: Number(newMemberForm.value.membership_type_id),
       payment_method: newMemberForm.value.payment_method
     };
@@ -168,6 +170,7 @@ const submitNewMember = async () => {
         last_name: "",
         email: "",
         phone_number: "",
+        organization: "",
         membership_type_id: "",
         payment_method: ""
       };
@@ -732,6 +735,7 @@ watch(currentPage, () => {
           <input v-model="newMemberForm.last_name" placeholder="Last Name" class="input" />
           <input v-model="newMemberForm.email" placeholder="Email" class="input" />
           <input v-model="newMemberForm.phone_number" placeholder="Phone Number" class="input" />
+          <input v-model="newMemberForm.organization" placeholder="Organization (Optional)" class="input" />
 
           <select v-model="newMemberForm.membership_type_id" class="input">
             <option disabled value="">Select Membership Type</option>

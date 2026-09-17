@@ -164,13 +164,17 @@ const componentMap = {
   },
 };
 
-const availablePageTypes = computed(() => Object.keys(pageSchemas));
-
 const pages = ref([]);
 const isLoading = ref(false);
-const selectedPageType = ref("");
+const selectedLayout = ref("split");
 const newPageName = ref("");
 const selectedMenu = ref("");
+
+const layoutOptions = [
+  { value: "split", label: "Split hero and content" },
+  { value: "centered", label: "Centered hero and content" },
+  { value: "content", label: "Content only" },
+];
 
 const menuOptions = [
   { value: "", label: "No menu (no nav label)" },
@@ -183,10 +187,10 @@ const menuOptions = [
 const createPage = async () => {
   try {
     const pageName = newPageName.value.trim();
-    const templateType = selectedPageType.value;
     const pageType = "others";
-    if (!templateType || !pageName) return;
-    const schema = structuredClone(pageSchemas[templateType]);
+    if (!selectedLayout.value || !pageName) return;
+    const schema = structuredClone(pageSchemas.custom);
+    schema.layout = selectedLayout.value;
 
     const exists = pages.value.some((p) => p.name?.toLowerCase() === pageName.toLowerCase());
     if (exists) {
@@ -313,7 +317,7 @@ onMounted(fetchPages);
 
 const sectionKeys = computed(() => {
   if (!activePage.value?.sections) return [];
-  return Object.keys(activePage.value.sections);
+  return Object.keys(activePage.value.sections).filter((key) => key !== "layout");
 });
 
 const pageEditorType = computed(() => {
@@ -576,17 +580,13 @@ watch(activePage, (page) => {
           </h1>
         </div>
         <div class="flex items-center space-x-3 mb-6">
+          <label class="text-sm font-medium text-gray-700">New page layout</label>
           <select
-            v-model="selectedPageType"
+            v-model="selectedLayout"
             class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
           >
-            <option value="" disabled selected>Select page type</option>
-            <option
-              v-for="type in availablePageTypes"
-              :key="type"
-              :value="type"
-            >
-              {{ type.toUpperCase() }}
+            <option v-for="layout in layoutOptions" :key="layout.value" :value="layout.value">
+              {{ layout.label }}
             </option>
           </select>
           <input
@@ -610,7 +610,7 @@ watch(activePage, (page) => {
           </select>
           <button
             type="button"
-            :disabled="!selectedPageType || !newPageName.trim()"
+            :disabled="!selectedLayout || !newPageName.trim()"
             @click="createPage"
             class="px-4 py-2 rounded-lg bg-green-700 text-white text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >

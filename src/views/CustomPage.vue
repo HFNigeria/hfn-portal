@@ -17,6 +17,7 @@ onMounted(async () => {
 const page = computed(() => ({
   ...customPageSchema,
   ...(pageFromApi.value || {}),
+  layout: pageFromApi.value?.layout || customPageSchema.layout,
   hero: { ...customPageSchema.hero, ...(pageFromApi.value?.hero || {}) },
   main: { ...customPageSchema.main, ...(pageFromApi.value?.main || {}) },
 }));
@@ -25,12 +26,15 @@ const page = computed(() => ({
 <template>
   <div>
     <section
-      v-if="!page.hero?.is_hidden"
+      v-if="page.layout !== 'content' && !page.hero?.is_hidden"
       :style="{ backgroundColor: page.hero.backgroundColor || '#f0f7f5' }"
       class="relative pb-16 pt-16 overflow-hidden"
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="lg:grid lg:grid-cols-12 lg:gap-12 items-center">
+        <div
+          class="lg:grid lg:grid-cols-12 lg:gap-12 items-center"
+          :class="page.layout === 'centered' ? 'text-center' : ''"
+        >
           <div class="lg:col-span-6 xl:col-span-5 mb-10 lg:mb-0">
             <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 leading-tight">
               <span class="text-orange-600">{{ page.hero.titleHighlight }}</span><br />
@@ -51,7 +55,10 @@ const page = computed(() => ({
               {{ page.hero.ctaLabel }}
             </RouterLink>
           </div>
-          <div class="lg:col-span-6 xl:col-span-7 relative flex justify-center lg:justify-end">
+          <div
+            v-if="page.layout !== 'centered'"
+            class="lg:col-span-6 xl:col-span-7 relative flex justify-center lg:justify-end"
+          >
             <div class="w-full max-w-lg p-4 overflow-hidden shadow-2xl" style="background-color: #f0f7f5; border-radius: 2rem">
               <img :src="page.hero.image" alt="Healthcare Federation of Nigeria" class="w-full h-auto object-cover rounded-[2rem]" />
             </div>
@@ -61,7 +68,10 @@ const page = computed(() => ({
     </section>
 
     <section v-if="!page.main?.is_hidden" class="bg-white py-16 lg:py-24">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div
+        class="mx-auto px-4 sm:px-6 lg:px-8"
+        :class="page.layout === 'centered' ? 'max-w-4xl text-center' : 'max-w-4xl'"
+      >
         <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-10">
           {{ page.main.sectionTitle }}
         </h2>
