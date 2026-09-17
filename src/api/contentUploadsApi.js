@@ -479,4 +479,66 @@ export default {
       throw error;
     }
   },
+
+  async listEditorials(params = {}) {
+    try {
+      const { data } = await api.get('/media/editorials/', { params });
+      return data;
+    } catch (error) {
+      console.error('List editorials error');
+      throw error;
+    }
+  },
+
+  async createEditorials(payload) {
+    try {
+      const { data } = await api.post(
+        '/media/editorials/',
+        payload,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      );
+      return data;
+    } catch (error) {
+      console.error('Create editorial error');
+      throw error;
+    }
+  },
+
+  async retrieveEditorials(slug) {
+    try {
+      const { data } = await api.get(`/media/editorials/${slug}/`);
+      return data;
+    } catch (error) {
+      console.error('Retrieve editorial error');
+      throw error;
+    }
+  },
+
+  async updateEditorials(slug, payload) {
+    try {
+      const { data } = await api.patch(
+        `/media/editorials/${slug}/`,
+        payload,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      );
+      return data;
+    } catch (error) {
+      console.error('Update editorial error');
+      throw error;
+    }
+  },
+
+  async deleteEditorials(slug) {
+    try {
+      const { data } = await api.delete(`/media/editorials/${slug}/`);
+      return data;
+    } catch (error) {
+      console.error('Delete editorial error');
+      throw error;
+    }
+  },
 };

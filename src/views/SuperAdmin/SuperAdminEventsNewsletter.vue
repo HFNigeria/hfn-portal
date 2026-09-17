@@ -131,6 +131,9 @@ const handleDeleteUpload = (item) => {
         case "publications":
           await uploadsApi.deletepublications(item.slug);
           break;
+        case "editorial":
+          await uploadsApi.deleteEditorials(item.slug);
+          break;
         case "video":
           await uploadsApi.deleteVideo(item.slug);
           break;  
@@ -436,6 +439,7 @@ const uploads = ref([]);
 
 const uploadForm = ref({
   title: "",
+  date: "",
   type: "newsletter",
   description: "",
   summary: "",
@@ -445,11 +449,16 @@ const uploadForm = ref({
   date: "",
   files: [],
   bannerIndex: 0,
+  excerpt: "",
+  content: "",
+  featured_image: "",
+  status: "draft",
+  publish_date: "",
 });
 
 const fetchUploads = async () => {
   try {
-    const [newsletters, minutes, documents, galleries, publications, videos] =
+    const [newsletters, minutes, documents, galleries, publications, videos, editorials] =
       await Promise.all([
         uploadsApi.listNewsletters(),
         uploadsApi.getMinutes(),
@@ -457,6 +466,7 @@ const fetchUploads = async () => {
         uploadsApi.gallery(),
         uploadsApi.listPublications(),
         uploadsApi.getVideos(),
+        uploadsApi.listEditorials(),
       ]);
 
     const normalizedNewsletters = newsletters.map((n) => ({
@@ -521,6 +531,22 @@ const fetchUploads = async () => {
       date: v.date,
     }));
 
+    const normalizedEditorials = editorials.map((e) => ({
+      id: e.id,
+      title: e.title,
+      type: "editorial",
+      file: e.file,
+      slug: e.slug,
+      audience: e.audience ?? "all",
+      excerpt: e.excerpt ?? "",
+      content: e.content ?? "",
+      featured_image: e.featured_image ?? "",
+      status: e.status ?? "draft",
+      publish_date: e.publish_date ?? "",
+      created_at: e.created_at,
+      date: e.publish_date || e.date,
+    }));
+
     uploads.value = [
       ...normalizedNewsletters,
       ...normalizedMinutes,
@@ -528,6 +554,7 @@ const fetchUploads = async () => {
       ...normalizedGalleries,
       ...normalizedPublications,
       ...normalizedVideos,
+      ...normalizedEditorials,
     ];
   } catch (error) {
     console.error("Failed to fetch uploads");
@@ -543,11 +570,43 @@ const uploadFile = (e) => {
   }
 };
 
+const uploadEditorialImage = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    uploadForm.value.featured_image = file;
+  }
+};
+
 const fileInputRef = ref(null);
+const editingUploadSlug = ref(null);
+const isEditingUpload = computed(() => !!editingUploadSlug.value);
+
+const editEditorial = (item) => {
+  editingUploadSlug.value = item.slug;
+  uploadForm.value = {
+    title: item.title,
+    date: item.publish_date ? item.publish_date.split("T")[0] : item.date || "",
+    type: "editorial",
+    description: item.excerpt || "",
+    summary: item.excerpt || "",
+    audience: item.audience || "all",
+    media_type: "image",
+    youtube_url: "",
+    files: [],
+    bannerIndex: 0,
+    excerpt: item.excerpt || "",
+    content: item.content || "",
+    featured_image: item.featured_image || "",
+    status: item.status || "draft",
+    publish_date: item.publish_date ? item.publish_date.split("T")[0] : "",
+  };
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
 
 const resetUploadForm = () => {
   uploadForm.value = {
     title: "",
+    date: "",
     type: "newsletter",
     description: "",
     summary: "",
@@ -557,7 +616,13 @@ const resetUploadForm = () => {
     date: "",
     files: [],
     bannerIndex: 0,
+    excerpt: "",
+    content: "",
+    featured_image: "",
+    status: "draft",
+    publish_date: "",
   };
+  editingUploadSlug.value = null;
 
   if (fileInputRef.value) {
     fileInputRef.value.value = "";
@@ -569,9 +634,42 @@ const createUpload = async () => {
 
   try {
     uploading.value = true;
+
+    if (uploadForm.value.type === "editorial") {
+      const formData = new FormData();
+
+      formData.append("title", uploadForm.value.title);
+      formData.append("excerpt", uploadForm.value.excerpt);
+      formData.append("content", uploadForm.value.content);
+      formData.append("audience", uploadForm.value.audience);
+      formData.append("status", uploadForm.value.status);
+      formData.append("type", "editorial");
+
+      if (uploadForm.value.publish_date) {
+        formData.append("publish_date", uploadForm.value.publish_date);
+      }
+
+      if (isFile(uploadForm.value.featured_image)) {
+        formData.append("featured_image", uploadForm.value.featured_image);
+      }
+
+      if (isEditingUpload.value) {
+        await uploadsApi.updateEditorials(editingUploadSlug.value, formData);
+        toast.success("Editorial updated");
+      } else {
+        await uploadsApi.createEditorials(formData);
+        toast.success("Editorial created");
+      }
+
+      await fetchUploads();
+      resetUploadForm();
+      return;
+    }
+
     const formData = new FormData();
 
     formData.append("title", uploadForm.value.title);
+    formData.append("date", uploadForm.value.date);
     formData.append("summary", uploadForm.value.summary);
     formData.append("audience", uploadForm.value.audience);
     formData.append("media_type", uploadForm.value.media_type);
@@ -638,6 +736,10 @@ const createUpload = async () => {
 
       case "publications":
         await uploadsApi.createPublications(formData);
+        break;
+
+      case "editorial":
+        await uploadsApi.createEditorials(formData);
         break;
 
       case "newsletter":
@@ -1150,7 +1252,13 @@ const closeSidebar = () => (showSidebar.value = false);
 
         <section>
           <h2 class="text-xl font-semibold mb-4">
-            Upload Newsletter / Document
+            {{
+              uploadForm.type === "editorial"
+                ? isEditingUpload
+                  ? "Edit Editorial"
+                  : "Create Editorial"
+                : "Upload Newsletter / Document"
+            }}
           </h2>
 
           <div class="bg-white p-6 rounded-xl shadow max-w-xl">
@@ -1166,14 +1274,94 @@ const closeSidebar = () => (showSidebar.value = false);
               <option value="gallery">Gallery</option>
               <option value="minute">Minute</option>
               <option value="publications">Publications</option>
+              <option value="editorial">Editorial (Article)</option>
               <option value="video">Video</option>  
             </select>
+
+            <template v-if="uploadForm.type === 'editorial'">
+              <select v-model="uploadForm.audience" class="input mb-3">
+                <option value="all">All</option>
+                <option value="members">Members Only</option>
+                <option value="non_members">Non Members Only</option>
+              </select>
+
+              <div class="mb-3">
+                <label class="block mb-1 text-sm font-medium text-gray-700">
+                  Publish Date
+                </label>
+                <input
+                  v-model="uploadForm.publish_date"
+                  type="date"
+                  class="input"
+                />
+              </div>
+
+              <textarea
+                v-model="uploadForm.excerpt"
+                class="input mb-3"
+                placeholder="Excerpt"
+              ></textarea>
+
+              <div class="mb-3">
+                <label class="block mb-1 text-sm font-medium text-gray-700">
+                  Article Content
+                </label>
+                <textarea
+                  v-model="uploadForm.content"
+                  class="input h-40"
+                  placeholder="Full editorial content"
+                ></textarea>
+              </div>
+
+              <div class="mb-3">
+                <label class="block mb-1 text-sm font-medium text-gray-700">
+                  Featured Image
+                </label>
+                <input
+                  type="file"
+                  @change="uploadEditorialImage"
+                  class="border border-gray-300 rounded-md px-3 py-2 w-full"
+                />
+                <img
+                  v-if="uploadForm.featured_image"
+                  :src="
+                    previewUrl(uploadForm.featured_image) ||
+                    uploadForm.featured_image
+                  "
+                  class="h-40 mt-2 rounded object-cover"
+                />
+              </div>
+
+              <select v-model="uploadForm.status" class="input mb-3">
+                <option value="draft">Draft</option>
+                <option value="published">Published</option>
+              </select>
+            </template>
+
+            <template v-else>
+            <input
+              v-model="uploadForm.date"
+              type="date"
+              class="input mb-3"
+            />
 
             <select v-model="uploadForm.audience" class="input mb-3">
               <option value="all">All</option>
               <option value="members">Members Only</option>
               <option value="non_members">Non Members Only</option>
             </select>
+
+            <div class="mb-3">
+              <label for="upload-date" class="block mb-1 text-sm font-medium text-gray-700">
+                Date
+              </label>
+              <input
+                id="upload-date"
+                v-model="uploadForm.date"
+                type="date"
+                class="input"
+              />
+            </div>
 
             <textarea
               v-model="uploadForm.summary"
@@ -1256,6 +1444,7 @@ const closeSidebar = () => (showSidebar.value = false);
                 </p>
               </div>
             </div>
+            </template>
 
             <div class="flex justify-end mt-4">
               <button
@@ -1264,6 +1453,13 @@ const closeSidebar = () => (showSidebar.value = false);
                 :disabled="uploading"
               >
                 {{ uploading ? "Uploading..." : "Upload" }}
+              </button>
+              <button
+                v-if="isEditingUpload"
+                @click="resetUploadForm"
+                class="btn-secondary ml-2"
+              >
+                Cancel
               </button>
             </div>
           </div>
@@ -1288,7 +1484,29 @@ const closeSidebar = () => (showSidebar.value = false);
                   :key="item.id"
                   class="border-t hover:bg-gray-50"
                 >
-                  <td class="p-3 font-medium">{{ item.title }}</td>
+                  <td class="p-3 font-medium">
+                    <div class="flex items-center gap-3">
+                      <img
+                        v-if="item.type === 'editorial' && item.featured_image"
+                        :src="item.featured_image"
+                        class="h-10 w-10 object-cover rounded"
+                      />
+                      <div>
+                        <div>{{ item.title }}</div>
+                        <span
+                          v-if="item.type === 'editorial'"
+                          class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-medium"
+                          :class="
+                            item.status === 'published'
+                              ? 'bg-green-100 text-green-700'
+                              : 'bg-gray-200 text-gray-600'
+                          "
+                        >
+                          {{ item.status }}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
                   <td>
                     <span
                       class="px-2 py-1 rounded text-xs font-medium"
@@ -1302,6 +1520,8 @@ const closeSidebar = () => (showSidebar.value = false);
 
                         'bg-purple-100 text-purple-700':
                           item.type === 'gallery',
+                        'bg-yellow-100 text-yellow-700':
+                          item.type === 'editorial',
                       }"
                     >
                       {{ item.type }}
@@ -1331,6 +1551,12 @@ const closeSidebar = () => (showSidebar.value = false);
                       class="w-32 h-20 rounded object-cover"
                     ></video>
 
+                    <!-- EDITORIAL IMAGE -->
+                    <img
+                      v-else-if="item.type === 'editorial' && item.featured_image"
+                      :src="item.featured_image"
+                      class="h-16 w-16 object-cover rounded"
+                    />
 
                     <!-- FILE -->
                     <a
@@ -1345,12 +1571,13 @@ const closeSidebar = () => (showSidebar.value = false);
                     <span v-else class="text-gray-400">No media</span>
                   </td>
                   <td class="p-3">
-                    <!-- <button
-                      class="text-red-500 hover:text-red-700 font-semibold text-sm"
-                      @click="handleDeleteUpload(item)"
+                    <button
+                      v-if="item.type === 'editorial'"
+                      @click="editEditorial(item)"
+                      class="text-blue-600 hover:underline text-sm mr-3"
                     >
-                      Delete
-                    </button> -->
+                      Edit
+                    </button>
                     <button
                       class="text-red-500 hover:text-red-700 font-semibold text-sm"
                       @click="handleDeleteUpload(item)"

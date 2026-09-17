@@ -55,6 +55,16 @@ export const resourcesPageSchema = {
     },
   },
 
+  editorialSection: {
+    title: 'Editorials',
+    backgroundColor: '#F2F9F3',
+    items: [],
+    pagination: {
+      currentPage: 1,
+      totalPages: 1,
+    },
+  },
+
   publicationsSection: {
     title: 'Publications',
     backgroundColor: '#F2F9F3',

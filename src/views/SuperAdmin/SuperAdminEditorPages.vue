@@ -166,6 +166,15 @@ const pages = ref([]);
 const isLoading = ref(false);
 const selectedPageType = ref("");
 const newPageName = ref("");
+const selectedMenu = ref("");
+
+const menuOptions = [
+  { value: "", label: "No menu (no nav label)" },
+  { value: "top", label: "Top navigation (top level)" },
+  { value: "about", label: "About Us (dropdown)" },
+  { value: "news", label: "News & Updates (dropdown)" },
+  { value: "membership", label: "Membership (dropdown)" },
+];
 
 const createPage = async () => {
   try {
@@ -185,7 +194,8 @@ const createPage = async () => {
       page_type: pageType,
       name: pageName,
       status: "draft",
-      is_visible: false,
+      is_visible: true,
+      menu: selectedMenu.value,
       content: schema,
     };
 
@@ -416,6 +426,8 @@ const saveChanges = async () => {
     };
 
     const payload = {
+      status: activePage.value.status || 'draft',
+      is_visible: activePage.value.is_visible ?? true,
       content: activePage.value.sections,
     };
 
@@ -546,6 +558,19 @@ watch(activePage, (page) => {
             placeholder="Page name"
             class="border border-gray-300 rounded-lg px-3 py-2 text-sm"
           />
+          <select
+            v-model="selectedMenu"
+            class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
+          >
+            <option value="" selected>No menu (no nav label)</option>
+            <option
+              v-for="option in menuOptions"
+              :key="option.value"
+              :value="option.value"
+            >
+              {{ option.label }}
+            </option>
+          </select>
           <button
             type="button"
             :disabled="!selectedPageType || !newPageName.trim()"

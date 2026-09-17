@@ -64,12 +64,12 @@ Her presentation underscored a critical message: digital systems are no longer o
 
 She underscored the following critical actions:
 
-✅ Addressing digital determinants must become a public health priority
-✅ Close digital divides and extend benefits of digitalisation to all
-✅ Closer collaboration between groups working on digital health, online safety and digital/AI governance
-✅ The health sector must be at the table in shaping new policies and laws to tackle digital determinants and hold industry to account
-✅ Learn lessons from other public health challenges to address risks of technology use and boost digital well-being
-✅ Digital citizenship for health - empower people to use technology in ways that improve health
+Addressing digital determinants must become a public health priority
+Close digital divides and extend benefits of digitalisation to all
+Closer collaboration between groups working on digital health, online safety and digital/AI governance
+The health sector must be at the table in shaping new policies and laws to tackle digital determinants and hold industry to account
+Learn lessons from other public health challenges to address risks of technology use and boost digital well-being
+Digital citizenship for health - empower people to use technology in ways that improve health
 
 As digitalisation rapidly transforms health systems, leaders like Njide Ndili are helping chart the frameworks, conversations, and policies needed to protect populations and strengthen resilience.
 
