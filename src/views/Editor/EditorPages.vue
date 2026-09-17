@@ -236,6 +236,7 @@ const fetchPages = async () => {
     };
 
     const rawPages = await pagesApi.listPages();
+    const slugCounts = {};
     pages.value = rawPages.map((page) => {
       const schema = pageSchemas[page.page_type?.toLowerCase()] ?? pageSchemas.custom ?? {};
 
@@ -286,12 +287,18 @@ const fetchPages = async () => {
         }
       }
 
+      const baseSlug = (page.name ?? page.page_type)
+        .toLowerCase()
+        .replace(/\s+/g, "-");
+      const slug = baseSlug === "others"
+        ? `/${baseSlug}-${(slugCounts[baseSlug] || 0) + 1}`
+        : page.slug || `/${baseSlug}`;
+      slugCounts[baseSlug] = (slugCounts[baseSlug] || 0) + 1;
+
       return {
         ...page,
         title: page.name ?? page.page_type_display,
-        slug: page.slug || `/${(page.name ?? page.page_type)
-          .toLowerCase()
-          .replace(/\s+/g, "-")}`,
+        slug,
         sections: content,
       };
     });

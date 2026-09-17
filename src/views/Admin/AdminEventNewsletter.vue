@@ -594,8 +594,8 @@ const createUpload = async () => {
       formData.append('audience', uploadForm.value.audience);
       formData.append('status', uploadForm.value.status);
       formData.append('type', 'editorial');
-      if (isFile(uploadForm.value.files?.[0])) {
-        formData.append('file', uploadForm.value.files[0]);
+      if (isFile(uploadForm.value.featured_image)) {
+        formData.append('file', uploadForm.value.featured_image);
       }
 
       if (uploadForm.value.publish_date) {
