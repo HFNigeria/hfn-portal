@@ -333,13 +333,6 @@ const toggleSectionVisibility = (key) => {
   }
 };
 
-const viewPage = (page) => {
-  router.push({
-    path: page.slug?.startsWith("/") ? page.slug : `/${page.slug}`,
-    query: { preview: "true" },
-  });
-};
-
 const uploadSectionImage = async (event, sectionKey) => {
   const file = event.target.files[0];
   if (!file) return;
@@ -674,27 +667,6 @@ watch(activePage, (page) => {
             </div>
 
             <div class="flex items-center space-x-3">
-              <button
-                @click="viewPage(page)"
-                class="text-blue-500 hover:text-blue-700 transition duration-200 p-2 rounded-full hover:bg-gray-100"
-                aria-label="View Page"
-                title="View Page"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
-              </button>
-
               <button
                 @click="editPage(page)"
                 class="text-green-500 hover:text-green-700 transition duration-200 p-2 rounded-full hover:bg-gray-100"
