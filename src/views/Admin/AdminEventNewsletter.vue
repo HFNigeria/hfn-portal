@@ -400,6 +400,8 @@ const uploadForm = ref({
   bannerIndex: 0,
   excerpt: '',
   content: '',
+  editorial_media_type: 'image',
+  editorial_file: '',
   featured_image: '',
   status: 'draft',
   publish_date: '',
@@ -522,8 +524,18 @@ const uploadFile = (e) => {
 const uploadEditorialImage = (e) => {
   const file = e.target.files[0];
   if (file) {
-    uploadForm.value.featured_image = file;
+    uploadForm.value.editorial_file = file;
+    uploadForm.value.featured_image =
+      uploadForm.value.editorial_media_type === 'image' ? file : '';
   }
+};
+
+const changeEditorialMediaType = () => {
+  uploadForm.value.featured_image =
+    uploadForm.value.editorial_media_type === 'image' &&
+    isFile(uploadForm.value.editorial_file)
+      ? uploadForm.value.editorial_file
+      : '';
 };
 
 const fileInputRef = ref(null);
@@ -546,6 +558,8 @@ const editEditorial = (item) => {
     bannerIndex: 0,
     excerpt: item.excerpt || '',
     content: item.content || '',
+    editorial_media_type: item.featured_image ? 'image' : 'document',
+    editorial_file: item.file || item.featured_image || '',
     featured_image: item.featured_image || '',
     status: item.status || 'draft',
     publish_date: item.publish_date ? item.publish_date.split('T')[0] : '',
@@ -568,6 +582,8 @@ const resetUploadForm = () => {
     bannerIndex: 0,
     excerpt: '',
     content: '',
+    editorial_media_type: 'image',
+    editorial_file: '',
     featured_image: '',
     status: 'draft',
     publish_date: '',
@@ -594,16 +610,19 @@ const createUpload = async () => {
       formData.append('audience', uploadForm.value.audience);
       formData.append('status', uploadForm.value.status);
       formData.append('type', 'editorial');
-      if (isFile(uploadForm.value.featured_image)) {
-        formData.append('file', uploadForm.value.featured_image);
+      if (isFile(uploadForm.value.editorial_file)) {
+        formData.append('file', uploadForm.value.editorial_file);
       }
 
       if (uploadForm.value.publish_date) {
         formData.append('publish_date', uploadForm.value.publish_date);
       }
 
-      if (isFile(uploadForm.value.featured_image)) {
-        formData.append('featured_image', uploadForm.value.featured_image);
+      if (
+        uploadForm.value.editorial_media_type === 'image' &&
+        isFile(uploadForm.value.editorial_file)
+      ) {
+        formData.append('featured_image', uploadForm.value.editorial_file);
       }
 
       if (isEditingUpload.value) {
@@ -1311,21 +1330,58 @@ const closeSidebar = () => (showSidebar.value = false);
 
               <div class="mb-3">
                 <label class="block mb-1 text-sm font-medium text-gray-700"
-                  >Featured Image</label
+                  >Editorial File</label
                 >
+                <select
+                  v-model="uploadForm.editorial_media_type"
+                  @change="changeEditorialMediaType"
+                  class="input mb-2"
+                >
+                  <option value="image">Image</option>
+                  <option value="document">Document</option>
+                </select>
                 <input
                   type="file"
                   @change="uploadEditorialImage"
+                  :accept="
+                    uploadForm.editorial_media_type === 'image'
+                      ? 'image/*'
+                      : '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv'
+                  "
                   class="border border-gray-300 rounded-md px-3 py-2 w-full"
                 />
                 <img
-                  v-if="uploadForm.featured_image"
+                  v-if="
+                    uploadForm.editorial_media_type === 'image' &&
+                    uploadForm.editorial_file
+                  "
                   :src="
-                    previewUrl(uploadForm.featured_image) ||
-                    uploadForm.featured_image
+                    previewUrl(uploadForm.editorial_file) ||
+                    uploadForm.editorial_file
                   "
                   class="h-40 mt-2 rounded object-cover"
                 />
+                <span
+                  v-else-if="
+                    uploadForm.editorial_media_type === 'document' &&
+                    isFile(uploadForm.editorial_file)
+                  "
+                  class="inline-block mt-2 text-sm text-gray-600"
+                >
+                  Document selected: {{ uploadForm.editorial_file.name }}
+                </span>
+                <a
+                  v-else-if="
+                    uploadForm.editorial_media_type === 'document' &&
+                    uploadForm.editorial_file
+                  "
+                  :href="uploadForm.editorial_file"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-block mt-2 text-sm text-blue-600 hover:underline"
+                >
+                  Open selected document
+                </a>
               </div>
 
               <select v-model="uploadForm.status" class="input mb-3">
