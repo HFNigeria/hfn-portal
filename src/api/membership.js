@@ -300,4 +300,15 @@ export default {
       throw error;
     }
   },
+
+  async deleteSubscription(id) {
+    try {
+      const response = await api.delete(`/membership/subscriptions/${id}/`);
+      return response.data;
+    } catch (error) {
+      console.error('Delete subscription API error');
+      throw error;
+    }
+  },
+
 };

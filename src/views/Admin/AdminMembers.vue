@@ -210,10 +210,13 @@ const updateMember = async () => {
       email: updateMemberForm.value.email,
       phone_number: updateMemberForm.value.phone_number,
       membership_type_id: updateMemberForm.value.membership_type_id ? Number(updateMemberForm.value.membership_type_id) : undefined,
-      role: updateMemberForm.value.member_category
+      role: updateMemberForm.value.role
     };
 
-    const response = await membershipAPI.updateApplication(selectedMember.value.id, payload);
+    const response = await membershipAPI.updateSubscription(
+      getSubscriptionId(selectedMember.value),
+      payload
+    );
 
     if (response.status === "success" || response.id) {
       showUpdateMemberModal.value = false;
@@ -235,6 +238,9 @@ const updateMember = async () => {
     isUpdating.value = false;
   }
 };
+
+const getSubscriptionId = (member) =>
+  member?.subscription_id || member?.subscription?.id;
 
 const openUpdateModal = (member) => {
   selectedMember.value = member;
@@ -329,18 +335,24 @@ const closeSidebar = () => (showSidebar.value = false);
 
 const handleAction = async (action, memberId) => {
   try {
+    const member = members.value.find((item) => item.id === memberId);
+
     if (action === "Delete") {
-      await membershipAPI.deleteApplication(memberId);
+      const subscriptionId = getSubscriptionId(member);
+      if (!subscriptionId) {
+        toast.error("This member does not have a subscription to delete");
+        return;
+      }
+
+      await membershipAPI.deleteSubscription(subscriptionId);
       members.value = members.value.filter((m) => m.id !== memberId);
+      toast.success("Member deleted successfully");
     } else if (action === "Edit") {
-      const member = members.value.find((m) => m.id === memberId);
       if (member) {
-        selectedMember.value = member;
-        showMemberDetailsModal.value = true;
+        openUpdateModal(member);
       }
 
     } else if (action === "View") {
-      const member = members.value.find((m) => m.id === memberId);
       if (member) {
         selectedMember.value = member;
         showMemberDetailsModal.value = true;
@@ -676,8 +688,7 @@ watch(currentPage, () => {
                     <Eye class="w-full h-full text-gray-500 hover:text-blue-500" />
                   </button>
                   <button @click="handleAction('Edit', member.id)"
-                    disabled
-                    class="w-6 h-6 transform hover:scale-110 transition-transform p-0.5 opacity-30 cursor-not-allowed">
+                    class="w-6 h-6 transform hover:scale-110 transition-transform p-0.5">
                     <Edit2 class="w-full h-full text-gray-500" />
                   </button>
                   <button @click="handleAction('Delete', member.id)"
@@ -778,7 +789,7 @@ watch(currentPage, () => {
       </div>
 
       <div class="flex justify-between pt-6">
-        <button disabled class="px-4 py-2 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed">
+        <button @click="openUpdateModal(selectedMember)" class="px-4 py-2 bg-[#006633] text-white rounded-lg">
           Update
         </button>
 
@@ -810,7 +821,7 @@ watch(currentPage, () => {
           </option>
         </select>
 
-        <select v-model="updateMemberForm.member_category" class="input">
+        <select v-model="updateMemberForm.role" class="input">
           <option disabled value="">Select Category</option>
           <option value="individual">Individual</option>
           <option value="corporate">Corporate</option>
