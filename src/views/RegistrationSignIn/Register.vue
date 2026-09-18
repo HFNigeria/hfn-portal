@@ -28,6 +28,7 @@ const form = ref({
   password: "",
   confirm_password: "",
   organizationName: "",
+  organizationType: "",
   organizationContactPerson: "",
 
   professionalBackground: "",
@@ -87,6 +88,21 @@ const membershipCategories = ref([
     currency: "USD",
   },
 ]);
+
+const organizationTypes = [
+  { value: "hospital_clinic", label: "Hospital/Clinic" },
+  {
+    value: "pharmaceutical_manufacturer",
+    label: "Pharmaceutical Manufacturer",
+  },
+  {
+    value: "medical_devices_supplies",
+    label: "Medical Devices & Supplies",
+  },
+  { value: "health_insurance", label: "Health Insurance" },
+  { value: "digital_health", label: "Digital Health" },
+  { value: "others", label: "Others" },
+];
 
 const filteredCategories = computed(() => {
   return membershipCategories.value.filter(
@@ -152,6 +168,7 @@ const prepareOrganizationPayload = () => {
   return {
     email: form.value.email,
     organization_name: form.value.organizationName.trim(),
+    organization_type: form.value.organizationType,
     contact_person: form.value.organizationContactPerson.trim(),
     phone_number: formatPhoneNumber(form.value.phone),
     password: form.value.password,
@@ -262,6 +279,11 @@ const validateForm = () => {
       return false;
     }
 
+    if (!form.value.organizationType) {
+      showCustomAlert("Organization type is required", "error");
+      return false;
+    }
+
     if (!form.value.organizationContactPerson?.trim()) {
       showCustomAlert("Contact person is required", "error");
       return false;
@@ -352,6 +374,7 @@ const handleRegistration = async () => {
           password: "",
           confirm_password: "",
           organizationName: "",
+          organizationType: "",
           organizationContactPerson: "",
           professionalBackground: "",
           healthcareInterest: "",
@@ -428,6 +451,7 @@ const changeTab = (tab) => {
     password: "",
     confirm_password: "",
     organizationName: "",
+    organizationType: "",
   };
 };
 </script>
@@ -894,6 +918,30 @@ const changeTab = (tab) => {
                     required
                     class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
                   />
+                </div>
+
+                <div>
+                  <label
+                    for="organizationType"
+                    class="block text-sm font-medium text-gray-700"
+                  >
+                    Organization Type*
+                  </label>
+                  <select
+                    id="organizationType"
+                    v-model="form.organizationType"
+                    required
+                    class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm p-2.5"
+                  >
+                    <option disabled value="">Select organization type</option>
+                    <option
+                      v-for="organizationType in organizationTypes"
+                      :key="organizationType.value"
+                      :value="organizationType.value"
+                    >
+                      {{ organizationType.label }}
+                    </option>
+                  </select>
                 </div>
 
                 <div>
