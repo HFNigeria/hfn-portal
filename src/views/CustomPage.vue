@@ -1,18 +1,25 @@
 <script setup>
 import pagesApi from '@/api/pageManagement';
 import { customPageSchema } from '@/schemas/pages/custom.schema';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
 const pageFromApi = ref(null);
 
-onMounted(async () => {
+const loadPage = async (slug) => {
+  pageFromApi.value = null;
+
   try {
-    const response = await pagesApi.getPageByType('others');
+    const response = await pagesApi.getPageByType(slug);
     pageFromApi.value = response?.content || null;
   } catch (error) {
     console.warn('Using local custom page schema fallback');
   }
-});
+};
+
+onMounted(() => loadPage(route.params.slug));
+watch(() => route.params.slug, loadPage);
 
 const page = computed(() => ({
   ...customPageSchema,
