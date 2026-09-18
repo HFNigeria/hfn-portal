@@ -540,7 +540,7 @@ const fetchUploads = async () => {
       file: e.file,
       slug: e.slug,
       audience: e.audience ?? "all",
-      excerpt: e.summary ?? e.excerpt ?? "",
+      summary: e.summary ?? "",
       content: e.content ?? "",
       featured_image: e.featured_image ?? "",
       status: e.status ?? "draft",
@@ -599,15 +599,14 @@ const editEditorial = (item) => {
     title: item.title,
     date: item.publish_date ? item.publish_date.split("T")[0] : item.date || "",
     type: "editorial",
-    description: item.summary || item.excerpt || "",
-    summary: item.summary || item.excerpt || "",
+    description: item.summary || "",
+    summary: item.summary || "",
     audience: item.audience || "all",
     media_type: "image",
     youtube_url: "",
     files: [],
     bannerIndex: 0,
-    excerpt: item.summary || item.excerpt || "",
-    content: item.content || "",
+    content: item.summary || "",
     editorial_media_type: item.featured_image ? "image" : "document",
     editorial_file: item.file || item.featured_image || "",
     featured_image: item.featured_image || "",
@@ -630,7 +629,6 @@ const resetUploadForm = () => {
     date: "",
     files: [],
     bannerIndex: 0,
-    excerpt: "",
     content: "",
     editorial_media_type: "image",
     editorial_file: "",
@@ -653,15 +651,11 @@ const createUpload = async () => {
 
     if (uploadForm.value.type === "editorial") {
       const formData = new FormData();
-      const summary =
-        uploadForm.value.content ||
-        uploadForm.value.summary ||
-        uploadForm.value.excerpt ||
-        "";
+      const summary = uploadForm.value.summary || "";
 
       formData.append("title", uploadForm.value.title);
       formData.append("summary", summary);
-      formData.append("content", uploadForm.value.content);
+      formData.append("content", summary);
       formData.append("audience", uploadForm.value.audience);
       formData.append("status", uploadForm.value.status);
       formData.append("type", "editorial");
@@ -1322,18 +1316,12 @@ const closeSidebar = () => (showSidebar.value = false);
                 />
               </div>
 
-              <textarea
-                v-model="uploadForm.excerpt"
-                class="input mb-3"
-                placeholder="Excerpt"
-              ></textarea>
-
               <div class="mb-3">
                 <label class="block mb-1 text-sm font-medium text-gray-700">
                   Article Content
                 </label>
                 <textarea
-                  v-model="uploadForm.content"
+                  v-model="uploadForm.summary"
                   class="input h-40"
                   placeholder="Full editorial content"
                 ></textarea>

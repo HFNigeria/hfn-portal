@@ -10,10 +10,13 @@
         <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
           {{ editorial.title }}
         </h1>
+        <p v-if="editorialExcerpt" class="text-lg text-gray-600 mb-8">
+          {{ editorialExcerpt }}
+        </p>
         <div
           class="prose max-w-none text-gray-700 leading-relaxed whitespace-pre-line"
         >
-          {{ editorial.summary || editorial.content || editorial.description || 'No article content available.' }}
+          {{ articleContent || 'No article content available.' }}
         </div>
       </div>
 
@@ -26,12 +29,25 @@
 
 <script setup>
 import contentUploadApi from "@/api/contentUploadsApi";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
 const editorial = ref(null);
 const loading = ref(true);
+
+const articleContent = computed(() =>
+  editorial.value?.summary ||
+  editorial.value?.content ||
+  editorial.value?.description ||
+  ""
+);
+
+const editorialExcerpt = computed(() => {
+  const words = articleContent.value.trim().split(/\s+/).filter(Boolean);
+  if (words.length <= 10) return words.join(" ");
+  return `${words.slice(0, 10).join(" ")}...`;
+});
 
 const formatDate = (value) => {
   if (!value) return "";
