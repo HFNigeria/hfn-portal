@@ -459,7 +459,10 @@ const saveChanges = async () => {
       content: activePage.value.sections,
     };
 
-    await pagesApi.updatePage(activePage.value.page_type, payload);
+    await pagesApi.updatePage(
+      activePage.value.slug || activePage.value.page_type,
+      payload
+    );
 
     goBackToManager();
   } catch (e) {
@@ -495,7 +498,7 @@ const toggleVisibility = async (page) => {
   page.is_visible = !page.is_visible;
   try {
     await pagesApi.updatePageVisibility(
-      page.page_type,
+      page.slug || page.page_type,
       page.is_visible
     );
   } catch (e) {
@@ -665,7 +668,7 @@ watch(activePage, (page) => {
                 {{ page.is_visible ? "VISIBLE" : "HIDDEN" }}
               </span>
               <span class="text-gray-700 font-medium">{{
-                page.page_type
+                page.name || page.page_type
               }}</span>
             </div>
 
