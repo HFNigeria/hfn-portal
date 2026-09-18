@@ -554,6 +554,16 @@ watch([() => selectedDate.month, () => selectedDate.year], () => {
 
 const allowedAudiences = ["all", "non_members"];
 
+const getSummaryExcerpt = (summary) => {
+  const words = String(summary || "")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+
+  if (words.length <= 10) return words.join(" ");
+  return `${words.slice(0, 10).join(" ")}...`;
+};
+
 const dummyArticles = [...newsPageSchema.latestNewsSection.articles];
 
 const goToPrevPage = () => {
@@ -724,7 +734,9 @@ const fetchEditorials = async () => {
         title: item.title,
         slug: item.slug,
         pdfUrl: item.file || item.pdf || item.document,
-        excerpt: item.summary || item.excerpt || item.caption || item.description || "",
+        excerpt: getSummaryExcerpt(
+          item.summary || item.excerpt || item.caption || item.description
+        ),
         date: item.created_at ? new Date(item.created_at).toDateString() : "",
         created_at: item.created_at ? new Date(item.created_at).getTime() : 0,
       }))

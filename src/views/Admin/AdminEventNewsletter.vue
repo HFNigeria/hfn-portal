@@ -489,7 +489,7 @@ const fetchUploads = async () => {
       file: e.file,
       slug: e.slug,
       audience: e.audience ?? 'all',
-      excerpt: e.excerpt ?? '',
+      excerpt: e.summary ?? e.excerpt ?? '',
       content: e.content ?? '',
       featured_image: e.featured_image ?? '',
       status: e.status ?? 'draft',
@@ -548,15 +548,15 @@ const editEditorial = (item) => {
     title: item.title,
     date: item.publish_date ? item.publish_date.split('T')[0] : item.date || '',
     type: 'editorial',
-    description: item.excerpt || '',
-    summary: item.excerpt || '',
+    description: item.summary || item.excerpt || '',
+    summary: item.summary || item.excerpt || '',
     audience: item.audience || 'all',
     media_type: 'image',
     youtube_url: '',
     date: item.publish_date ? item.publish_date.split('T')[0] : item.date || '',
     files: [],
     bannerIndex: 0,
-    excerpt: item.excerpt || '',
+    excerpt: item.summary || item.excerpt || '',
     content: item.content || '',
     editorial_media_type: item.featured_image ? 'image' : 'document',
     editorial_file: item.file || item.featured_image || '',
@@ -605,7 +605,7 @@ const createUpload = async () => {
       const formData = new FormData();
 
       formData.append('title', uploadForm.value.title);
-      formData.append('excerpt', uploadForm.value.excerpt);
+      formData.append('summary', uploadForm.value.excerpt);
       formData.append('content', uploadForm.value.content);
       formData.append('audience', uploadForm.value.audience);
       formData.append('status', uploadForm.value.status);
