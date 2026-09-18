@@ -293,9 +293,10 @@ const fetchPages = async () => {
       const baseSlug = (page.name ?? page.page_type)
         .toLowerCase()
         .replace(/\s+/g, "-");
-      const slug = baseSlug === "others"
+      const rawSlug = baseSlug === "others"
         ? `/${baseSlug}-${(slugCounts[baseSlug] || 0) + 1}`
         : page.slug || `/${baseSlug}`;
+      const slug = rawSlug.startsWith("/") ? rawSlug : `/${rawSlug}`;
       slugCounts[baseSlug] = (slugCounts[baseSlug] || 0) + 1;
 
       return {
@@ -333,7 +334,7 @@ const toggleSectionVisibility = (key) => {
 
 const viewPage = (page) => {
   router.push({
-    path: page.slug,
+    path: page.slug?.startsWith("/") ? page.slug : `/${page.slug}`,
     query: { preview: "true" },
   });
 };
