@@ -10,22 +10,14 @@
         <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
           {{ editorial.title }}
         </h1>
-        <p v-if="editorial.excerpt" class="text-lg text-gray-600 mb-8">
-          {{ editorial.excerpt }}
+        <p v-if="editorial.summary || editorial.excerpt" class="text-lg text-gray-600 mb-8">
+          {{ editorial.summary || editorial.excerpt }}
         </p>
         <div
           class="prose max-w-none text-gray-700 leading-relaxed whitespace-pre-line"
-          v-html="editorial.content || editorial.description || 'No article content available.'"
-        ></div>
-        <a
-          v-if="editorial.file || editorial.featured_image"
-          :href="editorial.file || editorial.featured_image"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-block mt-10 bg-green-700 text-white px-5 py-2 rounded-full hover:bg-green-800"
         >
-          Download
-        </a>
+          {{ editorial.content || editorial.description || 'No article content available.' }}
+        </div>
       </div>
 
       <div v-else class="text-center text-gray-500 py-16">

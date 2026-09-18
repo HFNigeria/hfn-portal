@@ -206,6 +206,71 @@
 
       <section class="max-w-7xl mx-auto mb-20">
         <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">
+          Editorials
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-10 px-10 rounded-3xl bg-[#F2F9F3]">
+          <div
+            v-for="editorial in paginatedEditorials"
+            :key="editorial.slug"
+            class="flex flex-col text-center"
+          >
+            <div class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md flex items-center justify-center bg-white">
+              <iframe
+                v-if="editorial.pdfUrl"
+                :src="`https://docs.google.com/viewer?url=${encodeURIComponent(editorial.pdfUrl)}&embedded=true`"
+                class="w-full h-full pointer-events-none"
+                frameborder="0"
+                title="Editorial preview"
+              ></iframe>
+              <span v-else class="text-sm text-gray-400">Editorial article</span>
+            </div>
+
+            <h4 class="text-lg font-semibold text-gray-900 mb-1">
+              {{ editorial.title }}
+            </h4>
+            <p class="text-sm text-orange-500 mb-4">
+              {{ editorial.date }}
+            </p>
+            <p v-if="editorial.excerpt" class="text-sm text-gray-600 mb-4">
+              {{ editorial.excerpt }}
+            </p>
+            <RouterLink
+              :to="`/editorial/${editorial.slug}`"
+              class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors"
+            >
+              Read More
+            </RouterLink>
+          </div>
+
+          <p v-if="paginatedEditorials.length === 0" class="col-span-full text-center text-gray-500">
+            No editorials available yet.
+          </p>
+        </div>
+
+        <div v-if="totalEditorialPages > 1" class="flex justify-center items-center space-x-4 text-gray-600 mt-8">
+          <button
+            @click="editorialPage--"
+            :disabled="editorialPage === 1"
+            :class="{ 'opacity-50 cursor-not-allowed': editorialPage === 1 }"
+            class="flex items-center space-x-1 text-green-700 hover:underline disabled:hover:no-underline"
+          >
+            Prev
+          </button>
+          <span class="text-sm">Page {{ editorialPage }} of {{ totalEditorialPages }}</span>
+          <button
+            @click="editorialPage++"
+            :disabled="editorialPage === totalEditorialPages"
+            :class="{ 'opacity-50 cursor-not-allowed': editorialPage === totalEditorialPages }"
+            class="flex items-center space-x-1 text-green-700 hover:underline disabled:hover:no-underline"
+          >
+            Next
+          </button>
+        </div>
+      </section>
+
+      <section class="max-w-7xl mx-auto mb-20">
+        <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">
           Video Updates
         </h2>
 
@@ -404,6 +469,9 @@ const currentPagePolicy = ref(1);
 const itemsPerPagePolicy = 3;
 const videosPage = ref(1);
 const videosPerPage = 6;
+const editorialPage = ref(1);
+const editorials = ref([]);
+const editorialsPerPage = 6;
 const selectedDate = reactive({ month: "", year: "" });
 
 const totalPages = computed(() => {
@@ -550,6 +618,15 @@ const paginatedVideos = computed(() => {
 
 const totalVideoPages = computed(() => Math.ceil(filteredVideos.value.length / videosPerPage) || 1);
 
+const paginatedEditorials = computed(() => {
+  const startIndex = (editorialPage.value - 1) * editorialsPerPage;
+  return editorials.value.slice(startIndex, startIndex + editorialsPerPage);
+});
+
+const totalEditorialPages = computed(() =>
+  Math.ceil(editorials.value.length / editorialsPerPage) || 1
+);
+
 const dummyVideos = [
   {
     title:
@@ -633,6 +710,28 @@ const fetchVideos = async () => {
   } catch (error) {
     console.error("Error fetching videos");
     videos.value = [...dummyVideos];
+  }
+};
+
+const fetchEditorials = async () => {
+  try {
+    const res = await contentUploadApi.listEditorials();
+    const editorialItems = Array.isArray(res) ? res : res.results || [];
+
+    editorials.value = editorialItems
+      .filter((item) => allowedAudiences.includes(item.audience || "all"))
+      .map((item) => ({
+        title: item.title,
+        slug: item.slug,
+        pdfUrl: item.file || item.pdf || item.document,
+        excerpt: item.summary || item.excerpt || item.caption || item.description || "",
+        date: item.created_at ? new Date(item.created_at).toDateString() : "",
+        created_at: item.created_at ? new Date(item.created_at).getTime() : 0,
+      }))
+      .sort((a, b) => b.created_at - a.created_at);
+  } catch (error) {
+    console.error("Error fetching editorials");
+    editorials.value = [];
   }
 };
 
@@ -724,6 +823,7 @@ onMounted(async () => {
   }
   fetchArticles();
   fetchVideos();
+  fetchEditorials();
 });
 </script>
 
