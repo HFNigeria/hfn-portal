@@ -653,9 +653,14 @@ const createUpload = async () => {
 
     if (uploadForm.value.type === "editorial") {
       const formData = new FormData();
+      const summary =
+        uploadForm.value.content ||
+        uploadForm.value.summary ||
+        uploadForm.value.excerpt ||
+        "";
 
       formData.append("title", uploadForm.value.title);
-      formData.append("summary", uploadForm.value.excerpt);
+      formData.append("summary", summary);
       formData.append("content", uploadForm.value.content);
       formData.append("audience", uploadForm.value.audience);
       formData.append("status", uploadForm.value.status);
