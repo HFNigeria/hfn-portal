@@ -229,6 +229,12 @@ const rejectApplication = async () => {
 const updateMember = async () => {
   try {
     isUpdating.value = true;
+    const subscriptionId = getSubscriptionId(selectedMember.value);
+    if (!subscriptionId) {
+      toast.error("This member does not have a subscription to update");
+      return;
+    }
+
     const payload = {
       first_name: updateMemberForm.value.first_name,
       last_name: updateMemberForm.value.last_name,
@@ -239,7 +245,7 @@ const updateMember = async () => {
     };
 
     const response = await membershipAPI.updateSubscription(
-      getSubscriptionId(selectedMember.value),
+      subscriptionId,
       payload
     );
 
@@ -283,9 +289,37 @@ const openUpdateModal = (member) => {
 
 const fetchMembers = async () => {
   try {
-    const data = await userList.getUserList();
-    console.log('response', data)
-    members.value = data;
+    const [usersResponse, subscriptionsResponse] = await Promise.all([
+      userList.getUserList(),
+      membershipAPI.listSubscriptions(),
+    ]);
+    const users = Array.isArray(usersResponse)
+      ? usersResponse
+      : usersResponse.results || [];
+    const subscriptions = Array.isArray(subscriptionsResponse)
+      ? subscriptionsResponse
+      : subscriptionsResponse.results || [];
+
+    members.value = users.map((member) => {
+      const subscription = subscriptions.find((item) => {
+        const subscriptionUserId =
+          item.user_id || item.user?.id || item.member_id || item.member?.id;
+        const subscriptionEmail =
+          item.email || item.user?.email || item.member?.email;
+
+        return (
+          (subscriptionUserId && String(subscriptionUserId) === String(member.id)) ||
+          (subscriptionEmail &&
+            member.email &&
+            subscriptionEmail.toLowerCase() === member.email.toLowerCase())
+        );
+      });
+
+      return {
+        ...member,
+        subscription_id: subscription?.id,
+      };
+    });
 
   } catch (error) {
     console.error("Failed to fetch members");
