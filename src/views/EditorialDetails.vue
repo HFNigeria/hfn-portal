@@ -10,13 +10,10 @@
         <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
           {{ editorial.title }}
         </h1>
-        <p v-if="editorial.summary || editorial.excerpt" class="text-lg text-gray-600 mb-8">
-          {{ editorial.summary || editorial.excerpt }}
-        </p>
         <div
           class="prose max-w-none text-gray-700 leading-relaxed whitespace-pre-line"
         >
-          {{ editorial.content || editorial.description || 'No article content available.' }}
+          {{ editorial.summary || editorial.content || editorial.description || 'No article content available.' }}
         </div>
       </div>
 
