@@ -27,6 +27,7 @@ import SuperAdminCourseList from '@/views/SuperAdmin/SuperAdminCourseList.vue';
 import SuperAdminCreateCourse from '@/views/SuperAdmin/SuperAdminCreateCourse.vue';
 import SuperAdminDashboard from '@/views/SuperAdmin/SuperAdminDashboard.vue';
 import SuperAdminEventsNewsletter from '@/views/SuperAdmin/SuperAdminEventsNewsletter.vue';
+import SuperAdminFeedback from '@/views/SuperAdmin/SuperAdminFeedback.vue';
 import SuperAdminManager from '@/views/SuperAdmin/SuperAdminManager.vue';
 import SuperAdminMembers from '@/views/SuperAdmin/SuperAdminMembers.vue';
 import SuperAdminMessages from '@/views/SuperAdmin/SuperAdminMessages.vue';
@@ -58,6 +59,7 @@ import AdminCourseList from '@/views/Admin/AdminCourseList.vue';
 import AdminCreateCourse from '@/views/Admin/AdminCreateCourse.vue';
 import AdminDashboard from '@/views/Admin/AdminDashboard.vue';
 import AdminEventNewsletter from '@/views/Admin/AdminEventNewsletter.vue';
+import AdminFeedback from '@/views/Admin/AdminFeedback.vue';
 import AdminManager from '@/views/Admin/AdminManager.vue';
 import AdminMembers from '@/views/Admin/AdminMembers.vue';
 import AdminMessages from '@/views/Admin/AdminMessages.vue';
@@ -322,6 +324,11 @@ const routes = [
     name: 'SuperAdminEventsNewsletter',
     component: SuperAdminEventsNewsletter,
   },
+  {
+    path: '/superadmin/feedback',
+    name: 'SuperAdminFeedback',
+    component: SuperAdminFeedback,
+  },
 
   //For Admin
   {
@@ -375,6 +382,11 @@ const routes = [
     path: '/admin/events',
     name: 'AdminEventNewsletter',
     component: AdminEventNewsletter,
+  },
+  {
+    path: '/admin/feedback',
+    name: 'AdminFeedback',
+    component: AdminFeedback,
   },
 
   {

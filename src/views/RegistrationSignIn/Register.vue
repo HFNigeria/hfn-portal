@@ -556,7 +556,7 @@ const changeTab = (tab) => {
               class="w-full px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md text-center"
             >
               <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">
-                Account Registration
+                Membership Registration
               </h2>
             </div>
           </div>

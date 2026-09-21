@@ -404,4 +404,22 @@ export default {
       throw error;
     }
   },
+  async listFeedback() {
+    try {
+      const response = await api.get('/contact/feedback/');
+      return response.data;
+    } catch (error) {
+      console.error('List feedback API error');
+      throw error;
+    }
+  },
+  async getFeedback(id) {
+    try {
+      const response = await api.get(`/contact/feedback/${id}/`);
+      return response.data;
+    } catch (error) {
+      console.error('Get feedback API error');
+      throw error;
+    }
+  },
 };
