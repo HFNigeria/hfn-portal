@@ -10,6 +10,21 @@
         <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
           {{ editorial.title }}
         </h1>
+        <div v-if="editorialMediaUrl" class="mb-8 overflow-hidden rounded-xl border border-gray-200 bg-gray-50">
+          <img
+            v-if="editorialIsImage"
+            :src="editorialMediaUrl"
+            :alt="editorial.title"
+            class="max-h-[32rem] w-full object-contain"
+          />
+          <iframe
+            v-else
+            :src="`https://docs.google.com/viewer?url=${encodeURIComponent(editorialMediaUrl)}&embedded=true`"
+            class="h-[32rem] w-full"
+            frameborder="0"
+            title="Editorial document preview"
+          ></iframe>
+        </div>
         <p v-if="editorialExcerpt" class="text-lg text-gray-600 mb-8">
           {{ editorialExcerpt }}
         </p>
@@ -28,6 +43,7 @@
 </template>
 
 <script setup>
+import api from "@/api/axios";
 import contentUploadApi from "@/api/contentUploadsApi";
 import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
@@ -41,6 +57,33 @@ const articleContent = computed(() =>
   editorial.value?.content ||
   editorial.value?.description ||
   ""
+);
+
+const getMediaUrl = (value) => {
+  if (!value) return "";
+
+  try {
+    const url = new URL(value, new URL(api.defaults.baseURL).origin);
+    if (url.protocol === "http:") url.protocol = "https:";
+    return url.toString();
+  } catch {
+    return value;
+  }
+};
+
+const editorialMediaUrl = computed(() =>
+  getMediaUrl(
+    editorial.value?.featured_image ||
+      editorial.value?.file ||
+      editorial.value?.pdf ||
+      editorial.value?.document
+  )
+);
+
+const editorialIsImage = computed(
+  () =>
+    Boolean(editorial.value?.featured_image) ||
+    /\.(avif|gif|jpe?g|png|svg|webp)(?:[?#]|$)/i.test(editorialMediaUrl.value)
 );
 
 const editorialExcerpt = computed(() => {

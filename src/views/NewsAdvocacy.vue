@@ -216,9 +216,15 @@
             class="flex flex-col text-center"
           >
             <div class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md flex items-center justify-center bg-white">
+              <img
+                v-if="editorial.imageUrl"
+                :src="editorial.imageUrl"
+                :alt="editorial.title"
+                class="w-full h-full object-contain"
+              />
               <iframe
-                v-if="editorial.pdfUrl"
-                :src="`https://docs.google.com/viewer?url=${encodeURIComponent(editorial.pdfUrl)}&embedded=true`"
+                v-else-if="editorial.fileUrl"
+                :src="`https://docs.google.com/viewer?url=${encodeURIComponent(editorial.fileUrl)}&embedded=true`"
                 class="w-full h-full pointer-events-none"
                 frameborder="0"
                 title="Editorial preview"
@@ -462,6 +468,7 @@ import { ref, reactive, computed, onMounted, watch } from "vue";
 import contentUploadApi from "@/api/contentUploadsApi";
 import newsModule from "@/api/newsModule";
 import pagesApi from "@/api/pageManagement";
+import api from "@/api/axios";
 
 const currentPage = ref(1);
 const itemsPerPage = 4;
@@ -553,6 +560,21 @@ watch([() => selectedDate.month, () => selectedDate.year], () => {
 });
 
 const allowedAudiences = ["all", "non_members"];
+
+const getMediaUrl = (value) => {
+  if (!value) return "";
+
+  try {
+    const url = new URL(value, new URL(api.defaults.baseURL).origin);
+    if (url.protocol === "http:") url.protocol = "https:";
+    return url.toString();
+  } catch {
+    return value;
+  }
+};
+
+const isImageUrl = (value) =>
+  /\.(avif|gif|jpe?g|png|svg|webp)(?:[?#]|$)/i.test(value || "");
 
 const getSummaryExcerpt = (summary) => {
   const words = String(summary || "")
@@ -730,16 +752,24 @@ const fetchEditorials = async () => {
 
     editorials.value = editorialItems
       .filter((item) => allowedAudiences.includes(item.audience || "all"))
-      .map((item) => ({
-        title: item.title,
-        slug: item.slug,
-        pdfUrl: item.file || item.pdf || item.document,
-        excerpt: getSummaryExcerpt(
-          item.summary || item.excerpt || item.caption || item.description
-        ),
-        date: item.created_at ? new Date(item.created_at).toDateString() : "",
-        created_at: item.created_at ? new Date(item.created_at).getTime() : 0,
-      }))
+      .map((item) => {
+        const mediaUrl = getMediaUrl(
+          item.featured_image || item.file || item.pdf || item.document
+        );
+        const imageUrl = item.featured_image || isImageUrl(mediaUrl) ? mediaUrl : "";
+
+        return {
+          title: item.title,
+          slug: item.slug,
+          imageUrl,
+          fileUrl: imageUrl ? "" : mediaUrl,
+          excerpt: getSummaryExcerpt(
+            item.summary || item.excerpt || item.caption || item.description
+          ),
+          date: item.created_at ? new Date(item.created_at).toDateString() : "",
+          created_at: item.created_at ? new Date(item.created_at).getTime() : 0,
+        };
+      })
       .sort((a, b) => b.created_at - a.created_at);
   } catch (error) {
     console.error("Error fetching editorials");

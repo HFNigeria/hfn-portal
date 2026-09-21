@@ -98,7 +98,7 @@ const submitFeedback = async () => {
   try {
     await messagingApi.sendFeedback({
       name: form.value.name,
-      message: form.value.feedback,
+      feedback: form.value.feedback,
     });
 
     toast.success("Feedback submitted successfully!");
