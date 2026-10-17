@@ -121,14 +121,16 @@ const loadDynamicPages = async () => {
     const res = await publicApi.get("/pages/");
     const rawPages = res.data || [];
     dynamicPages.value = rawPages
-      .filter((p) => p.menu && p.is_visible)
-      .map((p) => ({
-        menu: p.menu,
-        title: p.name,
-        path: `/${(p.name ?? "")
-          .toLowerCase()
-          .replace(/\s+/g, "-")}`,
-      }));
+      .filter((p) => p.is_visible)
+      .map((p) => {
+        const slugSource = String(p.slug || p.name || "");
+        return {
+          menu: p.content?._menu || p.menu,
+          title: p.name,
+          path: `/${slugSource.toLowerCase().replace(/\s+/g, "-").replace(/^\/+/, "")}`,
+        };
+      })
+      .filter((p) => p.menu);
   } catch (e) {
     console.warn("Failed to load dynamic nav pages", e);
   }

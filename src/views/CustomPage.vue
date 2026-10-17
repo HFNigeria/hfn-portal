@@ -77,12 +77,39 @@ const page = computed(() => ({
     <section v-if="!page.main?.is_hidden" class="bg-white py-16 lg:py-24">
       <div
         class="mx-auto px-4 sm:px-6 lg:px-8"
-        :class="page.layout === 'centered' ? 'max-w-4xl text-center' : 'max-w-4xl'"
+        :class="page.layout === 'centered' ? 'max-w-7xl text-center' : 'max-w-7xl'"
       >
         <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-10">
           {{ page.main.sectionTitle }}
         </h2>
-        <div class="text-lg leading-relaxed text-gray-700 space-y-6">
+
+        <div v-if="page.main.rows?.length" class="space-y-8">
+          <div
+            v-for="row in page.main.rows"
+            :key="row.id"
+            class="custom-content-columns"
+            :style="{ '--column-count': row.columns.length }"
+          >
+            <div v-for="column in row.columns" :key="column.id" class="space-y-6">
+              <template v-for="block in column.blocks" :key="block.id">
+                <div v-if="block.type === 'text'" class="text-lg leading-relaxed text-gray-700 whitespace-pre-line">
+                  <h3 v-if="block.heading" class="mb-3 text-2xl font-bold text-gray-900">
+                    {{ block.heading }}
+                  </h3>
+                  <p>{{ block.content }}</p>
+                </div>
+                <img
+                  v-else-if="block.type === 'image' && block.src"
+                  :src="block.src"
+                  :alt="block.alt || ''"
+                  class="h-auto w-full object-contain"
+                />
+              </template>
+            </div>
+          </div>
+        </div>
+
+        <div v-else class="text-lg leading-relaxed text-gray-700 space-y-6">
           <p v-for="(paragraph, index) in page.main.paragraphs" :key="index">
             {{ paragraph }}
           </p>
@@ -91,3 +118,17 @@ const page = computed(() => ({
     </section>
   </div>
 </template>
+
+<style scoped>
+.custom-content-columns {
+  display: grid;
+  grid-template-columns: repeat(var(--column-count, 1), minmax(0, 1fr));
+  gap: 2rem;
+}
+
+@media (max-width: 767px) {
+  .custom-content-columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+</style>

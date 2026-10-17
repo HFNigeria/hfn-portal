@@ -16,5 +16,6 @@ export const customPageSchema = {
   main: {
     sectionTitle: 'Page content',
     paragraphs: ['Add the content for this page.'],
+    rows: [],
   },
 };

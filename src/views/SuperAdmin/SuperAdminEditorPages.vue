@@ -1,9 +1,9 @@
 <script setup>
 import pagesApi from "@/api/pageManagement";
+import ConfirmModal from "@/components/layout/ConfirmModal.vue";
 import { pageSchemas } from "@/schemas/pageSchemas";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import ConfirmModal from "@/components/layout/ConfirmModal.vue";
 import HomeHeroEditor from "./components/cms/home/HomeHeroEditor.vue";
 import SuperAdminSidebar from "./SuperAdminSidebar.vue";
 
@@ -13,6 +13,7 @@ import HomeMandateEditor from "./components/cms/home/HomeMandateEditor.vue";
 import HomeNewsEditor from "./components/cms/home/HomeNewsEditor.vue";
 import HomePartnerEditor from "./components/cms/home/HomePartnerEditor.vue";
 
+import FlexibleMainEditor from "@/components/page-manager/FlexibleMainEditor.vue";
 import AboutCommitmentSection from "./components/cms/about/AboutCommitmentSection.vue";
 import AboutCtaSectionEditor from "./components/cms/about/AboutCtaSectionEditor.vue";
 import AboutGovernanceEditor from "./components/cms/about/AboutGovernanceEditor.vue";
@@ -159,7 +160,7 @@ const componentMap = {
   },
   custom: {
     hero: AboutHeroEditor,
-    main: AboutStoryEditor,
+    main: FlexibleMainEditor,
   },
 };
 
@@ -190,6 +191,7 @@ const createPage = async () => {
     if (!selectedLayout.value || !pageName) return;
     const schema = structuredClone(pageSchemas.custom);
     schema.layout = selectedLayout.value;
+    if (selectedMenu.value) schema._menu = selectedMenu.value;
 
     const exists = pages.value.some((p) => p.name?.toLowerCase() === pageName.toLowerCase());
     if (exists) {
@@ -200,9 +202,8 @@ const createPage = async () => {
     const payload = {
       page_type: pageType,
       name: pageName,
-      status: "draft",
+      status: "published",
       is_visible: true,
-      menu: selectedMenu.value,
       content: schema,
     };
 
@@ -215,9 +216,14 @@ const createPage = async () => {
       sections: structuredClone(schema),
     });
     await fetchPages();
-    editPage(newPage);
+    const created = pages.value.find((p) => p.id === newPage.id) ?? newPage;
+    editPage(created);
   } catch (e) {
-    console.error("Failed to create page", e);
+    console.error("Failed to create page", e?.response?.data ?? e);
+    alert(
+      "Failed to create page:\n" +
+        JSON.stringify(e?.response?.data ?? e?.message ?? e, null, 2)
+    );
   }
 };
 
@@ -266,6 +272,10 @@ const fetchPages = async () => {
             content[key].is_hidden = true;
           }
         }
+      }
+
+      if (page.content?._menu !== undefined) {
+        content._menu = page.content._menu;
       }
 
       if (pageTypeLower === 'governance') {
@@ -317,7 +327,9 @@ onMounted(fetchPages);
 
 const sectionKeys = computed(() => {
   if (!activePage.value?.sections) return [];
-  return Object.keys(activePage.value.sections).filter((key) => key !== "layout");
+  return Object.keys(activePage.value.sections).filter(
+    (key) => key !== "layout" && !key.startsWith("_")
+  );
 });
 
 const pageEditorType = computed(() => {
@@ -510,7 +522,9 @@ watch(activePage, (page) => {
   }
 
   const schema = pageSchemas[pageType] ?? pageSchemas.custom;
-  const firstSection = schema ? Object.keys(schema)[0] : "hero";
+  const firstSection =
+    (schema ? Object.keys(schema).find((key) => key !== "layout") : null) ||
+    "hero";
 
   activeSection.value = firstSection;
 });
