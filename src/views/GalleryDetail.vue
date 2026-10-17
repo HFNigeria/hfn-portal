@@ -22,9 +22,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import galleryApi from "@/api/contentUploadsApi";
+import { getContentDate } from "@/utils/contentDate";
+import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
-import galleryApi from "@/api/contentUploadsApi"; 
 
 const formatDate = (dateStr) => {
   if (!dateStr) return "";
@@ -88,7 +89,7 @@ const fetchGallery = async () => {
       slug: item.slug || `gallery-${item.id}`,
       title: item.title,
       category: item.category || "General",
-      date: formatDate(item.created_at),
+      date: formatDate(getContentDate(item)),
       images: item.images || [],
     }));
 

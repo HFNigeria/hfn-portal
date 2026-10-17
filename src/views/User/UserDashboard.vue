@@ -5,6 +5,7 @@ import newsApi from "@/api/newsModule.js";
 import authApi from "@/api/userRegister.js";
 import blogh from "@/assets/blogh.png";
 import UserSidebar from "@/components/layout/UserSidebar.vue";
+import { getContentDate } from "@/utils/contentDate";
 import { computed, onMounted, ref } from "vue";
 
 const resources = ref([]);
@@ -414,12 +415,15 @@ const fetchNewsletterPdfs = async () => {
   try {
     const data = await contentUploadsApi.listNewsletters();
 
-    const apiNewsletters = data.map((n) => ({
-      date: formatDate(n.created_at),
-      text: n.title,
-      pdfUrl: n.file,
-      created_at: n.created_at
-    }));
+    const apiNewsletters = data.map((n) => {
+      const contentDate = getContentDate(n);
+      return {
+        date: formatDate(contentDate),
+        text: n.title,
+        pdfUrl: n.file,
+        created_at: contentDate,
+      };
+    });
 
     const localNewsletters = newsletterPdfs.value.map(n => ({
       ...n,

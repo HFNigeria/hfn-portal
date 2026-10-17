@@ -366,6 +366,7 @@ import postDownload from "@/api/memberResources";
 import pagesApi from "@/api/pageManagement";
 import latest from "@/assets/latest_news.png";
 import { resourcesPageSchema } from "@/schemas/pages/resources.schema";
+import { getContentDate } from "@/utils/contentDate";
 import { computed, onMounted, ref } from "vue";
 import { useToast } from "vue-toastification";
 
@@ -586,12 +587,15 @@ const fetchDocuments = async () => {
 
     const apiNewsletters = newslettersData
       .filter(isPublicContent)
-      .map((item) => ({
-        text: item.title,
-        pdfUrl: item.file || item.pdf || item.document,
-        date: formatDate(item.created_at),
-        created_at: new Date(item.created_at),
-      }));
+      .map((item) => {
+        const contentDate = getContentDate(item);
+        return {
+          text: item.title,
+          pdfUrl: item.file || item.pdf || item.document,
+          date: formatDate(contentDate),
+          created_at: new Date(contentDate || 0),
+        };
+      });
 
     const allNewsletters = [
       ...apiNewsletters,
@@ -614,13 +618,15 @@ const fetchDocuments = async () => {
 
         return isPublic && !isNewsletter;
       })
-      .map((item) => ({
-        title: item.title,
-        pdfUrl: item.file || item.pdf || item.document,
-        description: item.caption || item.description || "",
-        // created_at: new Date(item.created_at),
-        created_at: item.created_at ? new Date(item.created_at) : new Date(0),
-      }));
+      .map((item) => {
+        const contentDate = getContentDate(item);
+        return {
+          title: item.title,
+          pdfUrl: item.file || item.pdf || item.document,
+          description: item.caption || item.description || "",
+          created_at: contentDate ? new Date(contentDate) : new Date(0),
+        };
+      });
 
     const allPublications = [
       ...apiPublications,

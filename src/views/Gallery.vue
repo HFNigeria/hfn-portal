@@ -80,10 +80,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import pagesApi from "@/api/pageManagement";
 import galleryApi from "@/api/contentUploadsApi";
+import pagesApi from "@/api/pageManagement";
 import { galleryPageSchema } from "@/schemas/pages/gallery.schema";
+import { getContentDate } from "@/utils/contentDate";
+import { computed, onMounted, ref } from "vue";
 
 const pageFromApi = ref(null);
 const loading = ref(false);
@@ -155,7 +156,7 @@ const fetchGalleryFromApi = async (loadMore = false) => {
         slug: item.slug || `gallery-${item.id}`,
         title: item.title,
         category: item.category || "General",
-        date: formatDate(item.created_at || item.date),
+        date: formatDate(getContentDate(item) || item.date),
         cover: resolveImage(item),
       }));
 
