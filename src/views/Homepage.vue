@@ -89,31 +89,31 @@ const resolveImage = (item) => {
   return img;
 };
 
-// const resolveImage = (item) => {
-//   if (!item) return "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772533037/news_mup0qv.png";
 
-//   const img =
-//     item.image ||
-//     item.thumbnail ||
-//     item.coverImage ||
-//     item.featured_image ||
-//     item.featuredImage ||
-//     item.image_url ||
-//     item.file ||
-//     item.media;
 
-//   if (!img) return "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772533037/news_mup0qv.png";
 
-//   if (typeof img === "string" && img.startsWith("http")) {
-//     return img;
-//   }
 
-//   if (imageMap[img]) {
-//     return imageMap[img];
-//   }
 
-//   return "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772533037/news_mup0qv.png";
-// };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const actionRef = ref(null);
 const isVisible = ref(false);

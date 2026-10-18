@@ -1,5 +1,5 @@
 <script setup>
-// import hfn_logo from "@/assets/hfn-health.png";
+
 import { useAuth } from "@/store/authStore";
 import { useMenuStore } from "@/store/menuStore";
 import { onMounted } from "vue";
@@ -38,7 +38,7 @@ const handleLinkClick = (path) => {
   isMobileMenuOpen.value = false;
 };
 
-// const isLinkActive = (path) => path === currentPath.value;
+
 
 const isLinkActive = (link) => {
   if (link.path !== "#" && link.path === currentPath.value) {
@@ -63,9 +63,9 @@ const { navLinks, loadApiMenus } = menuStore;
 
 const isUserDropdownOpen = ref(false);
 const userDropdownRef = ref(null);
-// const toggleDropdown = () => {
-//   isUserDropdownOpen.value = !isUserDropdownOpen.value;
-// };
+
+
+
 
 const toggleUserDropdown = () => {
   isUserDropdownOpen.value = !isUserDropdownOpen.value;

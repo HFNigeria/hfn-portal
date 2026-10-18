@@ -78,9 +78,9 @@ const handleHeroImageUpload = (event) => {
 
 <template>
             <div class="flex space-x-6">
-              <!-- LEFT SIDE -->
+              
               <div class="w-3/5 space-y-6">
-                <!-- Highlight Title -->
+                
                 <div class="border border-gray-300 rounded-lg p-3 space-y-2">
                   <label
                     class="block text-xs font-semibold uppercase text-gray-500"
@@ -95,7 +95,7 @@ const handleHeroImageUpload = (event) => {
                   />
                 </div>
 
-                <!-- Main Title -->
+                
                 <div class="border border-gray-300 rounded-lg p-3 space-y-2">
                   <label
                     class="block text-xs font-semibold uppercase text-gray-500"
@@ -110,7 +110,7 @@ const handleHeroImageUpload = (event) => {
                   />
                 </div>
 
-                <!-- Intro Line -->
+                
                 <div class="border border-gray-300 rounded-lg p-3 space-y-2">
                   <label
                     class="block text-xs font-semibold uppercase text-gray-500"
@@ -124,7 +124,7 @@ const handleHeroImageUpload = (event) => {
                   />
                 </div>
 
-                <!-- Intro Text -->
+                
                 <div class="border border-gray-300 rounded-lg p-3 space-y-2">
                   <label
                     class="block text-xs font-semibold uppercase text-gray-500"
@@ -138,7 +138,7 @@ const handleHeroImageUpload = (event) => {
                   />
                 </div>
 
-                <!-- Sub Text -->
+                
                 <div class="border border-gray-300 rounded-lg p-3 space-y-2">
                   <label
                     class="block text-xs font-semibold uppercase text-gray-500"
@@ -151,7 +151,7 @@ const handleHeroImageUpload = (event) => {
             </div>
                 </div>
 
-                <!-- CTA Text -->
+                
                 <div class="border border-gray-300 rounded-lg p-3 space-y-2">
                   <label
                     class="block text-xs font-semibold uppercase text-gray-500"
@@ -165,7 +165,7 @@ const handleHeroImageUpload = (event) => {
                   />
                 </div>
 
-                <!-- CTA Link -->
+                
                 <div class="border border-gray-300 rounded-lg p-3 space-y-2">
                   <label
                     class="block text-xs font-semibold uppercase text-gray-500"
@@ -181,9 +181,9 @@ const handleHeroImageUpload = (event) => {
                 </div>
               </div>
 
-              <!-- RIGHT SIDE -->
+              
               <div class="w-2/5 space-y-6">
-                <!-- IMAGE UPLOAD -->
+                
                 <div
                   class="border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center bg-white shadow-inner"
                 >
@@ -220,7 +220,7 @@ const handleHeroImageUpload = (event) => {
                   </div>
                 </div>
 
-                <!-- BACKGROUND COLOR -->
+                
                 <div
                   class="border border-gray-300 rounded-lg p-3 space-y-2 bg-white"
                 >

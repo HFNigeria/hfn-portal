@@ -1,26 +1,26 @@
 <script setup>
 import { ref, watch } from "vue";
 
-// Props
+
 const props = defineProps({
   modelValue: Object,
 });
 
-// Emits
+
 const emit = defineEmits(["update:modelValue"]);
 
-// Default schema
+
 const getDefaultData = () => ({
   items: [],
 });
 
-// Local state
+
 const currentSectionData = ref({
   ...getDefaultData(),
   ...props.modelValue,
 });
 
-// Sync from parent
+
 watch(
   () => props.modelValue,
   (val) => {
@@ -32,7 +32,7 @@ watch(
   { deep: true, immediate: true }
 );
 
-// Emit to parent
+
 watch(
   currentSectionData,
   (val) => {
@@ -41,7 +41,7 @@ watch(
   { deep: true }
 );
 
-// Add item
+
 const addItem = () => {
   currentSectionData.value.items.push({
     id: Date.now(),
@@ -51,7 +51,7 @@ const addItem = () => {
   });
 };
 
-// Delete item
+
 const deleteItem = (index) => {
   currentSectionData.value.items.splice(index, 1);
 };

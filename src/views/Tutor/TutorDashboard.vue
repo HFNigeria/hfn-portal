@@ -45,97 +45,97 @@ const completionData = ref(null);
 const growthData = ref(null);
 const loading = ref(false);
 
-// // --- STATS DATA ---
-// const statCards = [
-//   {
-//     title: "Total Courses",
-//     value: "13",
-//     change: "13% Increase",
-//     changeColor: "text-[#00cc66]",
-//   },
-//   {
-//     title: "Active Courses",
-//     value: "7",
-//     change: "13% Increase",
-//     changeColor: "text-[#00cc66]",
-//   },
-//   {
-//     title: "Average Enrollment",
-//     value: "13",
-//     change: "–5% Decrease",
-//     changeColor: "text-red-500",
-//   },
-//   {
-//     title: "Average Rating",
-//     value: "4.5",
-//     stars: true,
-//     change: "0% Increase",
-//     changeColor: "text-gray-500",
-//   },
-// ];
 
-// const engagementData = {
-//   labels: [
-//     "Jan",
-//     "Feb",
-//     "Mar",
-//     "Apr",
-//     "May",
-//     "Jun",
-//     "Jul",
-//     "Aug",
-//     "Sep",
-//     "Oct",
-//     "Nov",
-//     "Dec",
-//   ],
-//   datasets: [
-//     {
-//       label: "Engagement",
-//       backgroundColor: "#28a745",
-//       borderRadius: 8,
-//       data: [60, 80, 40, 70, 100, 90, 80, 110, 95, 85, 70, 90],
-//     },
-//   ],
-// };
 
-// const completionData = {
-//   labels: ["Completed", "In Progress", "Pending"],
-//   datasets: [
-//     {
-//       label: "Course Completion",
-//       backgroundColor: ["#28a745", "#ffb300", "#ff5252"],
-//       data: [45, 35, 20],
-//     },
-//   ],
-// };
 
-// const growthData = {
-//   labels: [
-//     "Jan",
-//     "Feb",
-//     "Mar",
-//     "Apr",
-//     "May",
-//     "Jun",
-//     "Jul",
-//     "Aug",
-//     "Sep",
-//     "Oct",
-//     "Nov",
-//     "Dec",
-//   ],
-//   datasets: [
-//     {
-//       label: "Students",
-//       borderColor: "#fdc700",
-//       backgroundColor: "#fdc7008a",
-//       fill: true,
-//       tension: 0.4,
-//       data: [150, 200, 180, 260, 300, 400, 380, 420, 450, 480, 460, 500],
-//     },
-//   ],
-// };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const fetchDashboardStats = async () => {
   const res = await analyticsService.fetchDashboard();

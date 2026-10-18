@@ -58,7 +58,7 @@ const editArticle = (article) => {
     audience: article.audience,
     is_featured: article.is_featured ?? false,
     featured_order: article.featured_order ?? 0,
-    // videos: article.videos ? [...article.videos] : [],
+    
     videos: (article.videos || []).map((v) =>
       typeof v === "string" ? { media_type: "youtube", youtube_url: v } : v
     ),
@@ -712,7 +712,7 @@ const createUpload = async () => {
         }
         formData.append("banner_index", uploadForm.value.bannerIndex);
       } else {
-        // formData.append("file", uploadForm.value.files[0]);
+        
         if (uploadForm.value.type === "video") {
           formData.append("video_file", uploadForm.value.files[0]);
         } else {
@@ -722,9 +722,9 @@ const createUpload = async () => {
     }
 
     switch (uploadForm.value.type) {
-      // case "gallery":
-      //   await uploadsApi.createGallery(formData);
-      //   break;
+      
+      
+      
       case "gallery": {
   const res = await uploadsApi.createGallery(formData);
 
@@ -1572,14 +1572,14 @@ const closeSidebar = () => (showSidebar.value = false);
                   <td class="p-3">{{ item.date || item.created_at || "-" }}</td>
 
                   <td class="p-3">
-                    <!-- IMAGE -->
+                    
                     <img
                       v-if="item.file && item.type === 'gallery'"
                       :src="item.file"
                       class="h-16 w-16 object-cover rounded"
                     />
 
-                    <!-- VIDEO -->
+                    
                     <iframe
                       v-else-if="item.youtube_url"
                       :src="item.youtube_url.replace('watch?v=', 'embed/')"
@@ -1593,14 +1593,14 @@ const closeSidebar = () => (showSidebar.value = false);
                       class="w-32 h-20 rounded object-cover"
                     ></video>
 
-                    <!-- EDITORIAL IMAGE -->
+                    
                     <img
                       v-else-if="item.type === 'editorial' && item.featured_image"
                       :src="item.featured_image"
                       class="h-16 w-16 object-cover rounded"
                     />
 
-                    <!-- FILE -->
+                    
                     <a
                       v-else-if="item.file"
                       :href="item.file"

@@ -1,11 +1,11 @@
 <script setup>
 import pagesApi from "@/api/pageManagement";
-// import aboutImage from "@/assets/about-us.png";
+
 import ayodele from "@/assets/ayodele.png";
 import babarinde from "@/assets/babarinde.png";
 import chinyere from "@/assets/chinyere.png";
 import jennifer from "@/assets/jennifer.png";
-// import map from "@/assets/map.jpg";
+
 import njide from "@/assets/njide.png";
 import partnership from "@/assets/partnership-01.png";
 import reagan from "@/assets/reagan.png";
@@ -367,12 +367,12 @@ const resolveImage = (image) => imageMap[image] || image;
         :key="index"
         class="flex flex-col md:flex-row gap-12 items-center"
       >
-        <!-- YEAR -->
+        
         <div class="text-8xl font-black opacity-20 select-none">
           {{ milestone.year }}
         </div>
 
-        <!-- CONTENT -->
+        
         <div class="space-y-4">
           <h3
             v-if="index === 0"

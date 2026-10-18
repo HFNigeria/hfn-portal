@@ -64,7 +64,7 @@ const mergeData = (data = {}) => {
     image: normalizedImage,
   };
 };
-// const currentSectionData = ref(mergeData(props.modelValue));
+
 
 
 const currentSectionData = computed({
@@ -79,9 +79,9 @@ const currentSectionData = computed({
 
 <template>
   <div class="flex space-x-6">
-    <!-- LEFT SIDE -->
+    
     <div class="w-3/5 space-y-6">
-      <!-- Badge Text -->
+      
       <div class="border border-gray-300 rounded-lg p-3 space-y-2">
         <label class="block text-xs font-semibold uppercase text-gray-500">
           Badge Text
@@ -104,7 +104,7 @@ const currentSectionData = computed({
         />
       </div>
 
-      <!-- Headline Line 2 -->
+      
       <div class="border border-gray-300 rounded-lg p-3 space-y-2">
         <label class="block text-xs font-semibold uppercase text-gray-500">
           Headline Line 2
@@ -116,7 +116,7 @@ const currentSectionData = computed({
         />
       </div>
 
-      <!-- Subheadline -->
+      
       <div class="border border-gray-300 rounded-lg p-3 space-y-2">
         <label class="block text-xs font-semibold uppercase text-gray-500">
           Subheadline
@@ -128,7 +128,7 @@ const currentSectionData = computed({
         />
       </div>
 
-      <!-- Response Note -->
+      
       <div class="border border-gray-300 rounded-lg p-3 space-y-2">
         <label class="block text-xs font-semibold uppercase text-gray-500">
           Response Note
@@ -141,7 +141,7 @@ const currentSectionData = computed({
       </div>
     </div>
 
-    <!-- RIGHT SIDE -->
+    
     <div class="w-2/5 space-y-6">
       <image-uploader v-model="currentSectionData.image.src" />
 
@@ -156,7 +156,7 @@ const currentSectionData = computed({
         />
       </div>
 
-      <!-- Background Color -->
+      
       <div class="border border-gray-300 rounded-lg p-3 space-y-2">
         <label class="block text-xs font-semibold uppercase text-gray-500">
           Background Color Class

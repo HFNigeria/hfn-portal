@@ -1,5 +1,6 @@
 <script setup>
 import pagesApi from '@/api/pageManagement';
+import DashboardLoader from '@/components/layout/DashboardLoader.vue';
 import { customPageSchema } from '@/schemas/pages/custom.schema';
 import NotFound from '@/views/NotFound.vue';
 import { computed, onMounted, ref, watch } from 'vue';
@@ -43,6 +44,7 @@ const page = computed(() => ({
 
 <template>
   <NotFound v-if="!loading && notFound" />
+  <DashboardLoader v-else-if="loading" message="Loading page..." />
   <div v-else>
     <section
       v-if="!loading && page.layout !== 'content' && !page.hero?.is_hidden"

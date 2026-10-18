@@ -254,7 +254,7 @@
 
     </main>
   </div>
-  <!-- PAYMENT MODAL -->
+  
   <div
     v-if="showPaymentDialog"
     class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
@@ -388,7 +388,7 @@ const form = ref({
   last_name: "",
   organization: "",
 });
-const timer = ref(300); // 5 minutes
+const timer = ref(300); 
 
 let interval = null;
 

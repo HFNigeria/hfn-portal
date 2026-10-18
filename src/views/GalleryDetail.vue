@@ -71,9 +71,9 @@ const dummyGalleries = [
   },
 ];
 
-// const gallery = computed(() =>
-//   galleries.find((g) => g.slug === route.params.slug)
-// );
+
+
+
 
 
 const fetchGallery = async () => {

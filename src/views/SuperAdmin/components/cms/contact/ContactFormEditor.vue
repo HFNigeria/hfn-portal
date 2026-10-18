@@ -64,7 +64,7 @@ const mergeData = (data = {}) => {
   };
 };
 
-// const currentSectionData = ref(getDefaultSectionData());
+
 
 const currentSectionData = computed({
   get() {
@@ -92,19 +92,19 @@ const deleteField = (index) => {
 
 const emit = defineEmits(["update:modelValue"]);
 
-// watch(
-//   currentSectionData,
-//   (val) => {
-//     emit("update:modelValue", val);
-//   },
-//   { deep: true }
-// );
+
+
+
+
+
+
+
 </script>
 
 <template>
          
             <div class="space-y-6">
-              <!-- Form Title -->
+              
               <div class="border border-gray-300 rounded-lg p-3 space-y-2">
                 <label
                   class="block text-xs font-semibold uppercase text-gray-500"
@@ -118,7 +118,7 @@ const emit = defineEmits(["update:modelValue"]);
                 />
               </div>
 
-              <!-- Description -->
+              
               <div class="border border-gray-300 rounded-lg p-3 space-y-2">
                 <label
                   class="block text-xs font-semibold uppercase text-gray-500"
@@ -132,7 +132,7 @@ const emit = defineEmits(["update:modelValue"]);
                 />
               </div>
 
-              <!-- Fields -->
+              
               <div
                 v-for="(field, index) in currentSectionData.fields"
                 :key="index"
@@ -187,7 +187,7 @@ const emit = defineEmits(["update:modelValue"]);
                 Add Field
               </button>
 
-              <!-- Submit Button Text -->
+              
               <div class="border border-gray-300 rounded-lg p-3 space-y-2">
                 <label
                   class="block text-xs font-semibold uppercase text-gray-500"
@@ -201,7 +201,7 @@ const emit = defineEmits(["update:modelValue"]);
                 />
               </div>
 
-              <!-- Success Message -->
+              
               <div class="border border-gray-300 rounded-lg p-3 space-y-2">
                 <label
                   class="block text-xs font-semibold uppercase text-gray-500"

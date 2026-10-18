@@ -1,15 +1,15 @@
 <script setup>
 import { ref, watch } from "vue";
 
-// Props
+
 const props = defineProps({
   modelValue: Object,
 });
 
-// Emits
+
 const emit = defineEmits(["update:modelValue"]);
 
-// Default schema
+
 const getDefaultData = () => ({
   title: "",
   subtitle: "",
@@ -19,7 +19,7 @@ const getDefaultData = () => ({
   buttonText: "",
 });
 
-// Local state
+
 const currentSectionData = ref({
   ...getDefaultData(),
   ...props.modelValue,
@@ -44,12 +44,12 @@ watch(
   { deep: true }
 );
 
-// Add paragraph
+
 const addItem = () => {
   currentSectionData.value.paragraphs.push("");
 };
 
-// Delete paragraph
+
 const deleteItem = (index) => {
   currentSectionData.value.paragraphs.splice(index, 1);
 };
@@ -79,7 +79,7 @@ const deleteItem = (index) => {
               />
             </div>
 
-            <!-- Paragraphs -->
+            
             <div
               v-for="(paragraph, index) in currentSectionData.paragraphs"
               :key="index"

@@ -44,7 +44,7 @@ const logoPreview = (key) => {
 <template>
 
             <div class="space-y-6">
-              <!-- Title -->
+              
               <div class="border border-gray-300 rounded-lg p-3 space-y-2">
                 <label
                   class="block text-xs font-semibold uppercase text-gray-500"
@@ -58,7 +58,7 @@ const logoPreview = (key) => {
                 />
               </div>
 
-              <!-- Logos -->
+              
               <div class="border border-gray-300 rounded-lg p-4 space-y-4">
                 <div class="flex justify-between items-center">
                   <label class="text-xs font-semibold uppercase text-gray-500">

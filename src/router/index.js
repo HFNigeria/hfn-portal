@@ -1,4 +1,4 @@
-// import DashboardLayout from '@/components/layout/DashboardLayout.vue';
+
 import Blog from '@/views/Blog.vue';
 import BlogDetails from '@/views/BlogDetails.vue';
 import Contact from '@/views/Contact.vue';
@@ -199,7 +199,7 @@ const routes = [
     component: Interests,
   },
 
-  //editor
+  
   {
     path: '/editor/signin',
     name: 'EditorSignin',
@@ -221,7 +221,7 @@ const routes = [
     component: EditorAccount,
   },
 
-  //tutor
+  
   {
     path: '/tutor/mycourses',
     name: 'TutorCourseList',
@@ -258,7 +258,7 @@ const routes = [
     component: TutorReviews,
   },
 
-  //superadmin
+  
   {
     path: '/superadmin/dashboard',
     name: 'SuperAdminDashboard',
@@ -333,7 +333,7 @@ const routes = [
     component: SuperAdminFeedback,
   },
 
-  //For Admin
+  
   {
     path: '/admin/dashboard',
     name: 'AdminDashboard',
@@ -406,7 +406,7 @@ const routes = [
     props: (route) => ({ slug: route.params.slug, mode: 'view' }),
   },
 
-  //for learners
+  
 
   {
     path: '/learner/dashboard',
@@ -459,8 +459,8 @@ const router = createRouter({
   },
 });
 
-// Routes that require authentication, keyed by path prefix.
-// The first matching prefix wins, so order matters (most specific first).
+
+
 const PROTECTED_PREFIXES = [
   { prefix: '/superadmin', roles: ['superadmin'] },
   { prefix: '/admin', roles: ['admin', 'superadmin'] },
@@ -470,7 +470,7 @@ const PROTECTED_PREFIXES = [
   { prefix: '/user', roles: ['user', 'member', 'superadmin'] },
 ];
 
-// Where each role belongs after logging in / being denied.
+
 const ROLE_HOME = {
   superadmin: '/superadmin/dashboard',
   admin: '/admin/dashboard',
@@ -484,7 +484,7 @@ const ROLE_HOME = {
 router.beforeEach((to) => {
   const { isAuthenticated, role } = useAuth();
 
-  // The fake sign-in pages must never grant access to a dashboard.
+  
   if (to.name === 'EditorSignin') {
     return { path: '/signin', query: { redirect: to.fullPath } };
   }
@@ -500,7 +500,7 @@ router.beforeEach((to) => {
   }
 
   if (!protectedRoute.roles.includes(role.value)) {
-    // Authenticated but on the wrong dashboard: send them to their own.
+    
     return { path: ROLE_HOME[role.value] ?? '/' };
   }
 

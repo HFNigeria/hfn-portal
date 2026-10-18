@@ -43,7 +43,7 @@
       <div
         class="max-w-7xl mx-auto mb-10 flex flex-wrap items-center gap-4 justify-center"
       >
-        <!-- Month -->
+        
         <div class="relative">
           <select
             v-model="selectedDate.month"
@@ -64,7 +64,7 @@
           <span class="absolute right-3 top-2.5 text-gray-400"> ▼ </span>
         </div>
 
-        <!-- Year -->
+        
         <div class="relative">
           <select
             v-model="selectedDate.year"
@@ -83,7 +83,7 @@
           <span class="absolute right-3 top-2.5 text-gray-400"> ▼ </span>
         </div>
 
-        <!-- Reset -->
+        
         <button
           @click="
             selectedDate.month = '';
@@ -501,7 +501,7 @@ const sortedArticles = computed(() => {
     return dateB - dateA;
   });
 });
-// const policyUpdates = newsPageSchema.news.policyAdvocacySection.updates;
+
 const policyUpdates = computed(() => page.value.policyAdvocacySection.updates);
 const latest =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769896360/243A8355_r47c3t.jpg";
@@ -687,7 +687,7 @@ const dummyVideos = [
 const articles = ref([]);
 const videos = ref([]);
 
-const selectedAudience = ref("all"); // all | non-members
+const selectedAudience = ref("all"); 
 
 const fetchArticles = async () => {
   try {

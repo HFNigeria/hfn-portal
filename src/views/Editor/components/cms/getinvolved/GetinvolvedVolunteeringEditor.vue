@@ -1,15 +1,15 @@
 <script setup>
 import { ref, watch } from "vue";
 
-// Props
+
 const props = defineProps({
   modelValue: Object,
 });
 
-// Emits
+
 const emit = defineEmits(["update:modelValue"]);
 
-// Default schema
+
 const getDefaultData = () => ({
   title: "",
   subtitle: "",
@@ -18,13 +18,13 @@ const getDefaultData = () => ({
   backgroundColor: "#ffffff",
 });
 
-// Local state
+
 const currentSectionData = ref({
   ...getDefaultData(),
   ...props.modelValue,
 });
 
-// Sync from parent
+
 watch(
   () => props.modelValue,
   (val) => {

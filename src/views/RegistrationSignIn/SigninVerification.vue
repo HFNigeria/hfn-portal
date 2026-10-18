@@ -43,7 +43,6 @@ onMounted(() => {
     userEmail.value = savedEmail;
   } else {
     toast.error("No email found for verification. Please register first.");
-    // setTimeout(() => router.push('/register'), 2000);
   }
   
   startTimer();
@@ -132,7 +131,6 @@ const handleVerification = async () => {
         return;
       }
 
-      // fallback
       router.push("/");
     } else {
       toast.error(response.messages?.[0] || "Verification failed.");

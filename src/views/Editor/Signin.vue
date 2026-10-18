@@ -152,7 +152,7 @@ const alert = (message) => {
 
         <form @submit.prevent="handleSignIn" class="space-y-6">
             
-            <!-- Username Field -->
+            
             <div class="relative pt-6">
               <input 
                 id="username" 
@@ -170,7 +170,7 @@ const alert = (message) => {
               </label>
             </div>
 
-            <!-- Password Field -->
+            
             <div class="relative pt-6">
               <input 
                 id="password" 
@@ -188,7 +188,7 @@ const alert = (message) => {
               </label>
             </div>
 
-            <!-- Remember Me / Forgot Password -->
+            
             <div class="flex items-center justify-between text-sm">
               <div class="flex items-center">
                 <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
@@ -202,7 +202,7 @@ const alert = (message) => {
               </a>
             </div>
 
-            <!-- Sign In Button -->
+            
             <div class="pt-4">
               <button
                 type="submit"

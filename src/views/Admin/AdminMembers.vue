@@ -167,10 +167,10 @@ const submitNewMember = async () => {
 
       toast.success("Member added successfully", "success");
 
-      // Reload members
+      
       fetchMembers();
 
-      // Reset form
+      
       newMemberForm.value = {
         first_name: "",
         last_name: "",
@@ -410,13 +410,13 @@ const filteredMembers = computed(() => {
   return members.value.filter(m => {
     const term = searchTerm.value.toLowerCase();
 
-    // Search logic
+    
     const matchesSearch =
       (m.first_name || "").toLowerCase().includes(term) ||
       (m.email || "").toLowerCase().includes(term) ||
       (m.membership_type || "").toLowerCase().includes(term);
 
-    // Role Filter
+    
     const matchesRole = filters.value.member_category ? m.member_category === filters.value.member_category : true;
 
     const matchesMembership = filters.value.membership_type
@@ -523,7 +523,7 @@ watch(currentPage, () => {
             + Membership Type
           </button>
         </div>
-        <!-- Membership Type Modal -->
+        
         <div v-if="showMembershipTypeModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div class="bg-white w-full max-w-3xl rounded-xl p-6 shadow-lg overflow-y-auto max-h-[90vh]">
 
@@ -537,7 +537,7 @@ watch(currentPage, () => {
               </button>
             </div>
 
-            <!-- Create Section -->
+            
             <div class="mb-8">
               <h3 class="font-semibold mb-3">Create Membership Type</h3>
 
@@ -560,7 +560,7 @@ watch(currentPage, () => {
               </div>
             </div>
 
-            <!-- Existing Types -->
+            
             <div>
               <h3 class="font-semibold mb-3">Existing Types</h3>
 
@@ -615,7 +615,7 @@ watch(currentPage, () => {
 
           <select v-model="filters.member_category" class="filter">
             <option value="">All Roles</option>
-            <!-- <option value="admin">Admin</option> -->
+            
             <option value="individual">Individual</option>
             <option value="corporate">Corporate</option>
             <option value="multinational">Multinational</option>

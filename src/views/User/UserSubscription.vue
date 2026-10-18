@@ -170,7 +170,7 @@ const closePaymentDialog = () => {
           </div>
         </div>
       </main>
-      <!-- Payment Dialog -->
+      
 <div
   v-if="showPaymentDialog"
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"

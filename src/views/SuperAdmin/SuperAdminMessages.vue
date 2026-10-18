@@ -152,7 +152,7 @@ const loadMessages = async (userId) => {
 
     const currentUserId = user.value?.id;
 
-    // Ensure messages are shown in chronological order (oldest first)
+    
     const messages = [...(res.results || [])].sort(
       (a, b) => new Date(a.created_at) - new Date(b.created_at)
     );
@@ -276,26 +276,26 @@ const selectGroup = async (group) => {
   await loadGroupMessages(group.id);
 };
 
-// const loadGroupMessages = async (groupId) => {
-//   try {
-//     const res = await messagingApi.getGroupMessages(groupId);
 
-//     chatMessages.value = res.results.map((m) => ({
-//       id: m.id,
-//       sender: m.sender.full_name,
-//       time: new Date(m.created_at).toLocaleTimeString(),
-//       initial: m.sender.full_name
-//         .split(' ')
-//         .map(n => n[0])
-//         .join('')
-//         .slice(0, 2),
-//       color: m.sender.is_admin ? 'bg-green-600' : 'bg-gray-500',
-//       body: m.content,
-//     }));
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const loadGroupMessages = async (groupId) => {
   try {
     const res = await messagingApi.getGroupMessages(groupId);

@@ -103,7 +103,7 @@ const confirmDelete = async () => {
 
   try {
     await courseApi.deleteCourse(courseToDelete.slug);
-    fetchCourses(); // refresh the table
+    fetchCourses(); 
     courseToDelete = null;
     isConfirmModalOpen.value = false;
   } catch (err) {

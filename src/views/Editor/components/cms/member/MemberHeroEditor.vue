@@ -15,7 +15,7 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue"]);
 
-// Local reactive state
+
 const currentSectionData = reactive({
   headlineTop: "",
   headlineBottom: "",

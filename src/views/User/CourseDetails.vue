@@ -428,7 +428,7 @@ const fetchCertificate = async () => {
     </button>
   </div>
 
-  <!-- TEXT LESSON -->
+  
   <div
     v-if="lesson.content_type === 'text'"
     class="text-sm text-gray-600 leading-relaxed"
@@ -436,7 +436,7 @@ const fetchCertificate = async () => {
     {{ lesson.content }}
   </div>
 
-  <!-- VIDEO LESSON -->
+  
   <div v-if="lesson.content_type === 'video' && lesson.video_url">
     <iframe
       :src="lesson.video_url"
@@ -445,7 +445,7 @@ const fetchCertificate = async () => {
     ></iframe>
   </div>
 
-  <!-- FILE DOWNLOAD -->
+  
   <div v-if="lesson.file_attachment">
     <a
       :href="lesson.file_attachment"
@@ -684,14 +684,14 @@ const fetchCertificate = async () => {
       {{ item }}
     </li>
 
-    <!-- fallback -->
+    
     <li v-if="!course?.materials_included?.length" class="text-gray-400">
       No materials provided for this course.
     </li>
               </ul>
             </div>
 
-            <!-- Requirements -->
+            
             <div class="bg-white rounded-xl shadow-lg p-6">
               <h3 class="text-xl font-bold text-gray-800 mb-4">Requirements</h3>
               <ul class="space-y-2 text-gray-700 text-sm">
@@ -716,7 +716,7 @@ const fetchCertificate = async () => {
           </div>
         </div>
 
-        <!-- Similar Courses Section -->
+        
         <div class="mt-12">
           <h2 class="text-2xl font-bold text-gray-800 mb-6">
             Similar courses you might like...

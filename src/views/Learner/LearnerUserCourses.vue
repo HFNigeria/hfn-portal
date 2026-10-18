@@ -21,28 +21,28 @@ const ACCENT_GRAY = "#f9fafb";
 const ACCENT_ORANGE = "#ff6600";
 const LIGHT_PINKISH_GRAY = "#E87A1814";
 
-// State
+
 const userName = ref("User");
 const isLoading = ref(true);
 const activeSidebarItem = ref("Dashboard");
 const activeCourseTrack = ref("Care");
 const searchQuery = ref("");
 
-// API Data
+
 const categories = ref([]);
 const courses = ref([]);
 const filteredCourses = ref([]);
 const latestCourses = ref([]);
 const userEnrollments = ref([]);
 
-// Pagination
+
 const currentPage = ref(1);
 const itemsPerPage = 6;
 const totalPages = ref(1);
 
 const courseTracks = ref([]);
 
-// Fetch user profile
+
 const fetchUserProfile = async () => {
   try {
     const userData = JSON.parse(localStorage.getItem("user") || "{}");
@@ -52,7 +52,7 @@ const fetchUserProfile = async () => {
   }
 };
 
-// Fetch categories (course tracks)
+
 const fetchCategories = async () => {
   try {
     const response = await learningModule.getCategories();
@@ -72,7 +72,7 @@ const fetchCategories = async () => {
   }
 };
 
-// Fetch all courses
+
 const fetchCourses = async () => {
   try {
     const response = await learningModule.listCourses({
@@ -98,7 +98,7 @@ const fetchCourses = async () => {
   }
 };
 
-// Fetch user enrollments
+
 const fetchUserEnrollments = async () => {
   try {
     const enrollmentResponse = await learningModule.getEnrollment();

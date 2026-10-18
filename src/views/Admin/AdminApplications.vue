@@ -527,7 +527,7 @@ onMounted(() => {
       </template>
     </main>
 
-    <!-- Reject Modal -->
+    
     <div
       v-if="showRejectModal"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
@@ -562,7 +562,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Details Modal -->
+    
     <div
       v-if="showDetailsModal"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
@@ -677,7 +677,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Transaction Modal -->
+    
     <div
       v-if="showTransactionModal"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"

@@ -669,7 +669,7 @@ const closeSidebar = () => (showSidebar.value = false);
 >
   <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6 relative">
     
-    <!-- Close button -->
+    
     <button
       @click="showHistoryDialog = false"
       class="absolute top-3 right-3 text-gray-500 hover:text-gray-700"

@@ -1,6 +1,6 @@
 <script setup>
 import userRegister from "@/api/userRegister";
-// import registerImage from '@/assets/register.jpg';
+
 import { useAuth } from "@/store/authStore";
 import { getRecaptchaToken } from "@/utils/recaptcha";
 import { onMounted, ref } from "vue";
@@ -188,7 +188,7 @@ const handleRoleBasedRedirect = (role) => {
     }
   }
 
-  // If a route guard bounced the user here, honour where they were headed.
+  
   const redirect = route.query.redirect;
   if (typeof redirect === "string" && redirect.startsWith("/") && !redirect.startsWith("//")) {
     router.push(redirect);
@@ -442,7 +442,7 @@ const submitForgotPassword = async () => {
     </div>
   </div>
 </div>
-    <!-- Forgot Password Modal -->
+    
 <div
   v-if="showForgotModal"
   class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"

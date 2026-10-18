@@ -1,5 +1,5 @@
 <script setup>
-// import hfn_logo from "@/assets/hfn-health.png";
+
 import { useAuth } from "@/store/authStore";
 import { useMenuStore } from "@/store/menuStore";
 import { computed, onMounted, ref, watch } from "vue";
@@ -54,9 +54,9 @@ const goToRegistration = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
-// const isLinkActive = (path) => {
-//   return path === currentPath.value;
-// };
+
+
+
 const isLinkActive = (link) => {
   if (link.path !== "#" && link.path === currentPath.value) {
     return true;
@@ -366,73 +366,7 @@ const toggleDropdown = (title) => {
       </div>
       
       <div class="flex flex-col p-4 space-y-2">
-        <!-- <div v-for="link in navLinks" :key="link.title">
-          <div
-            v-if="!link.hasDropdown"
-            class="flex items-center justify-between p-3 border-b border-gray-100 transition-colors cursor-pointer"
-            :class="[
-              isLinkActive(link.path)
-                ? `bg-[${ACTIVE_BG_COLOR}] text-[${DARK_GREEN}]`
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
-            ]"
-          >
-            <RouterLink
-              :to="link.path"
-              class="block w-full"
-              @click="handleLinkClick(link.path)"
-            >
-              {{ link.title }}
-            </RouterLink>
-          </div>
-
-          <div v-else>
-            <div
-              class="flex items-center justify-between p-3 border-b border-gray-100 transition-colors cursor-pointer"
-              :class="[
-                openDropdown === link.title
-                  ? `bg-[${ACTIVE_BG_COLOR}] text-[${DARK_GREEN}]`
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
-              ]"
-              @click="toggleDropdown(link.title)"
-            >
-              <span>{{ link.title }}</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                :class="[
-                  'w-4 h-4 ml-1 transition-transform duration-200 ease-in-out',
-                  openDropdown === link.title
-                    ? 'rotate-180 text-[#004d33]'
-                    : 'text-gray-500',
-                ]"
-              >
-                <path d="m6 9 6 6 6-6" />
-              </svg>
-            </div>
-
-            <div
-              v-if="openDropdown === link.title"
-              class="pl-6 pr-4 pb-2 bg-gray-50 border-b border-gray-100 space-y-2"
-            >
-              <RouterLink
-                v-for="item in link.dropdownItems"
-                :key="item.title"
-                :to="item.path"
-                class="block py-2 text-sm text-gray-700 hover:text-[#004d33]"
-                @click="handleLinkClick(item.path)"
-              >
-                {{ item.title }}
-              </RouterLink>
-            </div>
-          </div>
-        </div> -->
+        
         <div v-for="link in navLinks" :key="link.title">
         
         <div v-if="!link.hasDropdown"

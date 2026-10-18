@@ -1,5 +1,5 @@
 <script setup>
-// import registerImage from "@/assets/register.jpg";
+
 import userRegister from "@/api/userRegister";
 import { getRecaptchaToken } from "@/utils/recaptcha";
 import { computed, ref } from "vue";
@@ -126,7 +126,7 @@ const isLoading = ref(false);
 const customAlert = ref({
   show: false,
   message: "",
-  type: "error", // can be 'error', 'success', 'warning'
+  type: "error", 
 });
 
 const passwordRules = computed(() => {
@@ -758,7 +758,7 @@ const changeTab = (tab) => {
                 </p>
               </div>
 
-              <!-- Professional Background -->
+              
               <div>
                 <label class="block text-sm font-medium text-gray-700">
                   Professional Background / Current Organization*
@@ -770,7 +770,7 @@ const changeTab = (tab) => {
                 />
               </div>
 
-              <!-- Area of Interest -->
+              
               <div>
                 <label class="block text-sm font-medium text-gray-700">
                   Area of Interest in Healthcare*
@@ -782,7 +782,7 @@ const changeTab = (tab) => {
                 />
               </div>
 
-              <!-- Statement -->
+              
               <div>
                 <label class="block text-sm font-medium text-gray-700">
                   Brief Statement of Interest*

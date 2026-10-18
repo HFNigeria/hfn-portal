@@ -1,15 +1,15 @@
 <script setup>
 import { ref, watch } from "vue";
 
-// Props
+
 const props = defineProps({
   modelValue: Object,
 });
 
-// Emits
+
 const emit = defineEmits(["update:modelValue"]);
 
-// Default structure
+
 const getDefaultData = () => ({
   title: "",
   searchPlaceholder: "",
@@ -103,7 +103,7 @@ const removeCategory = (index) => {
               />
             </div>
 
-            <!-- Years -->
+            
             <div class="border border-gray-300 rounded-lg p-3 space-y-2">
               <label
                 class="block text-xs font-semibold uppercase text-gray-500"
@@ -133,7 +133,7 @@ const removeCategory = (index) => {
               </div>
             </div>
 
-            <!-- Categories -->
+            
             <div class="border border-gray-300 rounded-lg p-3 space-y-2">
               <label
                 class="block text-xs font-semibold uppercase text-gray-500"

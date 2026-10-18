@@ -7,7 +7,7 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue"]);
 
-// Default structure
+
 const getDefaultData = () => ({
   contact: {
     address: "",
@@ -23,7 +23,7 @@ const getDefaultData = () => ({
 
 const currentSectionData = ref(getDefaultData());
 
-// Sync from parent
+
 watch(
   () => props.modelValue,
   (val) => {
@@ -204,7 +204,7 @@ const deleteLegal = (index) => {
       </div>
     </div>
 
-    <!-- LEGAL -->
+    
     <div class="border p-4 rounded-lg space-y-4">
       <div class="flex justify-between">
         <h3 class="font-bold text-lg">Legal Links</h3>

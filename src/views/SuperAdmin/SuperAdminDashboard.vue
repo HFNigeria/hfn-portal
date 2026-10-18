@@ -551,25 +551,7 @@ onMounted(async () => {
           </div>
         </div>
 
-        <!-- <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-sm h-fit">
-          <h2 class="text-xl font-semibold text-gray-800 mb-4">
-            Most Viewed Courses
-          </h2>
-          <div class="space-y-4">
-            <div v-for="(course, index) in dashboardData.mostViewed" :key="index" class="flex items-center">
-              <div
-                class="relative flex-grow h-8 bg-gradient-to-r from-orange-100 to-orange-200 rounded-lg overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-r from-orange-300 to-orange-400 rounded-lg"
-                  :style="{ width: course.progress }"></div>
-                <p
-                  class="relative z-10 text-sm font-semibold text-gray-800 px-3 py-1 flex justify-between items-center h-full">
-                  <span>{{ course.name }}</span>
-                  <span>{{ course.value }}</span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div> -->
+        
       </div>
     </main>
   </div>
