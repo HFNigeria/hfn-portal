@@ -6,15 +6,19 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const pageFromApi = ref(null);
+const loading = ref(true);
 
 const loadPage = async (slug) => {
-  pageFromApi.value = null;
+  loading.value = true;
 
   try {
     const response = await pagesApi.getPageByType(slug);
     pageFromApi.value = response?.content || null;
   } catch (error) {
+    pageFromApi.value = null;
     console.warn('Using local custom page schema fallback');
+  } finally {
+    loading.value = false;
   }
 };
 
@@ -33,14 +37,13 @@ const page = computed(() => ({
 <template>
   <div>
     <section
-      v-if="page.layout !== 'content' && !page.hero?.is_hidden"
+      v-if="!loading && page.layout !== 'content' && !page.hero?.is_hidden"
       :style="{ backgroundColor: page.hero.backgroundColor || '#f0f7f5' }"
       class="relative pb-16 pt-16 overflow-hidden"
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
           class="lg:grid lg:grid-cols-12 lg:gap-12 items-center"
-          :class="page.layout === 'centered' ? 'text-center' : ''"
         >
           <div class="lg:col-span-6 xl:col-span-5 mb-10 lg:mb-0">
             <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 leading-tight">
@@ -63,7 +66,7 @@ const page = computed(() => ({
             </RouterLink>
           </div>
           <div
-            v-if="page.layout !== 'centered'"
+            v-if="page.hero.image"
             class="lg:col-span-6 xl:col-span-7 relative flex justify-center lg:justify-end"
           >
             <div class="w-full max-w-lg p-4 overflow-hidden shadow-2xl" style="background-color: #f0f7f5; border-radius: 2rem">
@@ -74,7 +77,7 @@ const page = computed(() => ({
       </div>
     </section>
 
-    <section v-if="!page.main?.is_hidden" class="bg-white py-16 lg:py-24">
+    <section v-if="!loading && !page.main?.is_hidden" class="bg-white py-16 lg:py-24">
       <div
         class="mx-auto px-4 sm:px-6 lg:px-8"
         :class="page.layout === 'centered' ? 'max-w-7xl text-center' : 'max-w-7xl'"

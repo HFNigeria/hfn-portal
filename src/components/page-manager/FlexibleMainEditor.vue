@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from "vue";
 import draggable from "vuedraggable";
-import pagesApi from "@/api/pageManagement";
+import { uploadPageImage } from "@/utils/imageUpload.js";
 
 const props = defineProps({
   modelValue: {
@@ -22,7 +22,7 @@ function makeTextBlock(content = "") {
 }
 
 function normalizeMain(value = {}) {
-  if (Array.isArray(value.rows) && value.rows.length) return value;
+  if (Array.isArray(value.rows)) return value;
 
   const blocks = (value.paragraphs || []).map((paragraph) =>
     makeTextBlock(paragraph)
@@ -103,12 +103,12 @@ const readImage = async (event, block) => {
   if (!file) return;
 
   try {
-    const { url } = await pagesApi.uploadImage(file);
+    const { url } = await uploadPageImage(file);
     block.src = url;
   } catch (e) {
-    console.error("Image upload failed", e?.response?.data ?? e);
+    console.error("Image upload failed", e);
     alert(
-      "Image upload failed. Try a smaller image, or paste an image URL instead."
+      "Image upload failed. Try a different image, or paste an image URL instead."
     );
   } finally {
     event.target.value = "";

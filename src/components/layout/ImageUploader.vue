@@ -1,6 +1,6 @@
 <script setup>
-import pagesApi from '@/api/pageManagement'
 import { ref, watch } from 'vue'
+import { uploadPageImage } from '@/utils/imageUpload.js'
 
 const props = defineProps({
   modelValue: {
@@ -12,6 +12,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 const isUploading = ref(false)
 const errorMessage = ref('')
+const noticeMessage = ref('')
 const manualUrl = ref(props.modelValue || '')
 
 watch(
@@ -26,10 +27,15 @@ const handleChange = async (event) => {
   if (!file) return
 
   errorMessage.value = ''
+  noticeMessage.value = ''
   isUploading.value = true
   try {
-    const { url } = await pagesApi.uploadImage(file)
-    emit('update:modelValue', url)
+    const result = await uploadPageImage(file)
+    emit('update:modelValue', result.url)
+    if (!result.hosted) {
+      noticeMessage.value =
+        'Image could not be uploaded to the media service, so it was embedded in the page data. It will still save.'
+    }
   } catch (e) {
     const detail = e?.response?.data ?? e?.message ?? e
     errorMessage.value =
@@ -60,6 +66,9 @@ const applyManualUrl = () => {
     />
     <p v-if="isUploading" class="text-sm text-gray-500">Uploading...</p>
     <p v-if="errorMessage" class="text-sm text-red-600">{{ errorMessage }}</p>
+    <p v-if="noticeMessage" class="text-sm text-amber-600">
+      {{ noticeMessage }}
+    </p>
     <input
       v-model="manualUrl"
       type="url"

@@ -4,6 +4,7 @@ import ConfirmModal from "@/components/layout/ConfirmModal.vue";
 import { pageSchemas } from "@/schemas/pageSchemas";
 import { menuGroupOptions } from "@/schemas/menu.schema";
 import { useMenuStore } from "@/store/menuStore";
+import { uploadPageImage } from "@/utils/imageUpload.js";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import HomeHeroEditor from "./components/cms/home/HomeHeroEditor.vue";
@@ -183,7 +184,10 @@ const menuOptions = menuGroupOptions;
 
 const createPage = async () => {
   try {
-    const pageName = newPageName.value.trim();
+    const rawPageName = newPageName.value.trim();
+    const pageName = rawPageName
+      ? rawPageName.charAt(0).toUpperCase() + rawPageName.slice(1)
+      : "";
     const pageType = "others";
     if (!selectedLayout.value || !pageName) return;
     const schema = structuredClone(pageSchemas.custom);
@@ -352,7 +356,7 @@ const uploadSectionImage = async (event, sectionKey) => {
   if (!file) return;
 
   try {
-    const { url } = await pagesApi.uploadImage(file);
+    const { url } = await uploadPageImage(file);
     activePage.value.sections[sectionKey].imageUrl = url;
     activePage.value.sections[sectionKey].previewUrl = url;
   } catch (e) {
@@ -391,6 +395,8 @@ const deletePage = async () => {
   try {
     const slug = (page.slug || page.name || page.page_type).replace(/^\//, "");
     await pagesApi.deletePage(slug);
+    menuStore.syncPageMenu({ name: page.name, slug, menu: null });
+    await menuStore.loadApiMenus();
     pages.value = pages.value.filter((currentPage) => currentPage.id !== page.id);
     cancelDeletePage();
     await fetchPages();
@@ -408,7 +414,7 @@ const addNewLogo = async (event) => {
   const file = event.target.files[0];
   if (!file) return;
 
-  const { url } = await pagesApi.uploadImage(file);
+  const { url } = await uploadPageImage(file);
 
   activePage.value.sections.section1.logos.push({
     id: Date.now(),
@@ -512,6 +518,15 @@ watch(
       );
   },
   { immediate: true }
+);
+
+watch(
+  currentSectionData,
+  (val) => {
+    if (!activePage.value || !activeSection.value || !val) return;
+    activePage.value.sections[activeSection.value] = val;
+  },
+  { deep: true }
 );
 
 const toggleVisibility = async (page) => {

@@ -51,6 +51,7 @@ const handleSignIn = async () => {
 
     const response = await userRegister.loginUser(payload);
     if (response?.status === "success") {
+      password.value = "";
       toast.success(response.messages?.[0] || "Login successful!");
 
       if (response.actions_required?.includes("verify_2fa")) {
@@ -90,8 +91,14 @@ const handleSignIn = async () => {
             const rawUser =
               userProfile?.data?.user || userProfile?.data || userProfile;
 
+            const safeUser = Object.fromEntries(
+              Object.entries(rawUser || {}).filter(
+                ([key]) => !key.toLowerCase().includes("password")
+              )
+            );
+
             const normalizedUser = {
-              ...rawUser,
+              ...safeUser,
               role,
             };
 

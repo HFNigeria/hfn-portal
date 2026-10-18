@@ -114,17 +114,14 @@ export default {
   },
 
  
-  async upload(file) {
+  async createGalleryItem(payload) {
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await api.post('/uploads/upload/', formData, {
+      const { data } = await api.post('/media/gallery-items/', payload, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      return response.data;
+      return data;
     } catch (error) {
-      console.error('File upload API error');
+      console.error('Gallery item upload error', error?.response?.data ?? error);
       throw error;
     }
   },

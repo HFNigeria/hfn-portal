@@ -28,11 +28,16 @@ const slugToPath = (slugSource) =>
     .replace(/\s+/g, "-")
     .replace(/^\/+/, "")}`;
 
+const capitalizeFirst = (value) => {
+  const text = String(value ?? "");
+  return text.charAt(0).toUpperCase() + text.slice(1);
+};
+
 export function useMenuStore() {
   const addMenuItem = (item) => {
     if (!item?.title || !item?.path || !item?.group) return;
     const entry = {
-      title: item.title,
+      title: capitalizeFirst(item.title),
       path: item.path,
       group: item.group,
       external: item.external ?? false,
@@ -71,7 +76,7 @@ export function useMenuStore() {
       apiMenus.value = rawPages
         .filter((p) => p.is_visible)
         .map((p) => ({
-          title: p.name,
+          title: capitalizeFirst(p.name),
           path: slugToPath(p.slug || p.name),
           group: p.content?._menu || p.menu || null,
         }))
@@ -98,14 +103,14 @@ export function useMenuStore() {
       seen.add(page.path);
       if (page.group === "top") {
         addTop.push({
-          title: page.title,
+          title: capitalizeFirst(page.title),
           path: page.path,
           hasDropdown: false,
           external: page.external,
         });
       } else if (addTo[page.group]) {
         addTo[page.group].push({
-          title: page.title,
+          title: capitalizeFirst(page.title),
           path: page.path,
           external: page.external,
         });
