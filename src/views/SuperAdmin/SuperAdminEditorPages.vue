@@ -2,6 +2,8 @@
 import pagesApi from "@/api/pageManagement";
 import ConfirmModal from "@/components/layout/ConfirmModal.vue";
 import { pageSchemas } from "@/schemas/pageSchemas";
+import { menuGroupOptions } from "@/schemas/menu.schema";
+import { useMenuStore } from "@/store/menuStore";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import HomeHeroEditor from "./components/cms/home/HomeHeroEditor.vue";
@@ -169,6 +171,7 @@ const isLoading = ref(false);
 const selectedLayout = ref("split");
 const newPageName = ref("");
 const selectedMenu = ref("");
+const menuStore = useMenuStore();
 
 const layoutOptions = [
   { value: "split", label: "Split hero and content" },
@@ -176,13 +179,7 @@ const layoutOptions = [
   { value: "content", label: "Content only" },
 ];
 
-const menuOptions = [
-  { value: "", label: "No menu (no nav label)" },
-  { value: "top", label: "Top navigation (top level)" },
-  { value: "about", label: "About Us (dropdown)" },
-  { value: "news", label: "News & Updates (dropdown)" },
-  { value: "membership", label: "Membership (dropdown)" },
-];
+const menuOptions = menuGroupOptions;
 
 const createPage = async () => {
   try {
@@ -208,6 +205,12 @@ const createPage = async () => {
     };
 
     const newPage = await pagesApi.createPage(payload);
+
+    menuStore.syncPageMenu({
+      name: pageName,
+      slug: pageName.toLowerCase().replace(/\s+/g, "-"),
+      menu: selectedMenu.value,
+    });
 
     pages.value.push({
       ...newPage,
@@ -469,6 +472,12 @@ const saveChanges = async () => {
       payload
     );
 
+    menuStore.syncPageMenu({
+      name: activePage.value.title || activePage.value.name,
+      slug: activePage.value.slug || activePage.value.page_type,
+      menu: activePage.value.sections?._menu || "",
+    });
+
     goBackToManager();
   } catch (e) {
     console.error("Failed to save page", e);
@@ -594,7 +603,6 @@ watch(activePage, (page) => {
             v-model="selectedMenu"
             class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
           >
-            <option value="" selected>No menu (no nav label)</option>
             <option
               v-for="option in menuOptions"
               :key="option.value"
