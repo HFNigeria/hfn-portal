@@ -578,12 +578,14 @@ watch(activePage, (page) => {
     ></div>
 
     <div
-      class="fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 w-72 max-w-full lg:w-64 lg:translate-x-0 lg:h-screen pt-16 lg:pt-0"
-      :class="showSidebar ? 'translate-x-0' : '-translate-x-full'"
+      :class="[
+        'fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 w-72 max-w-full lg:static lg:translate-x-0 lg:w-64 lg:min-h-screen',
+        showSidebar ? 'translate-x-0' : '-translate-x-full',
+      ]"
     >
       <SuperAdminSidebar @closeSidebar="closeSidebar" class="h-full" />
     </div>
-    <div class="flex-1 min-w-0 p-6 bg-white border-0 lg:ml-64">
+    <div class="flex-1 min-w-0 p-6 bg-white border-0">
       <nav class="mb-6 text-sm text-gray-500">
         <a href="#" class="hover:underline">Home</a>
         <span class="mx-1">></span>

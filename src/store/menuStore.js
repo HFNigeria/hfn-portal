@@ -1,8 +1,8 @@
-import axios from "axios";
-import { computed, ref } from "vue";
-import { menuSchema } from "@/schemas/menu.schema.js";
+import { menuSchema } from '@/schemas/menu.schema.js';
+import axios from 'axios';
+import { computed, ref } from 'vue';
 
-const STORAGE_KEY = "hfn_custom_menus";
+const STORAGE_KEY = 'hfn_custom_menus';
 
 const loadStoredMenus = () => {
   try {
@@ -23,13 +23,13 @@ const apiMenus = ref([]);
 const isLoaded = ref(false);
 
 const slugToPath = (slugSource) =>
-  `/${String(slugSource ?? "")
+  `/${String(slugSource ?? '')
     .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/^\/+/, "")}`;
+    .replace(/\s+/g, '-')
+    .replace(/^\/+/, '')}`;
 
 const capitalizeFirst = (value) => {
-  const text = String(value ?? "");
+  const text = String(value ?? '');
   return text.charAt(0).toUpperCase() + text.slice(1);
 };
 
@@ -67,12 +67,25 @@ export function useMenuStore() {
 
   const loadApiMenus = async () => {
     try {
+      const { API_BASE_URL } = await import('@/config');
       const publicApi = axios.create({
-        baseURL: "https://hfn-backend-production.up.railway.app/api",
+        baseURL: API_BASE_URL,
         timeout: 15000,
       });
-      const res = await publicApi.get("/pages/");
+      const res = await publicApi.get('/pages/');
       const rawPages = res.data || [];
+
+      const validPaths = new Set(
+        rawPages.map((p) => slugToPath(p.slug || p.name))
+      );
+      const reconciled = customMenus.value.filter(
+        (m) => m.external || validPaths.has(m.path)
+      );
+      if (reconciled.length !== customMenus.value.length) {
+        customMenus.value = reconciled;
+        persistMenus();
+      }
+
       apiMenus.value = rawPages
         .filter((p) => p.is_visible)
         .map((p) => ({
@@ -83,7 +96,7 @@ export function useMenuStore() {
         .filter((p) => p.group);
       isLoaded.value = true;
     } catch (e) {
-      console.warn("Failed to load dynamic nav pages", e);
+      console.warn('Failed to load dynamic nav pages', e);
     }
   };
 
@@ -101,7 +114,7 @@ export function useMenuStore() {
     for (const page of allDynamic) {
       if (seen.has(page.path)) continue;
       seen.add(page.path);
-      if (page.group === "top") {
+      if (page.group === 'top') {
         addTop.push({
           title: capitalizeFirst(page.title),
           path: page.path,
@@ -121,15 +134,18 @@ export function useMenuStore() {
 
     for (const link of links) {
       const key = link.title.toLowerCase();
-      if (key === "about us") {
+      if (key === 'about us') {
         link.dropdownItems = [...(link.dropdownItems ?? []), ...addTo.about];
-      } else if (key === "news & updates") {
+      } else if (key === 'news & updates') {
         link.dropdownItems = [...(link.dropdownItems ?? []), ...addTo.news];
-      } else if (key === "membership") {
-        link.dropdownItems = [...(link.dropdownItems ?? []), ...addTo.membership];
+      } else if (key === 'membership') {
+        link.dropdownItems = [
+          ...(link.dropdownItems ?? []),
+          ...addTo.membership,
+        ];
       }
       merged.push(link);
-      if (key === "contact us") {
+      if (key === 'contact us') {
         merged.push(...addTop);
       }
     }

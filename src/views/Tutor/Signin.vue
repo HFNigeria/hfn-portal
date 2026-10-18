@@ -44,18 +44,8 @@ const changeTab = (tab) => {
 };
 
 const handleSignIn = () => {
-  if (activeTab.value === "editor") {
-    console.log("Editor logged in successfully!");
-    router.push("/editor/dashboard");
-  } else if (activeTab.value === "super admin") {
-    console.log("Super admin logged in successfully!");
-    router.push("/admin/dashboard");
-  } else if (activeTab.value === "tutor") {
-    console.log("Tutor logged in successfully!");
-    router.push("/tutor/dashboard");
-  } else {
-    alert("Unknown role selected.");
-  }
+  
+  router.push("/signin");
 };
 
 const alert = (message) => {

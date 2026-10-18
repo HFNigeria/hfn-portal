@@ -1,11 +1,10 @@
 import router from '@/router';
 import { useAuth } from '@/store/authStore';
+import { API_BASE_URL } from '@/config';
 import axios from 'axios';
-// baseURL: "https://birdie-sequestrable-gilda.ngrok-free.dev/api",
-// baseURL: 'https://temp-hf.onrender.com/api',
 
 const api = axios.create({
-  baseURL: 'https://hfn-backend-production.up.railway.app/api',
+  baseURL: API_BASE_URL,
   timeout: 45000,
 });
 

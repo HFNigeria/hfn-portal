@@ -188,6 +188,13 @@ const handleRoleBasedRedirect = (role) => {
     }
   }
 
+  // If a route guard bounced the user here, honour where they were headed.
+  const redirect = route.query.redirect;
+  if (typeof redirect === "string" && redirect.startsWith("/") && !redirect.startsWith("//")) {
+    router.push(redirect);
+    return;
+  }
+
   router.push(targetPath);
 };
 

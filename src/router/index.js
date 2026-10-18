@@ -81,6 +81,9 @@ import CustomPage from '@/views/CustomPage.vue';
 
 import Buttons from '@/components/layout/Buttons.vue';
 import SuperAdminEditorPages from '@/views/SuperAdmin/SuperAdminEditorPages.vue';
+import NotFound from '@/views/NotFound.vue';
+import { useAuth } from '@/store/authStore';
+
 const routes = [
   {
     path: '/',
@@ -422,11 +425,6 @@ const routes = [
     component: LearnerUserSubscription,
   },
   {
-    path: '/course/:id',
-    name: 'LearnerCourseDetails',
-    component: LearnerCourseDetails,
-  },
-  {
     path: '/learner/courses/:slug',
     name: 'LearnerCourseDetails',
     component: LearnerCourseDetails,
@@ -446,6 +444,11 @@ const routes = [
     name: 'CustomPage',
     component: CustomPage,
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFound,
+  },
 ];
 
 const router = createRouter({
@@ -454,6 +457,54 @@ const router = createRouter({
   scrollBehavior(to, from, savedPosition) {
     return { top: 0 };
   },
+});
+
+// Routes that require authentication, keyed by path prefix.
+// The first matching prefix wins, so order matters (most specific first).
+const PROTECTED_PREFIXES = [
+  { prefix: '/superadmin', roles: ['superadmin'] },
+  { prefix: '/admin', roles: ['admin', 'superadmin'] },
+  { prefix: '/editor', roles: ['editor', 'superadmin'] },
+  { prefix: '/tutor', roles: ['tutor', 'superadmin'] },
+  { prefix: '/learner', roles: ['learner', 'superadmin'] },
+  { prefix: '/user', roles: ['user', 'member', 'superadmin'] },
+];
+
+// Where each role belongs after logging in / being denied.
+const ROLE_HOME = {
+  superadmin: '/superadmin/dashboard',
+  admin: '/admin/dashboard',
+  editor: '/editor/dashboard',
+  tutor: '/tutor/dashboard',
+  learner: '/learner/dashboard',
+  member: '/user/dashboard',
+  user: '/user/dashboard',
+};
+
+router.beforeEach((to) => {
+  const { isAuthenticated, role } = useAuth();
+
+  // The fake sign-in pages must never grant access to a dashboard.
+  if (to.name === 'EditorSignin') {
+    return { path: '/signin', query: { redirect: to.fullPath } };
+  }
+
+  const protectedRoute = PROTECTED_PREFIXES.find(
+    (entry) => to.path === entry.prefix || to.path.startsWith(`${entry.prefix}/`),
+  );
+
+  if (!protectedRoute) return true;
+
+  if (!isAuthenticated.value) {
+    return { path: '/signin', query: { redirect: to.fullPath } };
+  }
+
+  if (!protectedRoute.roles.includes(role.value)) {
+    // Authenticated but on the wrong dashboard: send them to their own.
+    return { path: ROLE_HOME[role.value] ?? '/' };
+  }
+
+  return true;
 });
 
 export default router;

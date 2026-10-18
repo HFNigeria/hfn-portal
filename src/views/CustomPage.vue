@@ -1,22 +1,29 @@
 <script setup>
 import pagesApi from '@/api/pageManagement';
 import { customPageSchema } from '@/schemas/pages/custom.schema';
+import NotFound from '@/views/NotFound.vue';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const pageFromApi = ref(null);
 const loading = ref(true);
+const notFound = ref(false);
 
 const loadPage = async (slug) => {
   loading.value = true;
+  notFound.value = false;
 
   try {
     const response = await pagesApi.getPageByType(slug);
     pageFromApi.value = response?.content || null;
   } catch (error) {
     pageFromApi.value = null;
-    console.warn('Using local custom page schema fallback');
+    
+    notFound.value = error?.response?.status === 404;
+    if (!notFound.value) {
+      console.warn('Using local custom page schema fallback');
+    }
   } finally {
     loading.value = false;
   }
@@ -35,7 +42,8 @@ const page = computed(() => ({
 </script>
 
 <template>
-  <div>
+  <NotFound v-if="!loading && notFound" />
+  <div v-else>
     <section
       v-if="!loading && page.layout !== 'content' && !page.hero?.is_hidden"
       :style="{ backgroundColor: page.hero.backgroundColor || '#f0f7f5' }"
