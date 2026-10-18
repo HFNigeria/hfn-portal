@@ -462,6 +462,8 @@ const saveChanges = async () => {
     };
 
     const payload = {
+      page_type: activePage.value.page_type,
+      name: activePage.value.name || activePage.value.title,
       status: activePage.value.status || 'draft',
       is_visible: activePage.value.is_visible ?? true,
       content: activePage.value.sections,
@@ -481,6 +483,10 @@ const saveChanges = async () => {
     goBackToManager();
   } catch (e) {
     console.error("Failed to save page", e);
+    alert(
+      "Failed to save page:\n" +
+        JSON.stringify(e?.response?.data ?? e?.message ?? e, null, 2)
+    );
   }
 };
 

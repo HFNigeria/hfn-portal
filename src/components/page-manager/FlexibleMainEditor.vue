@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch } from "vue";
 import draggable from "vuedraggable";
+import pagesApi from "@/api/pageManagement";
 
 const props = defineProps({
   modelValue: {
@@ -97,15 +98,21 @@ const removeBlock = (column, blockId) => {
   column.blocks = column.blocks.filter((block) => block.id !== blockId);
 };
 
-const readImage = (event, block) => {
+const readImage = async (event, block) => {
   const file = event.target.files?.[0];
   if (!file) return;
 
-  const reader = new FileReader();
-  reader.onload = () => {
-    block.src = reader.result;
-  };
-  reader.readAsDataURL(file);
+  try {
+    const { url } = await pagesApi.uploadImage(file);
+    block.src = url;
+  } catch (e) {
+    console.error("Image upload failed", e?.response?.data ?? e);
+    alert(
+      "Image upload failed. Try a smaller image, or paste an image URL instead."
+    );
+  } finally {
+    event.target.value = "";
+  }
 };
 </script>
 

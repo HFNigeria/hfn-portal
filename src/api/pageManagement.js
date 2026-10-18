@@ -25,6 +25,25 @@ export default {
     }
   },
 
+  async uploadImage(file) {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await api.post('/uploads/upload/', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      const data = response.data ?? {};
+      const url = data.url || data.file_url || data.file || data.image || data.location;
+      if (!url || typeof url !== 'string') {
+        throw new Error('Upload response did not include a file URL');
+      }
+      return { url, ...data };
+    } catch (error) {
+      console.error('Image upload API error', error?.response?.data ?? error);
+      throw error;
+    }
+  },
+
   async createPage(payload) {
     try {
       const response = await api.post('/pages/', payload);

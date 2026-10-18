@@ -1,6 +1,7 @@
 <script setup>
 // import hfn_logo from "@/assets/hfn-health.png";
 import { useAuth } from "@/store/authStore";
+import { useMenuStore } from "@/store/menuStore";
 import { onMounted } from "vue";
 
 import { computed, onUnmounted, ref, watch } from "vue";
@@ -57,52 +58,8 @@ const toggleNavDropdown = (title) => {
   openDropdown.value = openDropdown.value === title ? null : title;
 };
 
-const navLinks = [
-  { title: "Home", path: "/", hasDropdown: false },
-  {
-    title: "About Us",
-    path: "/about",
-    hasDropdown: true,
-    dropdownItems: [
-      { title: "Governance", path: "/governance" },
-      {
-        title: "Health Guardian",
-        path: "https://hfn-health-guardians.netlify.app/",
-        external: true,
-      },
-    ],
-  },
-  {
-    title: "Latest Updates",
-    path: "#",
-    hasDropdown: true,
-    dropdownItems: [
-      // { title: "Programs & Initiatives", path: "/programs" },
-      { title: "Latest News", path: "/news" },
-      { title: "Newsletters", path: "/resources" },
-      { title: "Events", path: "/events" },
-      { title: "Gallery", path: "/gallery" },
-      // { title: "2026 Annual Conference", path: "#" }
-    ],
-  },
-  {
-    title: "Membership",
-    path: "#",
-    hasDropdown: true,
-    dropdownItems: [
-      { title: "Member Area", path: "/membership" },
-      { title: "Get Involved", path: "/get-involved" },
-    ],
-  },
-  { title: "Contact Us", path: "/contact", hasDropdown: false },
-];
-// const navLinks = [
-//   { title: "Home", path: "/", hasDropdown: false },
-//   { title: "About Us", path: "/about", hasDropdown: false },
-//   { title: "Latest Updates", path: "/blog", hasDropdown: true },
-//   { title: "Membership", path: "/membership", hasDropdown: true },
-//   { title: "Contact Us", path: "/contact", hasDropdown: false },
-// ];
+const menuStore = useMenuStore();
+const { navLinks, loadApiMenus } = menuStore;
 
 const isUserDropdownOpen = ref(false);
 const userDropdownRef = ref(null);
@@ -142,6 +99,7 @@ const closeDropdown = (e) => {
 };
 
 onMounted(() => {
+  loadApiMenus();
   window.addEventListener("click", closeDropdown);
 });
 
@@ -205,7 +163,7 @@ onUnmounted(() => {
             @click="handleLinkClick(link.path)"
             class="flex items-center px-4 py-3 font-semibold transition-all duration-200 rounded-lg whitespace-nowrap"
             :class="[
-              isLinkActive(link.path)
+              isLinkActive(link)
                 ? 'bg-[#f2f9f3] text-[#004d33] shadow-sm'
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
             ]"
