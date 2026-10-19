@@ -64,6 +64,7 @@ import FooterEditor from "./components/cms/footer/FooterEditor.vue";
 import ProgramHero from "./components/cms/programs/ProgramHero.vue";
 import ProgramOngoing from "./components/cms/programs/ProgramOngoing.vue";
 import ProgramPast from "./components/cms/programs/ProgramPast.vue";
+import CustomMainEditor from "./components/cms/custom/CustomMainEditor.vue";
 
 const currentView = ref("manager");
 const activePage = ref(null);
@@ -159,7 +160,7 @@ const componentMap = {
   },
   custom: {
     hero: AboutHeroEditor,
-    main: AboutStoryEditor,
+    main: CustomMainEditor,
   },
 };
 

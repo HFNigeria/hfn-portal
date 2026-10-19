@@ -28,6 +28,14 @@ const page = computed(() => ({
   hero: { ...customPageSchema.hero, ...(pageFromApi.value?.hero || {}) },
   main: { ...customPageSchema.main, ...(pageFromApi.value?.main || {}) },
 }));
+
+const iconGlyphs = {
+  star: '★',
+  check: '✓',
+  heart: '♥',
+  info: 'ℹ',
+  arrow: '➜',
+};
 </script>
 
 <template>
@@ -74,20 +82,65 @@ const page = computed(() => ({
       </div>
     </section>
 
-    <section v-if="!page.main?.is_hidden" class="bg-white py-16 lg:py-24">
+    <section
+      v-if="!page.main?.is_hidden"
+      class="py-16 lg:py-24"
+      :style="{ backgroundColor: page.main.backgroundColor || '#ffffff' }"
+    >
       <div
         class="mx-auto px-4 sm:px-6 lg:px-8"
         :class="page.layout === 'centered' ? 'max-w-4xl text-center' : 'max-w-4xl'"
       >
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-10">
+        <h2
+          class="font-extrabold mb-10"
+          :style="{
+            color: page.main.headingColor || '#111827',
+            fontSize: `${page.main.headingFontSize || 36}px`,
+            textDecoration: page.main.headingUnderline ? 'underline' : 'none',
+            textDecorationColor: page.main.headingUnderlineColor || '#111827',
+            textDecorationThickness: '2px',
+          }"
+        >
           {{ page.main.sectionTitle }}
         </h2>
-        <div class="text-lg leading-relaxed text-gray-700 space-y-6">
-          <p v-for="(paragraph, index) in page.main.paragraphs" :key="index">
+        <div
+          class="custom-main-content grid gap-6"
+          :style="{
+            '--content-columns': Math.min(3, Math.max(1, Number(page.main.columns) || 1)),
+          }"
+        >
+          <div
+            v-for="(paragraph, index) in page.main.paragraphs"
+            :key="index"
+            class="rounded-lg p-4 leading-relaxed"
+            :style="{
+              color: page.main.textColor || '#374151',
+              fontSize: `${page.main.textFontSize || 18}px`,
+              backgroundColor: page.main.paragraphBackgroundColors?.[index] || 'transparent',
+            }"
+          >
+            <span
+              v-if="iconGlyphs[page.main.paragraphIcons?.[index]]"
+              class="mr-2"
+              :style="{ color: page.main.iconColor || '#004d33' }"
+              aria-hidden="true"
+            >{{ iconGlyphs[page.main.paragraphIcons[index]] }}</span>
             {{ paragraph }}
-          </p>
+          </div>
         </div>
       </div>
     </section>
   </div>
 </template>
+
+<style scoped>
+.custom-main-content {
+  grid-template-columns: repeat(var(--content-columns), minmax(0, 1fr));
+}
+
+@media (max-width: 640px) {
+  .custom-main-content {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

@@ -16,5 +16,16 @@ export const customPageSchema = {
   main: {
     sectionTitle: 'Page content',
     paragraphs: ['Add the content for this page.'],
+    backgroundColor: '#ffffff',
+    headingColor: '#111827',
+    headingFontSize: 36,
+    headingUnderline: false,
+    headingUnderlineColor: '#111827',
+    textColor: '#374151',
+    textFontSize: 18,
+    columns: 1,
+    paragraphBackgroundColors: [],
+    paragraphIcons: [],
+    iconColor: '#004d33',
   },
 };
