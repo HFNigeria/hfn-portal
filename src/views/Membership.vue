@@ -200,19 +200,19 @@ const filterByLetter = (letter) => {
   fetchCorporateMembers();
 };
 
-// const fetchCorporateMembers = async () => {
-//   try {
-//     loadingMembers.value = true;
-//     const allUsers = await userRegister.getCorporateUsers();
-//     members.value = allUsers.filter(
-//       (user) => user.member_category?.toLowerCase() === "corporate"
-//     );
-//   } catch (error) {
-//     console.error("Failed to fetch members:", error);
-//   } finally {
-//     loadingMembers.value = false;
-//   }
-// };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 const fetchCorporateMembers = async () => {
@@ -253,7 +253,7 @@ onMounted(async () => {
 const selectedMember = ref(null);
 const showDialog = ref(false);
 
-// Filtered search
+
 const filteredMembers = computed(() => {
   if (!searchQuery.value) return members.value;
   return members.value.filter((m) =>
@@ -500,82 +500,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
             </div>
           </div>
         </div>
-        <!-- <section class="bg-white">
-        <div class="max-w-6xl mx-auto px-6">
-          <h2 class="text-2xl font-semibold text-gray-800 mb-10">
-            HFN Members enjoy…
-          </h2>
-
-          <div
-            class="flex flex-wrap justify-center md:justify-start gap-4 mb-10"
-          >
-            <button
-              v-for="tab in tabs"
-              :key="tab.id"
-              @mouseenter="activeTab = tab.id"
-              :class="[
-                'relative w-[200px] h-[200px] p-3 shadow-sm flex flex-col justify-center text-left transition-all duration-300 transform',
-                'rounded-tr-[30px] rounded-bl-[30px]',
-
-                tab.color === 'green' || tab.color === 'default'
-                  ? 'bg-green-50'
-                  : 'bg-[#E87A1814]',
-
-                activeTab === tab.id
-                  ? 'ring-2 ring-offset-2 scale-105 shadow-md ' +
-                    (tab.color === 'green' || tab.color === 'default'
-                      ? 'ring-green-700'
-                      : 'ring-orange-500')
-                  : 'hover:shadow-md hover:scale-[1.02]',
-              ]"
-            >
-              <div
-                :class="[
-                  'absolute top-0 right-0 w-1 h-full rounded-tr-[30px] rounded-br-none',
-                  tab.color === 'green' || tab.color === 'default'
-                    ? 'bg-green-700'
-                    : 'bg-orange-500',
-                ]"
-              ></div>
-
-              <div class="relative z-10 pr-2">
-                <div class="mb-2">
-                  <img
-                    :src="logo"
-                    alt="Logo Icon"
-                    class="inline-block w-8 h-8 object-contain opacity-75"
-                  />
-                </div>
-
-                <span
-                  :class="[
-                    'font-bold text-lg leading-snug',
-                    tab.color === 'green' || tab.color === 'default'
-                      ? 'text-green-800'
-                      : 'text-orange-800',
-                  ]"
-                  v-html="tab.titleHtml"
-                >
-                </span>
-              </div>
-            </button>
-          </div>
-
-          <div v-for="tab in tabs" :key="tab.id">
-            <div v-if="activeTab === tab.id">
-              <div
-                class="text-gray-700 text-xl leading-relaxed space-y-5 px-6 py-4 border-l-4"
-                :class="[
-                  tab.color === 'green' || tab.color === 'default'
-                    ? 'border-green-700'
-                    : 'border-orange-500',
-                ]"
-                v-html="tab.contentHtml"
-              ></div>
-            </div>
-          </div>
-        </div>
-      </section> -->
+        
       </div>
     </section>
     <section v-if="!page.memberDirectory?.is_hidden" class="sm:py-14 bg-white">
@@ -679,7 +604,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
               :key="index"
               class="relative group"
             >
-              <!-- Member name -->
+              
               <div
                 class="p-1 text-gray-800 font-medium cursor-pointer hover:text-green-700 transition"
                 @click="openDialog(member, $event)"
@@ -687,7 +612,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
                 {{ getMemberDisplayName(member) }}
               </div>
 
-              <!-- Dialog under clicked name -->
+              
               <transition name="fade">
                 <div
                   v-if="showDialog && selectedMember === member"

@@ -1,9 +1,12 @@
 <script setup>
 import pagesApi from "@/api/pageManagement";
+import ConfirmModal from "@/components/layout/ConfirmModal.vue";
 import { pageSchemas } from "@/schemas/pageSchemas";
+import { menuGroupOptions } from "@/schemas/menu.schema";
+import { useMenuStore } from "@/store/menuStore";
+import { uploadPageImage } from "@/utils/imageUpload.js";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import ConfirmModal from "@/components/layout/ConfirmModal.vue";
 import HomeHeroEditor from "./components/cms/home/HomeHeroEditor.vue";
 import EditorSidebar from "./EditorSidebar.vue";
 
@@ -13,6 +16,7 @@ import HomeMandateEditor from "./components/cms/home/HomeMandateEditor.vue";
 import HomeNewsEditor from "./components/cms/home/HomeNewsEditor.vue";
 import HomePartnerEditor from "./components/cms/home/HomePartnerEditor.vue";
 
+import FlexibleMainEditor from "@/components/page-manager/FlexibleMainEditor.vue";
 import AboutCommitmentSection from "./components/cms/about/AboutCommitmentSection.vue";
 import AboutCtaSectionEditor from "./components/cms/about/AboutCtaSectionEditor.vue";
 import AboutGovernanceEditor from "./components/cms/about/AboutGovernanceEditor.vue";
@@ -160,7 +164,7 @@ const componentMap = {
   },
   custom: {
     hero: AboutHeroEditor,
-    main: AboutStoryEditor,
+    main: FlexibleMainEditor,
   },
 };
 
@@ -169,6 +173,7 @@ const isLoading = ref(false);
 const selectedLayout = ref("split");
 const newPageName = ref("");
 const selectedMenu = ref("");
+const menuStore = useMenuStore();
 
 const layoutOptions = [
   { value: "split", label: "Split hero and content" },
@@ -176,21 +181,19 @@ const layoutOptions = [
   { value: "content", label: "Content only" },
 ];
 
-const menuOptions = [
-  { value: "", label: "No menu (no nav label)" },
-  { value: "top", label: "Top navigation (top level)" },
-  { value: "about", label: "About Us (dropdown)" },
-  { value: "news", label: "News & Updates (dropdown)" },
-  { value: "membership", label: "Membership (dropdown)" },
-];
+const menuOptions = menuGroupOptions;
 
 const createPage = async () => {
   try {
-    const pageName = newPageName.value.trim();
+    const rawPageName = newPageName.value.trim();
+    const pageName = rawPageName
+      ? rawPageName.charAt(0).toUpperCase() + rawPageName.slice(1)
+      : "";
     const pageType = "others";
     if (!selectedLayout.value || !pageName) return;
     const schema = structuredClone(pageSchemas.custom);
     schema.layout = selectedLayout.value;
+    if (selectedMenu.value) schema._menu = selectedMenu.value;
 
     const exists = pages.value.some((p) => p.name?.toLowerCase() === pageName.toLowerCase());
     if (exists) {
@@ -201,13 +204,18 @@ const createPage = async () => {
     const payload = {
       page_type: pageType,
       name: pageName,
-      status: "draft",
+      status: "published",
       is_visible: true,
-      menu: selectedMenu.value,
       content: schema,
     };
 
     const newPage = await pagesApi.createPage(payload);
+
+    menuStore.syncPageMenu({
+      name: pageName,
+      slug: pageName.toLowerCase().replace(/\s+/g, "-"),
+      menu: selectedMenu.value,
+    });
 
     pages.value.push({
       ...newPage,
@@ -216,9 +224,14 @@ const createPage = async () => {
       sections: structuredClone(schema),
     });
     await fetchPages();
-    editPage(newPage);
+    const created = pages.value.find((p) => p.id === newPage.id) ?? newPage;
+    editPage(created);
   } catch (e) {
-    console.error("Failed to create page", e);
+    console.error("Failed to create page", e?.response?.data ?? e);
+    alert(
+      "Failed to create page:\n" +
+        JSON.stringify(e?.response?.data ?? e?.message ?? e, null, 2)
+    );
   }
 };
 
@@ -267,6 +280,10 @@ const fetchPages = async () => {
             content[key].is_hidden = true;
           }
         }
+      }
+
+      if (page.content?._menu !== undefined) {
+        content._menu = page.content._menu;
       }
 
       if (pageTypeLower === 'governance') {
@@ -318,7 +335,9 @@ onMounted(fetchPages);
 
 const sectionKeys = computed(() => {
   if (!activePage.value?.sections) return [];
-  return Object.keys(activePage.value.sections).filter((key) => key !== "layout");
+  return Object.keys(activePage.value.sections).filter(
+    (key) => key !== "layout" && !key.startsWith("_")
+  );
 });
 
 const pageEditorType = computed(() => {
@@ -338,7 +357,7 @@ const uploadSectionImage = async (event, sectionKey) => {
   if (!file) return;
 
   try {
-    const { url } = await pagesApi.uploadImage(file);
+    const { url } = await uploadPageImage(file);
     activePage.value.sections[sectionKey].imageUrl = url;
     activePage.value.sections[sectionKey].previewUrl = url;
   } catch (e) {
@@ -377,6 +396,8 @@ const deletePage = async () => {
   try {
     const slug = (page.slug || page.name || page.page_type).replace(/^\//, "");
     await pagesApi.deletePage(slug);
+    menuStore.syncPageMenu({ name: page.name, slug, menu: null });
+    await menuStore.loadApiMenus();
     pages.value = pages.value.filter((currentPage) => currentPage.id !== page.id);
     cancelDeletePage();
     await fetchPages();
@@ -394,7 +415,7 @@ const addNewLogo = async (event) => {
   const file = event.target.files[0];
   if (!file) return;
 
-  const { url } = await pagesApi.uploadImage(file);
+  const { url } = await uploadPageImage(file);
 
   activePage.value.sections.section1.logos.push({
     id: Date.now(),
@@ -448,6 +469,8 @@ const saveChanges = async () => {
     };
 
     const payload = {
+      page_type: activePage.value.page_type,
+      name: activePage.value.name || activePage.value.title,
       status: activePage.value.status || 'draft',
       is_visible: activePage.value.is_visible ?? true,
       content: activePage.value.sections,
@@ -458,9 +481,19 @@ const saveChanges = async () => {
       payload
     );
 
+    menuStore.syncPageMenu({
+      name: activePage.value.title || activePage.value.name,
+      slug: activePage.value.slug || activePage.value.page_type,
+      menu: activePage.value.sections?._menu || "",
+    });
+
     goBackToManager();
   } catch (e) {
     console.error("Failed to save page", e);
+    alert(
+      "Failed to save page:\n" +
+        JSON.stringify(e?.response?.data ?? e?.message ?? e, null, 2)
+    );
   }
 };
 
@@ -488,6 +521,15 @@ watch(
   { immediate: true }
 );
 
+watch(
+  currentSectionData,
+  (val) => {
+    if (!activePage.value || !activeSection.value || !val) return;
+    activePage.value.sections[activeSection.value] = val;
+  },
+  { deep: true }
+);
+
 const toggleVisibility = async (page) => {
   page.is_visible = !page.is_visible;
   try {
@@ -512,7 +554,9 @@ watch(activePage, (page) => {
   }
 
   const schema = pageSchemas[pageType] ?? pageSchemas.custom;
-  const firstSection = schema ? Object.keys(schema)[0] : "hero";
+  const firstSection =
+    (schema ? Object.keys(schema).find((key) => key !== "layout") : null) ||
+    "hero";
 
   activeSection.value = firstSection;
 });
@@ -596,7 +640,6 @@ watch(activePage, (page) => {
             v-model="selectedMenu"
             class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
           >
-            <option value="" selected>No menu (no nav label)</option>
             <option
               v-for="option in menuOptions"
               :key="option.value"

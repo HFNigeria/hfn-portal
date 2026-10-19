@@ -9,23 +9,23 @@ const props = defineProps({
 });
 const emit = defineEmits(["update:modelValue"]);
 
-// const currentSectionData = ref(props.modelValue || []);
+
 const currentSectionData = ref({ ...props.modelValue });
 
-// watch(
-//   () => props.modelValue,
-//   (val) => {
-//     currentSectionData.value = val || [];
-//   }
-// );
 
-// watch(
-//   currentSectionData,
-//   (val) => {
-//     emit("update:modelValue", val);
-//   },
-//   { deep: true }
-// );
+
+
+
+
+
+
+
+
+
+
+
+
+
 watch(
   () => props.modelValue,
   (val) => {
@@ -58,25 +58,25 @@ const removeFeature = (index) => {
 <template>
   <div class="space-y-6">
 
-    <!-- Badge -->
+    
     <div class="border p-3 rounded-lg">
       <label class="text-xs font-semibold uppercase text-gray-500">Badge</label>
       <input v-model="currentSectionData.badge" class="w-full border-none focus:ring-0" />
     </div>
 
-    <!-- Title -->
+    
     <div class="border p-3 rounded-lg">
       <label class="text-xs font-semibold uppercase text-gray-500">Title</label>
       <input v-model="currentSectionData.title" class="w-full border-none focus:ring-0" />
     </div>
 
-    <!-- Description -->
+    
     <div class="border p-3 rounded-lg">
       <label class="text-xs font-semibold uppercase text-gray-500">Description</label>
       <textarea v-model="currentSectionData.description" rows="4" class="w-full border-none resize-none" />
     </div>
 
-    <!-- Image -->
+    
     <div class="border p-3 rounded-lg">
       <label class="text-xs font-semibold uppercase text-gray-500">Image URL</label>
       <input v-model="currentSectionData.image" class="w-full border-none focus:ring-0" />

@@ -49,16 +49,16 @@ const navLinks = [
     path: '/tutor/reviews',
     icon: 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z',
   },
-  // {
-  //   title: 'My Account',
-  //   path: '#',
-  //   icon: 'M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2',
-  // },
-  // {
-  //   title: 'Support',
-  //   path: '#',
-  //   icon: 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20zm0-13a1 1 0 0 0-1 1v4a1 1 0 0 0 2 0V8a1 1 0 0 0-1-1zm0 8a1 1 0 1 0 0 2 1 1 0 0 0 0-2z',
-  // },
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 ];
 
 const handleLogout = () => {

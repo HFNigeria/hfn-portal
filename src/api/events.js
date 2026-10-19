@@ -42,15 +42,15 @@ export default {
   },
 
 
-  // async updateEvent(id, payload) {
-  //   try {
-  //     const response = await api.put(`/events/${id}/`, payload);
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('Update event API error');
-  //     throw error;
-  //   }
-  // },
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
   async updateEvent(slug, payload) {
     try {

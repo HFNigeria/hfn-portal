@@ -1,5 +1,8 @@
 import api from './axios.js';
 
+const normalizePageType = (pageType) =>
+  String(pageType ?? '').replace(/^\/+|\/+$/g, '');
+
 export default {
   async listPages() {
     try {
@@ -13,7 +16,8 @@ export default {
 
   async getPageByType(pageType) {
     try {
-      const response = await api.get(`/pages/${pageType}/`);
+      const normalizedPageType = normalizePageType(pageType);
+      const response = await api.get(`/pages/${normalizedPageType}/`);
       return response.data;
     } catch (error) {
       console.error('Get Page By Type API error');
@@ -33,7 +37,7 @@ export default {
 
   async updatePage(pageType, payload) {
     try {
-      const response = await api.put(`/pages/${pageType}/`, payload);
+      const response = await api.put(`/pages/${normalizePageType(pageType)}/`, payload);
       return response.data;
     } catch (error) {
       console.error('Update Page API error');
@@ -43,7 +47,7 @@ export default {
 
   async partialUpdatePage(pageType, payload) {
     try {
-      const response = await api.patch(`/pages/${pageType}/`, payload);
+      const response = await api.patch(`/pages/${normalizePageType(pageType)}/`, payload);
       return response.data;
     } catch (error) {
       console.error('Partial Update Page API error');
@@ -53,7 +57,7 @@ export default {
 
   async publishPage(pageType) {
     try {
-      const response = await api.post(`/pages/${pageType}/publish/`, {});
+      const response = await api.post(`/pages/${normalizePageType(pageType)}/publish/`, {});
       return response.data;
     } catch (error) {
       console.error('Publish Page API error');
@@ -63,10 +67,9 @@ export default {
 
   async updatePageVisibility(pageType, isVisible) {
     try {
-      const response = await api.patch(
-        `/pages/${pageType}/visibility/`,
-        { is_visible: isVisible }
-      );
+      const response = await api.patch(`/pages/${normalizePageType(pageType)}/visibility/`, {
+        is_visible: isVisible,
+      });
       return response.data;
     } catch (error) {
       console.error('Page Visibility API error');
@@ -76,7 +79,7 @@ export default {
 
   async deletePage(slug) {
     try {
-      const response = await api.delete(`/pages/${slug}/`);
+      const response = await api.delete(`/pages/${normalizePageType(slug)}/`);
       return response.data;
     } catch (error) {
       console.error('Delete Page API error');

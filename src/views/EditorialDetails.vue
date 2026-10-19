@@ -6,7 +6,7 @@
       </div>
 
       <div v-else-if="editorial" class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-10">
-        <p class="text-sm text-orange-600 mb-3">{{ formatDate(editorial.created_at) }}</p>
+        <p class="text-sm text-orange-600 mb-3">{{ formatDate(getContentDate(editorial)) }}</p>
         <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
           {{ editorial.title }}
         </h1>
@@ -45,6 +45,7 @@
 <script setup>
 import api from "@/api/axios";
 import contentUploadApi from "@/api/contentUploadsApi";
+import { getContentDate } from "@/utils/contentDate";
 import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 

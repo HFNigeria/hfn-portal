@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from "vue";
 
-// Props
+
 const props = defineProps({
   modelValue: {
     type: Object,
@@ -9,7 +9,7 @@ const props = defineProps({
   },
 });
 
-// Emits
+
 const emit = defineEmits(["update:modelValue"]);
 
 const getDefaultData = () => ({

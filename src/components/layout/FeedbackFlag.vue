@@ -103,7 +103,6 @@ const submitFeedback = async () => {
 
     toast.success("Feedback submitted successfully!");
 
-    // Reset form
     form.value = { name: "", feedback: "" };
     isOpen.value = false;
   } catch (error) {

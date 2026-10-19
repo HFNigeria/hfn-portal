@@ -14,8 +14,9 @@ export const customPageSchema = {
     backgroundColor: '#f0f7f5',
   },
   main: {
-    sectionTitle: 'Page content',
-    paragraphs: ['Add the content for this page.'],
+    sectionTitle: '',
+    paragraphs: [''],
+    rows: [],
     backgroundColor: '#ffffff',
     headingColor: '#111827',
     headingFontSize: 36,

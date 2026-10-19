@@ -1,19 +1,19 @@
-// import ayodele from '@/assets/ayodele.png';
-// import babarinde from '@/assets/babarinde.png';
-// import bridge from '@/assets/bridge.png';
-// import chinyere from '@/assets/chinyere.png';
-// import emzor from '@/assets/emzor.png';
-// import event from '@/assets/event.png';
-// import group from '@/assets/group.png';
-// import hba from '@/assets/hba-africa.png';
-// import health from '@/assets/health.png';
-// import hfn_partner from '@/assets/hfn_partner.png';
-// import jennifer from '@/assets/jennifer.png';
-// import njide from '@/assets/njide.png';
-// import oando from '@/assets/oando_logo.png';
-// import pharm from '@/assets/pharm.png';
-// import reagan from '@/assets/reagan.png';
-// import wef from '@/assets/wef.jpg';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import { homePageSchema } from './pages/home.schema.js';
 import { aboutPageSchema } from './pages/about.schema.js';
 import { governanceSchema } from './pages/governance.schema.js';

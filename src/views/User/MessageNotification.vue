@@ -226,9 +226,9 @@ const fetchPendingConnections = async () => {
       const isSender = req.sender === currentUserId.value;
       const otherUserId = isSender ? req.receiver : req.sender;
 
-      // const otherUser = directoryUsers.value.find((u) => u.id === otherUserId);
-      // const name = otherUser ? otherUser.name : `User ${otherUserId}`;
-      // const initial = otherUser ? otherUser.initial : "U";
+      
+      
+      
       const name = isSender
   ? req.receiver_name
   : req.sender_name;
@@ -593,7 +593,7 @@ const sendMessage = async () => {
     const groupId = currentGroup.value.id;
     const messageContent = messageInput.value;
     try {
-      // const groupId = currentGroup.value.id;
+      
 
       const tempMessage = {
         id: Date.now(),
@@ -612,7 +612,7 @@ const sendMessage = async () => {
       }
 
       groupMessagesMap.value[groupId].push(tempMessage);
-      // chatMessages.value = groupMessagesMap.value[groupId];
+      
       chatMessages.value = [...groupMessagesMap.value[groupId]]; 
 messageInput.value = "";
       await nextTick();
@@ -729,9 +729,9 @@ const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const isGroupActive = (group) =>
   currentGroup.value && group.id === currentGroup.value.id;
 
-// const pendingRequests = computed(() => {
-//   return allConnections.value.filter((conn) => conn.status === "pending");
-// });
+
+
+
 
 const pendingRequests = computed(() => {
   return allConnections.value.filter(
@@ -956,7 +956,7 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <!-- Loading Indicator -->
+      
       <div v-if="isLoading[currentTab.toLowerCase()]" class="text-center py-12">
         <div
           class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#004d33]"
@@ -1334,13 +1334,13 @@ onUnmounted(() => {
                 v-if="request.status?.toLowerCase() === 'pending'"
                 class="flex items-center space-x-4"
               >
-                <!-- If receiver -->
+                
 <div v-if="!request.isSender">
   <button @click="declineConnectionRequest(request.id)">Decline</button>
   <button @click="acceptConnectionRequest(request.id)">Accept</button>
 </div>
 
-<!-- If sender -->
+
 <div v-else>
   <button @click="cancelConnectionRequest(request.id)">
     Cancel Request
@@ -1507,7 +1507,7 @@ onUnmounted(() => {
   :key="group.id"
   class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50"
 >
-  <!-- LEFT: Select group -->
+  
   <button
     @click="selectGroup(group)"
     class="flex items-center truncate flex-1 text-left"
@@ -1526,7 +1526,7 @@ onUnmounted(() => {
     <span class="truncate">{{ group.name }}</span>
   </button>
 
-  <!-- RIGHT: Join / Leave -->
+  
   <button
     v-if="!group.isMember"
     @click.stop="joinGroup(group)"

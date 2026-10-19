@@ -1,7 +1,7 @@
 <script setup>
-// import hfn_logo from "@/assets/hfn-health.png";
-import axios from "axios";
+
 import { useAuth } from "@/store/authStore";
+import { useMenuStore } from "@/store/menuStore";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
@@ -54,9 +54,9 @@ const goToRegistration = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
-// const isLinkActive = (path) => {
-//   return path === currentPath.value;
-// };
+
+
+
 const isLinkActive = (link) => {
   if (link.path !== "#" && link.path === currentPath.value) {
     return true;
@@ -69,113 +69,10 @@ const isLinkActive = (link) => {
   return false;
 };
 
-const staticNavLinks = [
-  { title: "Home", path: "/", hasDropdown: false },
-  {
-    title: "About Us",
-    path: "/about",
-    hasDropdown: true,
+const menuStore = useMenuStore();
+const { navLinks, loadApiMenus } = menuStore;
 
-    dropdownItems: [
-      { title: "Governance", path: "/governance" },
-      {
-        title: "Health Guardian",
-        path: "https://hfn-health-guardians.netlify.app/",
-        external: true,
-      },
-    ],
-  },
-  {
-    title: "News & Updates",
-    path: "#",
-    hasDropdown: true,
-    dropdownItems: [
-      // { title: "Programs & Initiatives", path: "/programs" },
-      { title: "Latest News", path: "/news" },
-      { title: "Newsletters", path: "/resources" },
-      { title: "Events", path: "/events" },
-      { title: "Gallery", path: "/gallery" },
-      // { title: "2026 Annual Conference", path: "#" },
-    ],
-  },
-  {
-    title: "Membership",
-    path: "#",
-    hasDropdown: true,
-    dropdownItems: [
-      { title: "Member Area", path: "/membership" },
-      { title: "Get Involved", path: "/get-involved" },
-    ],
-  },
-  { title: "Contact Us", path: "/contact", hasDropdown: false },
-];
-
-const dynamicPages = ref([]);
-
-const loadDynamicPages = async () => {
-  try {
-    const publicApi = axios.create({
-      baseURL: "https://hfn-backend-production.up.railway.app/api",
-      timeout: 15000,
-    });
-    const res = await publicApi.get("/pages/");
-    const rawPages = res.data || [];
-    dynamicPages.value = rawPages
-      .filter((p) => p.menu && p.is_visible)
-      .map((p) => ({
-        menu: p.menu,
-        title: p.name,
-        path: `/${(p.name ?? "")
-          .toLowerCase()
-          .replace(/\s+/g, "-")}`,
-      }));
-  } catch (e) {
-    console.warn("Failed to load dynamic nav pages", e);
-  }
-};
-
-onMounted(loadDynamicPages);
-
-const navLinks = computed(() => {
-  const links = structuredClone(staticNavLinks);
-  const addTop = [];
-  const addTo = {
-    about: [],
-    news: [],
-    membership: [],
-  };
-
-  for (const page of dynamicPages.value) {
-    if (page.menu === "top") {
-      addTop.push({
-        title: page.title,
-        path: page.path,
-        hasDropdown: false,
-      });
-    } else if (addTo[page.menu]) {
-      addTo[page.menu].push({ title: page.title, path: page.path });
-    }
-  }
-
-  const merged = [];
-
-  for (const link of links) {
-    const key = link.title.toLowerCase();
-    if (addTo.about && key === "about us") {
-      link.dropdownItems = [...link.dropdownItems, ...addTo.about];
-    } else if (key === "news & updates") {
-      link.dropdownItems = [...link.dropdownItems, ...addTo.news];
-    } else if (key === "membership") {
-      link.dropdownItems = [...link.dropdownItems, ...addTo.membership];
-    }
-    merged.push(link);
-    if (key === "contact us") {
-      merged.push(...addTop);
-    }
-  }
-
-  return merged;
-});
+onMounted(loadApiMenus);
 
 watch(
   () => route.path,
@@ -469,73 +366,7 @@ const toggleDropdown = (title) => {
       </div>
       
       <div class="flex flex-col p-4 space-y-2">
-        <!-- <div v-for="link in navLinks" :key="link.title">
-          <div
-            v-if="!link.hasDropdown"
-            class="flex items-center justify-between p-3 border-b border-gray-100 transition-colors cursor-pointer"
-            :class="[
-              isLinkActive(link.path)
-                ? `bg-[${ACTIVE_BG_COLOR}] text-[${DARK_GREEN}]`
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
-            ]"
-          >
-            <RouterLink
-              :to="link.path"
-              class="block w-full"
-              @click="handleLinkClick(link.path)"
-            >
-              {{ link.title }}
-            </RouterLink>
-          </div>
-
-          <div v-else>
-            <div
-              class="flex items-center justify-between p-3 border-b border-gray-100 transition-colors cursor-pointer"
-              :class="[
-                openDropdown === link.title
-                  ? `bg-[${ACTIVE_BG_COLOR}] text-[${DARK_GREEN}]`
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
-              ]"
-              @click="toggleDropdown(link.title)"
-            >
-              <span>{{ link.title }}</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                :class="[
-                  'w-4 h-4 ml-1 transition-transform duration-200 ease-in-out',
-                  openDropdown === link.title
-                    ? 'rotate-180 text-[#004d33]'
-                    : 'text-gray-500',
-                ]"
-              >
-                <path d="m6 9 6 6 6-6" />
-              </svg>
-            </div>
-
-            <div
-              v-if="openDropdown === link.title"
-              class="pl-6 pr-4 pb-2 bg-gray-50 border-b border-gray-100 space-y-2"
-            >
-              <RouterLink
-                v-for="item in link.dropdownItems"
-                :key="item.title"
-                :to="item.path"
-                class="block py-2 text-sm text-gray-700 hover:text-[#004d33]"
-                @click="handleLinkClick(item.path)"
-              >
-                {{ item.title }}
-              </RouterLink>
-            </div>
-          </div>
-        </div> -->
+        
         <div v-for="link in navLinks" :key="link.title">
         
         <div v-if="!link.hasDropdown"

@@ -10,7 +10,7 @@ const props = defineProps({
   
 const emit = defineEmits(["update:modelValue"]);
 
-// const currentSectionData = ref(props.modelValue || []);
+
 const currentSectionData = ref(props.modelValue || {});
 
 watch(
@@ -52,7 +52,7 @@ const removeTag = (action, index) => {
 <template>
   <div class="space-y-6">
 
-    <!-- BADGE -->
+    
     <div class="border border-gray-300 rounded-lg p-3 space-y-2">
       <label class="block text-xs font-semibold uppercase text-gray-500">
         Badge
@@ -64,7 +64,7 @@ const removeTag = (action, index) => {
       />
     </div>
 
-    <!-- TITLE -->
+    
     <div class="border border-gray-300 rounded-lg p-3 space-y-2">
       <label class="block text-xs font-semibold uppercase text-gray-500">
         Title
@@ -76,7 +76,7 @@ const removeTag = (action, index) => {
       />
     </div>
 
-    <!-- DESCRIPTION -->
+    
     <div class="border border-gray-300 rounded-lg p-3 space-y-2">
       <label class="block text-xs font-semibold uppercase text-gray-500">
         Description
@@ -88,7 +88,7 @@ const removeTag = (action, index) => {
       />
     </div>
 
-    <!-- ACTIONS HEADER -->
+    
     <div class="flex justify-between items-center">
       <label class="text-xs font-semibold uppercase text-gray-500">
         Mandate Actions
@@ -101,20 +101,20 @@ const removeTag = (action, index) => {
       </button>
     </div>
 
-    <!-- ACTIONS LIST -->
+    
     <div
       v-for="(action, index) in currentSectionData.actions"
       :key="index"
       class="p-4 border border-gray-200 rounded-lg space-y-3 bg-gray-50"
     >
-      <!-- TITLE -->
+      
       <input
         v-model="action.title"
         placeholder="Action Title"
         class="w-full font-bold bg-transparent border-none focus:ring-0"
       />
 
-      <!-- DESCRIPTION -->
+      
       <textarea
         v-model="action.description"
         placeholder="Description"
@@ -122,14 +122,14 @@ const removeTag = (action, index) => {
         class="w-full text-sm bg-transparent border-none focus:ring-0"
       />
 
-      <!-- ICON -->
+      
       <input
         v-model="action.icon"
         placeholder="Icon (e.g. LightBulbIcon)"
         class="w-full text-xs border rounded px-2 py-1"
       />
 
-      <!-- TAGS -->
+      
       <div class="space-y-2">
         <div class="flex gap-2 flex-wrap">
           <div
@@ -158,7 +158,7 @@ const removeTag = (action, index) => {
         </button>
       </div>
 
-      <!-- REMOVE ACTION -->
+      
       <button
         @click="removeMandateAction(index)"
         class="text-red-500 text-xs"

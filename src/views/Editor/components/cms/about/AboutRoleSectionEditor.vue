@@ -1,22 +1,22 @@
 <script setup>
 import { ref, watch } from 'vue'
 
-// Props
+
 const props = defineProps({
   modelValue: Object
 })
 
-// Emits
+
 const emit = defineEmits(['update:modelValue'])
 
-// Initialize section data with defaults
+
 const currentSectionData = ref({
   points: [],
   tags: [],
   ...props.modelValue
 })
 
-// Sync props changes
+
 watch(
   () => props.modelValue,
   (val) => {
@@ -24,7 +24,7 @@ watch(
   }
 )
 
-// Emit changes
+
 watch(
   currentSectionData,
   (val) => {
@@ -33,7 +33,7 @@ watch(
   { deep: true }
 )
 
-// Points functions
+
 const addPoint = () => {
   currentSectionData.value.points.push('')
 }
@@ -42,7 +42,7 @@ const deletePoint = (index) => {
   currentSectionData.value.points.splice(index, 1)
 }
 
-// Tags functions
+
 const addTag = () => {
   currentSectionData.value.tags.push('')
 }
@@ -80,7 +80,7 @@ const deleteTag = (index) => {
     />
   </div>
 
-  <!-- Points -->
+  
   <div class="border border-gray-300 rounded-lg p-3 mb-2 space-y-2">
     <label class="block text-xs font-semibold uppercase text-gray-500">Points</label>
     <div
@@ -98,7 +98,7 @@ const deleteTag = (index) => {
     <button class="bg-black text-white px-3 py-1 rounded mt-2" @click="addPoint">Add Point</button>
   </div>
 
-  <!-- Tags -->
+  
   <div class="border border-gray-300 rounded-lg p-3 mb-2 space-y-2">
     <label class="block text-xs font-semibold uppercase text-gray-500">Tags</label>
     <div
@@ -116,7 +116,7 @@ const deleteTag = (index) => {
     <button class="bg-black text-white px-3 py-1 rounded mt-2" @click="addTag">Add Tag</button>
   </div>
 
-  <!-- Tag Description -->
+  
   <div class="border border-gray-300 rounded-lg p-3 mb-2">
     <label class="block text-xs font-semibold uppercase text-gray-500">Tag Description</label>
     <textarea

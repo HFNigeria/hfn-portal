@@ -80,10 +80,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import pagesApi from "@/api/pageManagement";
 import galleryApi from "@/api/contentUploadsApi";
+import pagesApi from "@/api/pageManagement";
 import { galleryPageSchema } from "@/schemas/pages/gallery.schema";
+import { getContentDate } from "@/utils/contentDate";
+import { computed, onMounted, ref } from "vue";
 
 const pageFromApi = ref(null);
 const loading = ref(false);
@@ -121,14 +122,14 @@ const resolveImage = (item) => {
   return "";
 };
 
-// const dummyGalleryItems = [
-//   { slug: "digital-skills-bootcamp-2025", title: "Digital Skills Bootcamp 2025", category: "Workshop", date: "November 20, 2025", cover: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739050/850a9bd13a177b57467b2c6d7c3dfec3_L_g8tmki.jpg" },
-//   { slug: "women-in-tech-summit", title: "Women in Tech Summit", category: "Conference", date: "December 5, 2025", cover: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769738844/675362aef61a36df3271398e6ff1e414_S_c6duhw.jpg" },
-//   { slug: "community-outreach-lagos", title: "Community Outreach Lagos", category: "Social", date: "October 12, 2025", cover: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739050/646e54f3224499907f10b9e476e85f82_S_xa0w1q.jpg" },
-//   { slug: "health-wellness-webinar", title: "Health & Wellness Webinar", category: "Webinar", date: "January 12, 2026", cover: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739049/1327d600f17579e414edbf44c080e3b5_L_1_p2vdpq.jpg" },
-//   { slug: "annual-leadership-awards", title: "Annual Leadership Awards", category: "Gala", date: "December 20, 2025", cover: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739049/47ed312dbee39b4feb4a261300270374_M_1_jqdrbm.jpg" },
-//   { slug: "tech-innovation-expo", title: "Tech Innovation Expo", category: "Conference", date: "March 15, 2026", cover: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739049/176305b02b8b14f75f2e6c696c06f6d6_M_fyowa4.jpg" },
-// ];
+
+
+
+
+
+
+
+
 
 const formatDate = (dateStr) => {
   if (!dateStr) return "";
@@ -155,20 +156,20 @@ const fetchGalleryFromApi = async (loadMore = false) => {
         slug: item.slug || `gallery-${item.id}`,
         title: item.title,
         category: item.category || "General",
-        date: formatDate(item.created_at || item.date),
+        date: formatDate(getContentDate(item) || item.date),
         cover: resolveImage(item),
       }));
 
     if (loadMore) {
       galleryItems.value = [...galleryItems.value, ...mappedApiItems];
     } else {
-      // galleryItems.value = [...mappedApiItems, ...dummyGalleryItems];
+      
       galleryItems.value = mappedApiItems;
 
     }
 
-    // const totalResults = allRes.count || 0;
-    // hasMore.value = galleryItems.value.length < totalResults;
+    
+    
 
     const totalResults =
   (allRes.count || 0) +

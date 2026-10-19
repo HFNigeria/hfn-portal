@@ -81,21 +81,21 @@ const fetchEnrollment = async () => {
   }
 };
 
-// const fetchCourse = async () => {
-//   try {
-//     loading.value = true;
-//     const data = await learningModule.getCoursesDetails(slug);
 
-//     course.value = data.course;
-//     modules.value = data.modules || [];
-//     instructor.value = data.instructor;
-//     similarCourses.value = data.similar_courses || [];
-//   } catch (err) {
-//     console.error('Failed to load course', err);
-//   } finally {
-//     loading.value = false;
-//   }
-// };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const fetchCourse = async () => {
   try {
     loading.value = true;
@@ -407,7 +407,7 @@ onMounted(() => {
     </button>
   </div>
 
-  <!-- TEXT LESSON -->
+  
   <div
     v-if="lesson.content_type === 'text'"
     class="text-sm text-gray-600 leading-relaxed"
@@ -415,7 +415,7 @@ onMounted(() => {
     {{ lesson.content }}
   </div>
 
-  <!-- VIDEO LESSON -->
+  
   <div v-if="lesson.content_type === 'video' && lesson.video_url">
     <iframe
       :src="lesson.video_url"
@@ -424,7 +424,7 @@ onMounted(() => {
     ></iframe>
   </div>
 
-  <!-- FILE DOWNLOAD -->
+  
   <div v-if="lesson.file_attachment">
     <a
       :href="lesson.file_attachment"
@@ -617,14 +617,14 @@ onMounted(() => {
     {{ item }}
   </li>
 
-  <!-- fallback if empty -->
+  
   <li v-if="!course?.learning_outcomes?.length" class="text-gray-400">
     No learning objectives provided for this course.
   </li>
 </ul>
             </div>
 
-            <!-- Material Includes -->
+            
             <div class="bg-white rounded-xl shadow-lg p-6">
               <h3 class="text-xl font-bold text-gray-800 mb-4">
                 Material Includes
@@ -657,7 +657,7 @@ onMounted(() => {
               </ul>
             </div>
 
-            <!-- Requirements -->
+            
             <div class="bg-white rounded-xl shadow-lg p-6">
               <h3 class="text-xl font-bold text-gray-800 mb-4">Requirements</h3>
               <ul class="space-y-2 text-gray-700 text-sm">

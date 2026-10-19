@@ -57,7 +57,7 @@ const fetchUserEnrollments = async () => {
         ? response.data
         : response.data.results || [];
 
-      // Normalize course fields
+      
       userEnrollments.value = userEnrollments.value.map((e) => ({
         ...e,
         course: {
@@ -166,7 +166,7 @@ const submitReview = async () => {
       review_text: reviewForm.value.review_text,
     });
 
-    // mark as reviewed instantly
+    
     reviewedCourses.value.add(selectedEnrollment.value.course.id);
     selectedEnrollment.value.has_reviewed = true;
 
@@ -494,7 +494,7 @@ onMounted(() => {
                 }}
               </p>
 
-              <!-- If NOT reviewed -->
+              
 <button
   v-if="!enrollment.has_reviewed"
   @click="reviewCourse(enrollment)"
@@ -508,7 +508,7 @@ onMounted(() => {
   Review Course
 </button>
 
-<!-- If already reviewed -->
+
 <button
   v-else
   @click="goToCertificate(enrollment)"
@@ -575,7 +575,7 @@ onMounted(() => {
     <div class="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
       <h3 class="text-lg font-bold mb-4">Review Course</h3>
 
-      <!-- Star Rating -->
+      
       <div class="flex space-x-2 mb-4">
         <svg
           v-for="star in 5"
@@ -595,7 +595,7 @@ onMounted(() => {
         </svg>
       </div>
 
-      <!-- Comment -->
+      
       <textarea
         v-model="reviewForm.review_text"
         placeholder="Write your review..."
@@ -603,7 +603,7 @@ onMounted(() => {
         rows="4"
       ></textarea>
 
-      <!-- Buttons -->
+      
       <div class="flex justify-end space-x-3">
         <button
           @click="showReviewDialog = false"

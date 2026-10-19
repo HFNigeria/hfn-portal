@@ -5,6 +5,7 @@ import newsApi from "@/api/newsModule.js";
 import authApi from "@/api/userRegister.js";
 import blogh from "@/assets/blogh.png";
 import UserSidebar from "@/components/layout/UserSidebar.vue";
+import { getContentDate } from "@/utils/contentDate";
 import { computed, onMounted, ref } from "vue";
 
 const resources = ref([]);
@@ -28,22 +29,22 @@ const toggleSidebar = () => (showSidebar.value = !showSidebar.value);
 const closeSidebar = () => (showSidebar.value = false);
 
 
-// const getEmbedUrl = (youtubeUrl) => {
-//   if (!youtubeUrl) return "";
 
-//   try {
-//     const url = new URL(youtubeUrl);
-//     const videoId = url.searchParams.get("v");
 
-//     if (videoId) {
-//       return `https://www.youtube.com/embed/${videoId}`;
-//     }
 
-//     return youtubeUrl.replace("watch?v=", "embed/");
-//   } catch {
-//     return youtubeUrl;
-//   }
-// };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const getEmbedUrl = (youtubeUrl) => {
   if (!youtubeUrl) return "";
@@ -414,12 +415,15 @@ const fetchNewsletterPdfs = async () => {
   try {
     const data = await contentUploadsApi.listNewsletters();
 
-    const apiNewsletters = data.map((n) => ({
-      date: formatDate(n.created_at),
-      text: n.title,
-      pdfUrl: n.file,
-      created_at: n.created_at
-    }));
+    const apiNewsletters = data.map((n) => {
+      const contentDate = getContentDate(n);
+      return {
+        date: formatDate(contentDate),
+        text: n.title,
+        pdfUrl: n.file,
+        created_at: contentDate,
+      };
+    });
 
     const localNewsletters = newsletterPdfs.value.map(n => ({
       ...n,
@@ -682,9 +686,7 @@ onMounted(() => {
             </div>
 
             <div class="order-1 md:order-2">
-              <!-- <h4 class="text-md font-extrabold text-[#333] mb-4 leading-snug">
-                {{ newsletters[0].title }}
-              </h4> -->
+              
               <p class="text-md text-gray-700 mb-6">
                 {{ newsletters[0].description_short }}
               </p>

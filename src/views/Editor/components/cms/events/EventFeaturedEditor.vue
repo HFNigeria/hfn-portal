@@ -1,12 +1,12 @@
 <script setup>
 import { ref, watch } from "vue";
 
-// Props
+
 const props = defineProps({
   modelValue: Object,
 });
 
-// Emits
+
 const emit = defineEmits(["update:modelValue"]);
 
 const getDefaultData = () => ({
@@ -20,7 +20,7 @@ const getDefaultData = () => ({
   registerLink: "",
 });
 
-// Local state
+
 const currentSectionData = ref({
   ...getDefaultData(),
   ...props.modelValue,

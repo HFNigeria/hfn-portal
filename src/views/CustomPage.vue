@@ -1,20 +1,32 @@
 <script setup>
 import pagesApi from '@/api/pageManagement';
+import DashboardLoader from '@/components/layout/DashboardLoader.vue';
 import { customPageSchema } from '@/schemas/pages/custom.schema';
+import NotFound from '@/views/NotFound.vue';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const pageFromApi = ref(null);
+const loading = ref(true);
+const notFound = ref(false);
 
 const loadPage = async (slug) => {
-  pageFromApi.value = null;
+  loading.value = true;
+  notFound.value = false;
 
   try {
     const response = await pagesApi.getPageByType(slug);
     pageFromApi.value = response?.content || null;
   } catch (error) {
-    console.warn('Using local custom page schema fallback');
+    pageFromApi.value = null;
+    
+    notFound.value = error?.response?.status === 404;
+    if (!notFound.value) {
+      console.warn('Using local custom page schema fallback');
+    }
+  } finally {
+    loading.value = false;
   }
 };
 
@@ -39,16 +51,17 @@ const iconGlyphs = {
 </script>
 
 <template>
-  <div>
+  <NotFound v-if="!loading && notFound" />
+  <DashboardLoader v-else-if="loading" message="Loading page..." />
+  <div v-else>
     <section
-      v-if="page.layout !== 'content' && !page.hero?.is_hidden"
+      v-if="!loading && page.layout !== 'content' && !page.hero?.is_hidden"
       :style="{ backgroundColor: page.hero.backgroundColor || '#f0f7f5' }"
       class="relative pb-16 pt-16 overflow-hidden"
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
           class="lg:grid lg:grid-cols-12 lg:gap-12 items-center"
-          :class="page.layout === 'centered' ? 'text-center' : ''"
         >
           <div class="lg:col-span-6 xl:col-span-5 mb-10 lg:mb-0">
             <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 leading-tight">
@@ -71,7 +84,7 @@ const iconGlyphs = {
             </RouterLink>
           </div>
           <div
-            v-if="page.layout !== 'centered'"
+            v-if="page.hero.image"
             class="lg:col-span-6 xl:col-span-7 relative flex justify-center lg:justify-end"
           >
             <div class="w-full max-w-lg p-4 overflow-hidden shadow-2xl" style="background-color: #f0f7f5; border-radius: 2rem">
@@ -83,13 +96,13 @@ const iconGlyphs = {
     </section>
 
     <section
-      v-if="!page.main?.is_hidden"
+      v-if="!loading && !page.main?.is_hidden"
       class="py-16 lg:py-24"
       :style="{ backgroundColor: page.main.backgroundColor || '#ffffff' }"
     >
       <div
         class="mx-auto px-4 sm:px-6 lg:px-8"
-        :class="page.layout === 'centered' ? 'max-w-4xl text-center' : 'max-w-4xl'"
+        :class="page.layout === 'centered' ? 'max-w-7xl text-center' : 'max-w-7xl'"
       >
         <h2
           class="font-extrabold mb-10"
@@ -103,28 +116,35 @@ const iconGlyphs = {
         >
           {{ page.main.sectionTitle }}
         </h2>
-        <div
-          class="custom-main-content grid gap-6"
-          :style="{
-            '--content-columns': Math.min(3, Math.max(1, Number(page.main.columns) || 1)),
-          }"
-        >
+
+        <div v-if="page.main.rows?.length" class="space-y-8">
           <div
-            v-for="(paragraph, index) in page.main.paragraphs"
-            :key="index"
-            class="rounded-lg p-4 leading-relaxed"
-            :style="{
-              color: page.main.textColor || '#374151',
-              fontSize: `${page.main.textFontSize || 18}px`,
-              backgroundColor: page.main.paragraphBackgroundColors?.[index] || 'transparent',
-            }"
+            v-for="row in page.main.rows"
+            :key="row.id"
+            class="custom-content-columns"
+            :style="{ '--column-count': row.columns.length }"
           >
-            <span
-              v-if="iconGlyphs[page.main.paragraphIcons?.[index]]"
-              class="mr-2"
-              :style="{ color: page.main.iconColor || '#004d33' }"
-              aria-hidden="true"
-            >{{ iconGlyphs[page.main.paragraphIcons[index]] }}</span>
+            <div v-for="column in row.columns" :key="column.id" class="space-y-6">
+              <template v-for="block in column.blocks" :key="block.id">
+                <div v-if="block.type === 'text'" class="text-lg leading-relaxed text-gray-700 whitespace-pre-line">
+                  <h3 v-if="block.heading" class="mb-3 text-2xl font-bold text-gray-900">
+                    {{ block.heading }}
+                  </h3>
+                  <p>{{ block.content }}</p>
+                </div>
+                <img
+                  v-else-if="block.type === 'image' && block.src"
+                  :src="block.src"
+                  :alt="block.alt || ''"
+                  class="h-auto w-full object-contain"
+                />
+              </template>
+            </div>
+          </div>
+        </div>
+
+        <div v-else class="text-lg leading-relaxed text-gray-700 space-y-6">
+          <p v-for="(paragraph, index) in page.main.paragraphs" :key="index">
             {{ paragraph }}
           </div>
         </div>
@@ -134,13 +154,15 @@ const iconGlyphs = {
 </template>
 
 <style scoped>
-.custom-main-content {
-  grid-template-columns: repeat(var(--content-columns), minmax(0, 1fr));
+.custom-content-columns {
+  display: grid;
+  grid-template-columns: repeat(var(--column-count, 1), minmax(0, 1fr));
+  gap: 2rem;
 }
 
-@media (max-width: 640px) {
-  .custom-main-content {
-    grid-template-columns: 1fr;
+@media (max-width: 767px) {
+  .custom-content-columns {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 </style>

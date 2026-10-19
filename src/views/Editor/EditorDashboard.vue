@@ -450,66 +450,9 @@ onMounted(loadAnalytics);
             </div>
           </div>
 
-          <!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-0 mt-[-10px]">
-            <div class="highlight-card-wrapper border-r border-orange-100">
-              <div class="highlight-card">
-                <p class="text-sm text-gray-500 mb-1">Top month</p>
-                <p class="text-3xl font-bold text-[#E87A18]">November</p>
-                <p class="text-xl font-semibold text-[#E87A18] mt-1">2019</p>
-              </div>
-            </div>
-
-            <div class="highlight-card-wrapper border-r border-orange-100">
-              <div class="highlight-card">
-                <p class="text-sm text-gray-500 mb-1">Top year</p>
-                <p class="text-3xl font-bold text-[#E87A18]">2023</p>
-                <p class="text-xl font-semibold text-gray-600 mt-1">
-                  96K sold so far
-                </p>
-              </div>
-            </div>
-
-            <div class="highlight-card-wrapper">
-              <div class="highlight-card">
-                <p class="text-sm text-gray-500 mb-1">Best Seller</p>
-                <img
-                  :src="assets"
-                  alt="Instructor"
-                  class="w-10 h-10 rounded-full mb-1 border-2 border-orange-300"
-                />
-                <p class="text-lg font-bold text-gray-800">Naturopathy 101</p>
-                <p class="text-sm text-gray-600">Dr. Kanu Nwarikwo</p>
-              </div>
-            </div>
-          </div> -->
+          
         </div>
-        <!-- <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-sm h-fit">
-          <h2 class="text-xl font-semibold text-gray-800 mb-4">
-            Top most read articles
-          </h2>
-          <div class="space-y-4">
-            <div
-              v-for="(course, index) in mostViewedCourses"
-              :key="index"
-              class="flex items-center"
-            >
-              <div
-                class="relative flex-grow h-8 bg-gradient-to-r from-orange-100 to-orange-200 rounded-lg overflow-hidden"
-              >
-                <div
-                  class="absolute inset-0 bg-gradient-to-r from-orange-300 to-orange-400 rounded-lg"
-                  :style="{ width: course.progress }"
-                ></div>
-                <p
-                  class="relative z-10 text-sm font-semibold text-gray-800 px-3 py-1 flex justify-between items-center h-full"
-                >
-                  <span>{{ course.name }}</span>
-                  <span>{{ course.value }}</span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div> -->
+        
       </div>
     </main>
   </div>

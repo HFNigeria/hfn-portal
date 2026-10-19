@@ -1,4 +1,4 @@
-// import DashboardLayout from '@/components/layout/DashboardLayout.vue';
+
 import Blog from '@/views/Blog.vue';
 import BlogDetails from '@/views/BlogDetails.vue';
 import Contact from '@/views/Contact.vue';
@@ -81,6 +81,9 @@ import CustomPage from '@/views/CustomPage.vue';
 
 import Buttons from '@/components/layout/Buttons.vue';
 import SuperAdminEditorPages from '@/views/SuperAdmin/SuperAdminEditorPages.vue';
+import NotFound from '@/views/NotFound.vue';
+import { useAuth } from '@/store/authStore';
+
 const routes = [
   {
     path: '/',
@@ -196,7 +199,7 @@ const routes = [
     component: Interests,
   },
 
-  //editor
+  
   {
     path: '/editor/signin',
     name: 'EditorSignin',
@@ -218,7 +221,7 @@ const routes = [
     component: EditorAccount,
   },
 
-  //tutor
+  
   {
     path: '/tutor/mycourses',
     name: 'TutorCourseList',
@@ -255,7 +258,7 @@ const routes = [
     component: TutorReviews,
   },
 
-  //superadmin
+  
   {
     path: '/superadmin/dashboard',
     name: 'SuperAdminDashboard',
@@ -330,7 +333,7 @@ const routes = [
     component: SuperAdminFeedback,
   },
 
-  //For Admin
+  
   {
     path: '/admin/dashboard',
     name: 'AdminDashboard',
@@ -403,7 +406,7 @@ const routes = [
     props: (route) => ({ slug: route.params.slug, mode: 'view' }),
   },
 
-  //for learners
+  
 
   {
     path: '/learner/dashboard',
@@ -420,11 +423,6 @@ const routes = [
     path: '/learner/subscription',
     name: 'LearnerUserSubscription',
     component: LearnerUserSubscription,
-  },
-  {
-    path: '/course/:id',
-    name: 'LearnerCourseDetails',
-    component: LearnerCourseDetails,
   },
   {
     path: '/learner/courses/:slug',
@@ -446,6 +444,11 @@ const routes = [
     name: 'CustomPage',
     component: CustomPage,
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFound,
+  },
 ];
 
 const router = createRouter({
@@ -454,6 +457,54 @@ const router = createRouter({
   scrollBehavior(to, from, savedPosition) {
     return { top: 0 };
   },
+});
+
+
+
+const PROTECTED_PREFIXES = [
+  { prefix: '/superadmin', roles: ['superadmin'] },
+  { prefix: '/admin', roles: ['admin', 'superadmin'] },
+  { prefix: '/editor', roles: ['editor', 'superadmin'] },
+  { prefix: '/tutor', roles: ['tutor', 'superadmin'] },
+  { prefix: '/learner', roles: ['learner', 'superadmin'] },
+  { prefix: '/user', roles: ['user', 'member', 'superadmin'] },
+];
+
+
+const ROLE_HOME = {
+  superadmin: '/superadmin/dashboard',
+  admin: '/admin/dashboard',
+  editor: '/editor/dashboard',
+  tutor: '/tutor/dashboard',
+  learner: '/learner/dashboard',
+  member: '/user/dashboard',
+  user: '/user/dashboard',
+};
+
+router.beforeEach((to) => {
+  const { isAuthenticated, role } = useAuth();
+
+  
+  if (to.name === 'EditorSignin') {
+    return { path: '/signin', query: { redirect: to.fullPath } };
+  }
+
+  const protectedRoute = PROTECTED_PREFIXES.find(
+    (entry) => to.path === entry.prefix || to.path.startsWith(`${entry.prefix}/`),
+  );
+
+  if (!protectedRoute) return true;
+
+  if (!isAuthenticated.value) {
+    return { path: '/signin', query: { redirect: to.fullPath } };
+  }
+
+  if (!protectedRoute.roles.includes(role.value)) {
+    
+    return { path: ROLE_HOME[role.value] ?? '/' };
+  }
+
+  return true;
 });
 
 export default router;

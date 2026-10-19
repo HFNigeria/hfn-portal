@@ -172,7 +172,7 @@
 </template>
 
 <script setup>
-// import { trustees, executives, chair } from "@/data/leadership.js";
+
 import { governanceSchema } from "@/schemas/pages/governance.schema";
 import { ref, computed, onMounted } from "vue";
 import pagesApi from "@/api/pageManagement";

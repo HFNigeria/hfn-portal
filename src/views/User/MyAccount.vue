@@ -244,9 +244,9 @@ const invitations = reactive([
 
 
 
-// const selectedInterestsCount = computed(
-//   () => interests.filter((i) => i.selected && !i.isMainCategory).length
-// );
+
+
+
 const selectedInterestsCount = computed(
   () =>
     interests.value.filter(
@@ -268,7 +268,7 @@ const toggleOrgEdit = () => {
 
 const toggleIndividualEdit = async () => {
   if (isIndividualEditing.value) {
-    // Validate first
+    
     if (
       !individualDetails.old_password ||
       !individualDetails.new_password ||
@@ -295,7 +295,7 @@ const toggleIndividualEdit = async () => {
 
       toast.success("Password changed successfully");
 
-      // Clear fields
+      
       individualDetails.old_password = '';
       individualDetails.new_password = '';
       individualDetails.confirm_password = '';
@@ -428,7 +428,7 @@ const fetchUserData = async () => {
     const res = await authApi.getUser();
     const data = res;
 
-    // Personal info
+    
     individualDetails.firstName = data.first_name || '';
     individualDetails.lastName = data.last_name || '';
     individualDetails.email = data.email || '';
@@ -451,7 +451,7 @@ const fetchUserData = async () => {
       otherDetails.twitter_handle = data.profile.twitter_handle || '';
       profileImage.value = data.profile.profile_picture || data.profile.profile || null;
       certificateUrl.value = data.profile.certificateUrl || '';
-      // interests.splice(0, interests.length, ...(data.profile.interests || []));
+      
       const defaultInterests = [
     {
       id: 1,
@@ -585,17 +585,7 @@ onMounted(() => {
           ]">
             Subscription
           </button>
-          <!-- <button
-            @click="activeTab = 'Settings'"
-            :class="[
-              'py-2 px-1 border-b-2 transition duration-150 font-medium',
-              activeTab === 'Settings'
-                ? 'border-green-600 text-green-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700',
-            ]"
-          >
-            Settings
-          </button> -->
+          
         </div>
 
         <div v-if="activeTab === 'My Profile'" class="space-y-10">

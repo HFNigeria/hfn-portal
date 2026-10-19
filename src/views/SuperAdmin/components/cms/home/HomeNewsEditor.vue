@@ -1,9 +1,9 @@
 <script setup>
 import { ref, watch } from "vue";
 
-// const props = defineProps({
-//   modelValue: Array
-// });
+
+
+
 const props = defineProps({
   modelValue: {
     type: Object,
@@ -65,7 +65,7 @@ const removeNewsItem = (month, index) => {
                 :key="monthName"
                 class="border border-gray-300 rounded-lg p-4 space-y-6"
               >
-                <!-- Month Header -->
+                
                 <div class="flex justify-between items-center">
                   <h3 class="font-semibold">{{ monthName }}</h3>
                   <button
@@ -76,8 +76,8 @@ const removeNewsItem = (month, index) => {
                   </button>
                 </div>
 
-                <!-- Featured -->
-                <!-- Featured -->
+                
+                
 <div class="space-y-3 border rounded p-3 bg-gray-50">
   <label class="text-xs font-semibold uppercase text-gray-500">
     Featured Article
@@ -114,7 +114,7 @@ const removeNewsItem = (month, index) => {
   />
 </div>
 
-                <!-- News List -->
+                
                 <div class="space-y-4">
                   <div class="flex justify-between">
                     <label

@@ -1,15 +1,15 @@
 <script setup>
 import { ref, watch } from "vue";
 
-// Props
+
 const props = defineProps({
   modelValue: Object,
 });
 
-// Emits
+
 const emit = defineEmits(["update:modelValue"]);
 
-// Default values
+
 const getDefaultData = () => ({
   titleLine1: "",
   titleLine2: "",
@@ -18,13 +18,13 @@ const getDefaultData = () => ({
   backgroundColor: "#ffffff",
 });
 
-// Reactive local state
+
 const currentSectionData = ref({
   ...getDefaultData(),
   ...props.modelValue,
 });
 
-// Watch for prop updates
+
 watch(
   () => props.modelValue,
   (val) => {
@@ -36,7 +36,7 @@ watch(
   { deep: true }
 );
 
-// Emit changes back to parent
+
 watch(
   currentSectionData,
   (val) => {
@@ -49,7 +49,7 @@ watch(
 <template>
   <div class="space-y-4 max-w-full">
 
-    <!-- Hero Title Line 1 -->
+    
     <div class="border border-gray-300 rounded-lg p-3 space-y-2">
       <label class="block text-xs font-semibold uppercase text-gray-500">
         Hero Title Line 1
@@ -62,7 +62,7 @@ watch(
       />
     </div>
 
-    <!-- Hero Title Line 2 -->
+    
     <div class="border border-gray-300 rounded-lg p-3 space-y-2">
       <label class="block text-xs font-semibold uppercase text-gray-500">
         Hero Title Line 2
@@ -75,7 +75,7 @@ watch(
       />
     </div>
 
-    <!-- Hero Description -->
+    
     <div class="border border-gray-300 rounded-lg p-3 space-y-2">
       <label class="block text-xs font-semibold uppercase text-gray-500">
         Hero Description
@@ -88,7 +88,7 @@ watch(
       ></textarea>
     </div>
 
-    <!-- Hero Image URL -->
+    
     <div class="border border-gray-300 rounded-lg p-3 space-y-2">
       <label class="block text-xs font-semibold uppercase text-gray-500">
         Hero Image URL
@@ -101,7 +101,7 @@ watch(
       />
     </div>
 
-    <!-- Hero Background Color -->
+    
     <div class="border border-gray-300 rounded-lg p-3 space-y-2 flex items-center space-x-2">
       <label class="block text-xs font-semibold uppercase text-gray-500">
         Hero Background Color

@@ -30,7 +30,7 @@ watch(
 <template>
 
             <div class="flex space-x-6">
-              <!-- LEFT SIDE -->
+              
               <div class="w-3/5 space-y-6">
                 <div class="border border-gray-300 rounded-lg p-3 space-y-2">
                   <label
@@ -117,7 +117,7 @@ watch(
                 </div>
               </div>
 
-              <!-- RIGHT SIDE -->
+              
               <div class="w-2/5 space-y-6">
                 <image-uploader v-model="currentSectionData.image" />
                 <div class="border border-gray-300 rounded-lg p-3 space-y-2">

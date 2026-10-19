@@ -70,11 +70,11 @@
 </template>
 
 <script setup>
-// No extra logic needed for simple link redirection
+
 </script>
 
 <style scoped>
-/* Optional: Adding a soft entrance animation */
+
 div {
   animation: fadeIn 0.6s ease-out;
 }

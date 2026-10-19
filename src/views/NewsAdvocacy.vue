@@ -43,7 +43,7 @@
       <div
         class="max-w-7xl mx-auto mb-10 flex flex-wrap items-center gap-4 justify-center"
       >
-        <!-- Month -->
+        
         <div class="relative">
           <select
             v-model="selectedDate.month"
@@ -64,7 +64,7 @@
           <span class="absolute right-3 top-2.5 text-gray-400"> ▼ </span>
         </div>
 
-        <!-- Year -->
+        
         <div class="relative">
           <select
             v-model="selectedDate.year"
@@ -83,7 +83,7 @@
           <span class="absolute right-3 top-2.5 text-gray-400"> ▼ </span>
         </div>
 
-        <!-- Reset -->
+        
         <button
           @click="
             selectedDate.month = '';
@@ -461,14 +461,15 @@
 </template>
 
 <script setup>
-import wef from "@/assets/wef.jpg";
-import blog from "@/assets/blogh.png";
-import { newsPageSchema } from "@/schemas/pages/news.schema";
-import { ref, reactive, computed, onMounted, watch } from "vue";
+import api from "@/api/axios";
 import contentUploadApi from "@/api/contentUploadsApi";
 import newsModule from "@/api/newsModule";
 import pagesApi from "@/api/pageManagement";
-import api from "@/api/axios";
+import blog from "@/assets/blogh.png";
+import wef from "@/assets/wef.jpg";
+import { newsPageSchema } from "@/schemas/pages/news.schema";
+import { getContentDate } from "@/utils/contentDate";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 
 const currentPage = ref(1);
 const itemsPerPage = 4;
@@ -500,7 +501,7 @@ const sortedArticles = computed(() => {
     return dateB - dateA;
   });
 });
-// const policyUpdates = newsPageSchema.news.policyAdvocacySection.updates;
+
 const policyUpdates = computed(() => page.value.policyAdvocacySection.updates);
 const latest =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769896360/243A8355_r47c3t.jpg";
@@ -686,7 +687,7 @@ const dummyVideos = [
 const articles = ref([]);
 const videos = ref([]);
 
-const selectedAudience = ref("all"); // all | non-members
+const selectedAudience = ref("all"); 
 
 const fetchArticles = async () => {
   try {
@@ -731,12 +732,15 @@ const fetchVideos = async () => {
 
     const normalizedApiVideos = apiVideos
       .filter((item) => item.youtube_url)
-      .map((item) => ({
-        title: item.title,
-        url: item.youtube_url,
-        date: new Date(item.created_at).toDateString(),
-        audience: item.audience,
-      }));
+      .map((item) => {
+        const contentDate = getContentDate(item);
+        return {
+          title: item.title,
+          url: item.youtube_url,
+          date: contentDate ? new Date(contentDate).toDateString() : "",
+          audience: item.audience,
+        };
+      });
 
     videos.value = [...normalizedApiVideos, ...dummyVideos];
   } catch (error) {
@@ -753,6 +757,7 @@ const fetchEditorials = async () => {
     editorials.value = editorialItems
       .filter((item) => allowedAudiences.includes(item.audience || "all"))
       .map((item) => {
+        const contentDate = getContentDate(item);
         const mediaUrl = getMediaUrl(
           item.featured_image || item.file || item.pdf || item.document
         );
@@ -766,8 +771,8 @@ const fetchEditorials = async () => {
           excerpt: getSummaryExcerpt(
             item.summary || item.excerpt || item.caption || item.description
           ),
-          date: item.created_at ? new Date(item.created_at).toDateString() : "",
-          created_at: item.created_at ? new Date(item.created_at).getTime() : 0,
+          date: contentDate ? new Date(contentDate).toDateString() : "",
+          created_at: contentDate ? new Date(contentDate).getTime() : 0,
         };
       })
       .sort((a, b) => b.created_at - a.created_at);

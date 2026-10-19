@@ -191,19 +191,19 @@ const toggleOrgEdit = () => {
   isOrgEditing.value = !isOrgEditing.value;
 };
 
-// const toggleIndividualEdit = () => {
-//   if (isIndividualEditing.value) {
-//     console.log(
-//       'Saving Individual Details:',
-//       JSON.parse(JSON.stringify(individualDetails))
-//     );
-//   }
-//   isIndividualEditing.value = !isIndividualEditing.value;
-// };
+
+
+
+
+
+
+
+
+
 
 const toggleIndividualEdit = async () => {
   if (isIndividualEditing.value) {
-    // Validate first
+    
     if (
       !individualDetails.old_password ||
       !individualDetails.new_password ||
@@ -295,7 +295,7 @@ const fetchUserData = async () => {
     const res = await authApi.getUser();
     const data = res;
 
-    // Personal info
+    
     individualDetails.firstName = data.first_name || '';
     individualDetails.lastName = data.last_name || '';
     individualDetails.email = data.email || '';
@@ -400,17 +400,7 @@ onMounted(() => {
           ]">
             Subscription
           </button>
-          <!-- <button
-            @click="activeTab = 'Settings'"
-            :class="[
-              'py-2 px-1 border-b-2 transition duration-150 font-medium',
-              activeTab === 'Settings'
-                ? 'border-green-600 text-green-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700',
-            ]"
-          >
-            Settings
-          </button> -->
+          
         </div>
 
         <div v-if="activeTab === 'My Profile'" class="space-y-10">

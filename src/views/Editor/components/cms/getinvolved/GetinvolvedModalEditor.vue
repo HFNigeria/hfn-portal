@@ -1,28 +1,28 @@
 <script setup>
 import { ref, watch } from "vue";
 
-// Props
+
 const props = defineProps({
   modelValue: Object,
 });
 
-// Emits
+
 const emit = defineEmits(["update:modelValue"]);
 
-// Default schema
+
 const getDefaultData = () => ({
   title: "",
   subtitle: "",
   options: [],
 });
 
-// Local reactive state
+
 const currentSectionData = ref({
   ...getDefaultData(),
   ...props.modelValue,
 });
 
-// Sync parent changes
+
 watch(
   () => props.modelValue,
   (val) => {
@@ -34,7 +34,7 @@ watch(
   { deep: true, immediate: true }
 );
 
-// Emit updates to parent
+
 watch(
   currentSectionData,
   (val) => {
@@ -43,7 +43,7 @@ watch(
   { deep: true }
 );
 
-// Add new option
+
 const addItem = () => {
   currentSectionData.value.options.push({
     key: `option-${Date.now()}`,
@@ -52,7 +52,7 @@ const addItem = () => {
   });
 };
 
-// Delete option
+
 const deleteItem = (index) => {
   currentSectionData.value.options.splice(index, 1);
 };

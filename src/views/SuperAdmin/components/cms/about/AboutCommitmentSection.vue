@@ -1,21 +1,21 @@
 <script setup>
 import { ref, watch } from 'vue'
 
-// Props
+
 const props = defineProps({
   modelValue: Object
 })
 
-// Emits
+
 const emit = defineEmits(['update:modelValue'])
 
-// Initialize section data
+
 const currentSectionData = ref({
   goals: [],
   ...props.modelValue
 })
 
-// Sync props changes
+
 watch(
   () => props.modelValue,
   (val) => {
@@ -23,7 +23,7 @@ watch(
   }
 )
 
-// Emit changes
+
 watch(
   currentSectionData,
   (val) => {
@@ -32,7 +32,7 @@ watch(
   { deep: true }
 )
 
-// Goal management
+
 const addGoal = () => {
   if (!currentSectionData.value.goals) {
     currentSectionData.value.goals = []
@@ -46,7 +46,7 @@ const deleteGoal = (index) => {
 </script>
 
 <template>
-  <!-- Section Title -->
+  
   <div class="border border-gray-300 rounded-lg p-3 mb-4">
     <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
     <input
@@ -56,7 +56,7 @@ const deleteGoal = (index) => {
     />
   </div>
 
-  <!-- Section Description -->
+  
   <div class="border border-gray-300 rounded-lg p-3 mb-4">
     <label class="block text-xs font-semibold uppercase text-gray-500">Description</label>
     <textarea
@@ -66,7 +66,7 @@ const deleteGoal = (index) => {
     ></textarea>
   </div>
 
-  <!-- Button Text -->
+  
   <div class="border border-gray-300 rounded-lg p-3 mb-4">
     <label class="block text-xs font-semibold uppercase text-gray-500">Button Text</label>
     <input
@@ -76,7 +76,7 @@ const deleteGoal = (index) => {
     />
   </div>
 
-  <!-- Goals -->
+  
   <div class="border border-gray-300 rounded-lg p-3 space-y-2">
     <label class="block text-xs font-semibold uppercase text-gray-500">Goals</label>
 

@@ -1,15 +1,15 @@
 <script setup>
 import { ref, watch } from "vue";
 
-// Props
+
 const props = defineProps({
   modelValue: Object,
 });
 
-// Emits
+
 const emit = defineEmits(["update:modelValue"]);
 
-// Default past event structure
+
 const getDefaultPastEvent = () => ({
   id: Date.now(),
   title: "",
@@ -19,7 +19,7 @@ const getDefaultPastEvent = () => ({
   image: "",
 });
 
-// Local state
+
 const currentSectionData = ref({
   title: "",
   items: [],

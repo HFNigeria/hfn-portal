@@ -208,11 +208,7 @@ const agenda = [
   </button>
 </a>
 
-            <!-- <button
-              class="px-10 py-5 border-2 border-white/30 text-white font-bold rounded-2xl hover:bg-white hover:text-green-950 transition-all backdrop-blur-sm"
-            >
-              Sponsorship Deck
-            </button> -->
+            
           </div>
         </div>
       </div>
@@ -824,11 +820,7 @@ const agenda = [
             class="bg-white text-orange-600 px-12 py-5 rounded-2xl font-black shadow-2xl hover:bg-green-950 hover:text-white transition-all transform hover:scale-105"
             >Get Your Tickets</a
           >
-          <!-- <button
-            class="bg-green-950/20 border-2 border-white/30 text-white px-12 py-5 rounded-2xl font-black hover:bg-green-950 transition-all"
-          >
-            Sponsorship Inquiry
-          </button> -->
+          
         </div>
         <p class="text-orange-100 mt-12 text-xl leading-relaxed">
           For more sponsorship, partnership and exhibition opportunities: 

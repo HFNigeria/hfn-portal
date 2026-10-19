@@ -31,7 +31,7 @@ const route = useRoute();
 const props = defineProps({
   mode: {
     type: String,
-    default: "create", // create | edit | view
+    default: "create", 
   },
 });
 
@@ -556,7 +556,7 @@ onMounted(async () => {
         text,
         charCount: text.length,
       })) || [];
-    // hydrateCurriculum(course.curriculum);
+    
     curriculumForm.value.materialsIncluded =
       course.materials?.map((text, index) => ({
         id: index + 1,
@@ -590,7 +590,7 @@ onMounted(async () => {
     basicInfoForm.value.category = course.category?.id;
     basicInfoForm.value.level = course.level;
     selectedInstructorId.value = course.instructor?.id || null;
-    // hydrateCurriculum(course.curriculum);
+    
     basicInfoForm.value.learnOutcomes =
       course.learning_outcomes?.map((text, index) => ({
         id: index + 1,
@@ -640,7 +640,7 @@ const deleteCategoryHandler = async (category) => {
       (c) => c.id !== category.id
     );
 
-    // reset if selected
+    
     if (basicInfoForm.value.category === category.id) {
       basicInfoForm.value.category = "";
       categorySearch.value = "";
@@ -801,24 +801,13 @@ const closeSidebar = () => (showSidebar.value = false);
                       v-if="showCategoryDropdown"
                       class="absolute z-20 w-full bg-white border border-gray-200 rounded-md mt-1 shadow-lg max-h-56 overflow-auto"
                     >
-                      <!-- <div
-                        v-for="category in filteredCategories"
-                        :key="category.id"
-                        @click="
-                          basicInfoForm.category = category.id;
-                          categorySearch = category.name;
-                          showCategoryDropdown = false;
-                        "
-                        class="px-4 py-2 hover:bg-green-50 cursor-pointer text-sm"
-                      >
-                        {{ category.icon }} {{ category.name }}
-                      </div> -->
+                      
                       <div
   v-for="category in filteredCategories"
   :key="category.id"
   class="flex items-center justify-between px-4 py-2 hover:bg-green-50"
 >
-  <!-- LEFT: SELECT / EDIT -->
+  
   <div
     class="flex-1 cursor-pointer text-sm"
     @click="
@@ -839,9 +828,9 @@ const closeSidebar = () => (showSidebar.value = false);
     </template>
   </div>
 
-  <!-- RIGHT: ACTIONS -->
+  
   <div class="flex items-center gap-2 ml-2">
-    <!-- EDIT -->
+    
     <button
       @click.stop="editingCategoryId = category.id"
       class="text-xs text-blue-500 hover:underline"
@@ -849,7 +838,7 @@ const closeSidebar = () => (showSidebar.value = false);
       Edit
     </button>
 
-    <!-- SAVE -->
+    
     <button
       v-if="editingCategoryId === category.id"
       @click.stop="updateCategoryHandler(category)"
@@ -858,7 +847,7 @@ const closeSidebar = () => (showSidebar.value = false);
       Save
     </button>
 
-    <!-- DELETE -->
+    
     <button
       @click.stop="deleteCategoryHandler(category)"
       class="text-xs text-red-500 hover:underline"
@@ -1320,8 +1309,7 @@ const closeSidebar = () => (showSidebar.value = false);
                   <option value="" disabled>Select content type</option>
                   <option value="video">Video</option>
                   <option value="text">Article</option>
-                  <!-- <option value="document">Document</option>
-                  <option value="live">Live Class</option> -->
+                  
                 </select>
                 <div
                   v-if="lessonForm.contentType === 'video'"

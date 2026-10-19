@@ -17,7 +17,7 @@ const getDefaultData = () => ({
 
 const currentSectionData = ref(getDefaultData());
 
-// Sync from parent
+
 watch(
   () => props.modelValue,
   (val) => {

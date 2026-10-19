@@ -230,7 +230,7 @@ const saveEdit = async () => {
   fetchPayments();
 };
 
-const currentMonth = new Date().getMonth() + 1; // 1-12
+const currentMonth = new Date().getMonth() + 1; 
 
 const recentRevenueData = computed(() => {
   const allData = revenueData.value;

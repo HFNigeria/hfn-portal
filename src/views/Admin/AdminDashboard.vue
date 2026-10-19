@@ -366,7 +366,7 @@ const fetchDashboardData = async () => {
 const updateChartData = () => {
   if (!dashboardData.value) return;
 
-  // Revenue
+  
   if (dashboardData.value.monthly_revenue) {
     revenueData.value = {
       ...revenueData.value,
@@ -380,7 +380,7 @@ const updateChartData = () => {
     };
   }
 
-  // Enrollments
+  
   if (dashboardData.value.enrollments_by_month) {
     engagementData.value = {
       ...engagementData.value,
@@ -394,7 +394,7 @@ const updateChartData = () => {
     };
   }
 
-  // Growth (New users)
+  
   if (dashboardData.value.new_users_by_month) {
     growthData.value = {
       ...growthData.value,
@@ -408,7 +408,7 @@ const updateChartData = () => {
     };
   }
 
-  // Completion
+  
   if (dashboardData.value.course_completion_stats) {
     const stats = dashboardData.value.course_completion_stats;
     completionData.value = {
@@ -640,26 +640,7 @@ const closeSidebar = () => (showSidebar.value = false);
             </div>
           </div>
 
-          <!-- <h2 class="text-xl font-semibold text-gray-800 mb-4">
-            Most Enrolled Courses
-          </h2>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div v-for="course in courseData" :key="course.name" class="course-card">
-              <div class="flex justify-between items-center mb-1">
-                <p class="text-base font-bold text-gray-800 truncate">
-                  {{ course.name }}
-                </p>
-                <button class="text-xl font-bold text-gray-400 hover:text-gray-600 p-1"
-                  @click="$router.push(`/admin/courses/${course.course_id || '#'}`)">
-                  &vellip;
-                </button>
-              </div>
-              <p class="text-sm text-gray-600">
-                Enrollments: {{ course.enrollments.toLocaleString() }}
-              </p>
-            </div>
-          </div> -->
+          
         </div>
 
         <div class="grid grid-cols-1 gap-8 p-6 bg-white rounded-lg">
@@ -727,52 +708,11 @@ const closeSidebar = () => (showSidebar.value = false);
                 </div>
               </div>
 
-              <!-- <div
-                class="highlight-card-wrapper"
-                v-if="mostViewedCourses.length > 0"
-              >
-                <div class="highlight-card">
-                  <p class="text-sm text-gray-500 mb-1">Best Seller</p>
-                  <div
-                    class="w-10 h-10 rounded-full mb-1 border-2 border-orange-300 bg-gray-200 flex items-center justify-center"
-                  >
-                    <span class="text-gray-600 font-bold">
-                      {{ mostViewedCourses[0]?.name?.charAt(0) || "NGN" }}
-                    </span>
-                  </div>
-                  <p class="text-lg font-bold text-gray-800 truncate">
-                    {{ mostViewedCourses[0]?.name || "No data" }}
-                  </p>
-                  <p class="text-sm text-gray-600">
-                    {{ mostViewedCourses[0]?.value || "0" }} views
-                  </p>
-                </div>
-              </div> -->
+              
             </div>
           </div>
 
-          <!-- <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-sm h-fit">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">
-              Most Viewed Courses
-            </h2>
-            <div class="space-y-4">
-              <div v-for="(course, index) in mostViewedCourses" :key="index" class="flex items-center">
-                <div
-                  class="relative flex-grow h-8 bg-gradient-to-r from-orange-100 to-orange-200 rounded-lg overflow-hidden">
-                  <div class="absolute inset-0 bg-gradient-to-r from-orange-300 to-orange-400 rounded-lg"
-                    :style="{ width: course.progress }"></div>
-                  <p
-                    class="relative z-10 text-sm font-semibold text-gray-800 px-3 py-1 flex justify-between items-center h-full">
-                    <span class="truncate">{{ course.name }}</span>
-                    <span>{{ course.value }}</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div v-if="mostViewedCourses.length === 0" class="text-center text-gray-500 py-8">
-              No course view data available
-            </div>
-          </div> -->
+          
         </div>
       </div>
     </main>

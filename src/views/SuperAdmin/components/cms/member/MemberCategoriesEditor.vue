@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from "vue";
 
-// Props
+
 const props = defineProps({
   modelValue: {
     type: Array,
@@ -9,7 +9,7 @@ const props = defineProps({
   },
 });
 
-// Emits
+
 const emit = defineEmits(["update:modelValue"]);
 
 const currentSectionData = ref([]);

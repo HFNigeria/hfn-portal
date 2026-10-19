@@ -1,6 +1,6 @@
 <script setup>
 import userRegister from "@/api/userRegister";
-// import registerImage from '@/assets/register.jpg';
+
 import { useAuth } from "@/store/authStore";
 import { getRecaptchaToken } from "@/utils/recaptcha";
 import { onMounted, ref } from "vue";
@@ -51,6 +51,7 @@ const handleSignIn = async () => {
 
     const response = await userRegister.loginUser(payload);
     if (response?.status === "success") {
+      password.value = "";
       toast.success(response.messages?.[0] || "Login successful!");
 
       if (response.actions_required?.includes("verify_2fa")) {
@@ -90,8 +91,14 @@ const handleSignIn = async () => {
             const rawUser =
               userProfile?.data?.user || userProfile?.data || userProfile;
 
+            const safeUser = Object.fromEntries(
+              Object.entries(rawUser || {}).filter(
+                ([key]) => !key.toLowerCase().includes("password")
+              )
+            );
+
             const normalizedUser = {
-              ...rawUser,
+              ...safeUser,
               role,
             };
 
@@ -179,6 +186,13 @@ const handleRoleBasedRedirect = (role) => {
       router.push("/user/interests");
       return;
     }
+  }
+
+  
+  const redirect = route.query.redirect;
+  if (typeof redirect === "string" && redirect.startsWith("/") && !redirect.startsWith("//")) {
+    router.push(redirect);
+    return;
   }
 
   router.push(targetPath);
@@ -428,7 +442,7 @@ const submitForgotPassword = async () => {
     </div>
   </div>
 </div>
-    <!-- Forgot Password Modal -->
+    
 <div
   v-if="showForgotModal"
   class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"

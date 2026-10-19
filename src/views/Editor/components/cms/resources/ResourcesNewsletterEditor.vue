@@ -1,12 +1,12 @@
 <script setup>
 import { ref, watch } from "vue";
 
-// Props
+
 const props = defineProps({
   modelValue: Object,
 });
 
-// Emits
+
 const emit = defineEmits(["update:modelValue"]);
 
 const getDefaultData = () => ({
@@ -78,7 +78,7 @@ const deleteItem = (index) => {
               />
             </div>
 
-            <!-- Newsletter Items -->
+            
             <div
               v-for="(item, index) in currentSectionData.items"
               :key="index"
@@ -132,7 +132,7 @@ const deleteItem = (index) => {
               Add Newsletter
             </button>
 
-            <!-- Pagination -->
+            
             <div class="border border-gray-300 rounded-lg p-3 space-y-2 mt-6">
               <label
                 class="block text-xs font-semibold uppercase text-gray-500"
