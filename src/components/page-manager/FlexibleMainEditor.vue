@@ -22,11 +22,21 @@ function makeTextBlock(content = "") {
 }
 
 function normalizeMain(value = {}) {
-  if (Array.isArray(value.rows)) return value;
+  if (
+    Array.isArray(value.rows) &&
+    (value.rows.length || !value.paragraphs?.some((paragraph) => paragraph))
+  ) {
+    return value;
+  }
 
-  const blocks = (value.paragraphs || []).map((paragraph) =>
-    makeTextBlock(paragraph)
-  );
+  const blocks = (value.paragraphs || []).map((paragraph, index) => ({
+    ...makeTextBlock(paragraph),
+    backgroundColor: value.paragraphBackgroundColors?.[index] || "",
+    icon: value.paragraphIcons?.[index] || "",
+    iconColor: value.iconColor || "#004d33",
+    textColor: value.textColor || "#374151",
+    fontSize: value.textFontSize || 18,
+  }));
 
   ["mission", "vision"].forEach((field) => {
     if (value[field]) {
@@ -86,11 +96,42 @@ const addRow = (columnCount) => {
   });
 };
 
+const icons = [
+  { value: "", label: "No icon" },
+  { value: "star", label: "Star" },
+  { value: "check", label: "Check" },
+  { value: "heart", label: "Heart" },
+  { value: "info", label: "Information" },
+  { value: "arrow", label: "Arrow" },
+];
+
+const clearBackground = (item) => {
+  item.backgroundColor = "";
+};
+
+const setFontSize = (target, field, event) => {
+  const value = Number(event.target.value);
+  if (Number.isFinite(value)) {
+    target[field] = Math.min(72, Math.max(12, value));
+  }
+};
+
 const addBlock = (column, type) => {
   column.blocks.push(
     type === "image"
       ? { id: makeId("block"), type, src: "", alt: "" }
-      : makeTextBlock()
+      : {
+          ...makeTextBlock(),
+          textColor: "#374151",
+          fontSize: 18,
+          headingColor: "#111827",
+          headingFontSize: 24,
+          headingUnderline: false,
+          headingUnderlineColor: "#111827",
+          icon: "",
+          iconColor: "#004d33",
+          backgroundColor: "",
+        }
   );
 };
 
@@ -127,6 +168,36 @@ const readImage = async (event, block) => {
         placeholder="Section title"
       />
     </label>
+    <div class="grid gap-3 rounded border border-gray-200 p-3 sm:grid-cols-2">
+      <label class="flex items-center justify-between gap-2 text-xs text-gray-600">
+        Section heading color
+        <input v-model="mainContent.headingColor" type="color" class="h-8 w-10 cursor-pointer" />
+      </label>
+      <label class="flex items-center justify-between gap-2 text-xs text-gray-600">
+        Section heading size (12–72 px)
+        <input
+          :value="mainContent.headingFontSize ?? 36"
+          type="number"
+          min="12"
+          max="72"
+          class="w-20 rounded border border-gray-300 px-2 py-1"
+          @change="setFontSize(mainContent, 'headingFontSize', $event)"
+        />
+      </label>
+      <label class="flex items-center gap-2 text-xs text-gray-600">
+        <input v-model="mainContent.headingUnderline" type="checkbox" />
+        Underline section heading
+      </label>
+      <label class="flex items-center justify-between gap-2 text-xs text-gray-600">
+        Underline color
+        <input
+          v-model="mainContent.headingUnderlineColor"
+          type="color"
+          class="h-8 w-10 cursor-pointer"
+          :disabled="!mainContent.headingUnderline"
+        />
+      </label>
+    </div>
 
     <section
       v-for="(row, rowIndex) in mainContent.rows"
@@ -135,22 +206,63 @@ const readImage = async (event, block) => {
     >
       <header class="mb-4 flex items-center justify-between">
         <h3 class="font-semibold text-gray-800">Row {{ rowIndex + 1 }} · {{ row.columns.length }} column{{ row.columns.length === 1 ? "" : "s" }}</h3>
-        <button
-          type="button"
-          class="text-sm text-red-700 hover:underline"
-          @click="mainContent.rows.splice(rowIndex, 1)"
-        >
-          Remove row
-        </button>
+        <div class="flex items-center gap-3">
+          <label class="flex items-center gap-2 text-xs text-gray-600">
+            Row background
+            <input
+              :value="row.backgroundColor || '#ffffff'"
+              type="color"
+              class="h-8 w-10 cursor-pointer"
+              @input="row.backgroundColor = $event.target.value"
+            />
+          </label>
+          <button
+            v-if="row.backgroundColor"
+            type="button"
+            class="text-xs text-gray-500 underline"
+            @click="clearBackground(row)"
+          >
+            Clear
+          </button>
+          <button
+            type="button"
+            class="text-sm text-red-700 hover:underline"
+            @click="mainContent.rows.splice(rowIndex, 1)"
+          >
+            Remove row
+          </button>
+        </div>
       </header>
 
       <div class="content-columns" :style="{ '--column-count': row.columns.length }">
         <section
           v-for="(column, columnIndex) in row.columns"
           :key="column.id"
-          class="min-w-0 rounded border border-dashed border-gray-400 bg-white p-3"
+          class="min-w-0 rounded border border-dashed border-gray-400 p-3"
+          :style="{ backgroundColor: column.backgroundColor || '#ffffff' }"
         >
-          <h4 class="mb-3 text-xs font-semibold uppercase text-gray-500">Column {{ columnIndex + 1 }}</h4>
+          <div class="mb-3 flex items-center justify-between gap-2">
+            <h4 class="text-xs font-semibold uppercase text-gray-500">Column {{ columnIndex + 1 }}</h4>
+            <div class="flex items-center gap-2">
+              <label class="flex items-center gap-1 text-xs text-gray-600">
+                Background
+                <input
+                  :value="column.backgroundColor || '#ffffff'"
+                  type="color"
+                  class="h-7 w-9 cursor-pointer"
+                  @input="column.backgroundColor = $event.target.value"
+                />
+              </label>
+              <button
+                v-if="column.backgroundColor"
+                type="button"
+                class="text-xs text-gray-500 underline"
+                @click="clearBackground(column)"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
           <draggable
             v-model="column.blocks"
             item-key="id"
@@ -187,6 +299,80 @@ const readImage = async (event, block) => {
                     class="w-full rounded border border-gray-300 px-2 py-2"
                     placeholder="Write your text"
                   ></textarea>
+                  <div class="grid gap-3 sm:grid-cols-2">
+                    <label class="flex items-center justify-between gap-2 text-xs text-gray-600">
+                      Text color
+                      <input v-model="block.textColor" type="color" class="h-8 w-10 cursor-pointer" />
+                    </label>
+                    <label class="flex items-center justify-between gap-2 text-xs text-gray-600">
+                      Text size (12–72 px)
+                      <input
+                        :value="block.fontSize ?? 18"
+                        type="number"
+                        min="12"
+                        max="72"
+                        class="w-20 rounded border border-gray-300 px-2 py-1"
+                        @change="setFontSize(block, 'fontSize', $event)"
+                      />
+                    </label>
+                    <label class="flex items-center justify-between gap-2 text-xs text-gray-600">
+                      Heading color
+                      <input v-model="block.headingColor" type="color" class="h-8 w-10 cursor-pointer" />
+                    </label>
+                    <label class="flex items-center justify-between gap-2 text-xs text-gray-600">
+                      Heading size (12–72 px)
+                      <input
+                        :value="block.headingFontSize ?? 24"
+                        type="number"
+                        min="12"
+                        max="72"
+                        class="w-20 rounded border border-gray-300 px-2 py-1"
+                        @change="setFontSize(block, 'headingFontSize', $event)"
+                      />
+                    </label>
+                    <label class="flex items-center gap-2 text-xs text-gray-600">
+                      <input v-model="block.headingUnderline" type="checkbox" />
+                      Underline heading
+                    </label>
+                    <label class="flex items-center justify-between gap-2 text-xs text-gray-600">
+                      Underline color
+                      <input
+                        v-model="block.headingUnderlineColor"
+                        type="color"
+                        class="h-8 w-10 cursor-pointer"
+                        :disabled="!block.headingUnderline"
+                      />
+                    </label>
+                    <label class="flex items-center justify-between gap-2 text-xs text-gray-600">
+                      Icon
+                      <select v-model="block.icon" class="rounded border border-gray-300 px-2 py-1">
+                        <option v-for="icon in icons" :key="icon.value" :value="icon.value">
+                          {{ icon.label }}
+                        </option>
+                      </select>
+                    </label>
+                    <label class="flex items-center justify-between gap-2 text-xs text-gray-600">
+                      Icon color
+                      <input v-model="block.iconColor" type="color" class="h-8 w-10 cursor-pointer" />
+                    </label>
+                    <label class="flex items-center justify-between gap-2 text-xs text-gray-600">
+                      Block background
+                      <input
+                        :value="block.backgroundColor || '#ffffff'"
+                        type="color"
+                        class="h-8 w-10 cursor-pointer"
+                        @input="block.backgroundColor = $event.target.value"
+                      />
+                    </label>
+                    <button
+                      v-if="block.backgroundColor"
+                      type="button"
+                      class="justify-self-start text-xs text-gray-500 underline"
+                      @click="clearBackground(block)"
+                    >
+                      Clear block background
+                    </button>
+                  </div>
                 </template>
 
                 <template v-else>

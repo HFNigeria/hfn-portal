@@ -48,6 +48,8 @@ const iconGlyphs = {
   info: 'ℹ',
   arrow: '➜',
 };
+
+const getIcon = (name) => iconGlyphs[name] || '';
 </script>
 
 <template>
@@ -122,14 +124,45 @@ const iconGlyphs = {
             v-for="row in page.main.rows"
             :key="row.id"
             class="custom-content-columns"
-            :style="{ '--column-count': row.columns.length }"
+            :style="{
+              '--column-count': row.columns.length,
+              backgroundColor: row.backgroundColor || 'transparent',
+            }"
           >
-            <div v-for="column in row.columns" :key="column.id" class="space-y-6">
+            <div
+              v-for="column in row.columns"
+              :key="column.id"
+              class="space-y-6 p-4"
+              :style="{ backgroundColor: column.backgroundColor || 'transparent' }"
+            >
               <template v-for="block in column.blocks" :key="block.id">
-                <div v-if="block.type === 'text'" class="text-lg leading-relaxed text-gray-700 whitespace-pre-line">
-                  <h3 v-if="block.heading" class="mb-3 text-2xl font-bold text-gray-900">
+                <div
+                  v-if="block.type === 'text'"
+                  class="rounded-lg p-4 leading-relaxed whitespace-pre-line"
+                  :style="{
+                    color: block.textColor || page.main.textColor || '#374151',
+                    fontSize: `${block.fontSize || page.main.textFontSize || 18}px`,
+                    backgroundColor: block.backgroundColor || 'transparent',
+                  }"
+                >
+                  <h3
+                    v-if="block.heading"
+                    class="mb-3 font-bold"
+                    :style="{
+                      color: block.headingColor || page.main.headingColor || '#111827',
+                      fontSize: `${block.headingFontSize || 24}px`,
+                      textDecoration: block.headingUnderline ? 'underline' : 'none',
+                      textDecorationColor: block.headingUnderlineColor || '#111827',
+                    }"
+                  >
                     {{ block.heading }}
                   </h3>
+                  <span
+                    v-if="getIcon(block.icon)"
+                    class="mr-2"
+                    :style="{ color: block.iconColor || page.main.iconColor || '#004d33' }"
+                    aria-hidden="true"
+                  >{{ getIcon(block.icon) }}</span>
                   <p>{{ block.content }}</p>
                 </div>
                 <img
@@ -143,11 +176,26 @@ const iconGlyphs = {
           </div>
         </div>
 
-        <div v-else class="text-lg leading-relaxed text-gray-700 space-y-6">
-          <p v-for="(paragraph, index) in page.main.paragraphs" :key="index">
-            {{ paragraph }}
-          </div>
+      <div v-else class="grid gap-6 custom-content-columns" :style="{ '--column-count': page.main.columns || 1 }">
+        <div
+          v-for="(paragraph, index) in page.main.paragraphs"
+          :key="index"
+          class="rounded-lg p-4 leading-relaxed"
+          :style="{
+            color: page.main.textColor || '#374151',
+            fontSize: `${page.main.textFontSize || 18}px`,
+            backgroundColor: page.main.paragraphBackgroundColors?.[index] || 'transparent',
+          }"
+        >
+          <span
+            v-if="getIcon(page.main.paragraphIcons?.[index])"
+            class="mr-2"
+            :style="{ color: page.main.iconColor || '#004d33' }"
+            aria-hidden="true"
+          >{{ getIcon(page.main.paragraphIcons[index]) }}</span>
+          {{ paragraph }}
         </div>
+      </div>
       </div>
     </section>
   </div>
@@ -158,6 +206,8 @@ const iconGlyphs = {
   display: grid;
   grid-template-columns: repeat(var(--column-count, 1), minmax(0, 1fr));
   gap: 2rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
 }
 
 @media (max-width: 767px) {
