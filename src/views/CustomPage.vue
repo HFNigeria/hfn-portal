@@ -114,6 +114,7 @@ const getIcon = (name) => iconGlyphs[name] || '';
             textDecoration: page.main.headingUnderline ? 'underline' : 'none',
             textDecorationColor: page.main.headingUnderlineColor || '#111827',
             textDecorationThickness: '2px',
+            textUnderlineOffset: '0.2em',
           }"
         >
           {{ page.main.sectionTitle }}
@@ -153,6 +154,7 @@ const getIcon = (name) => iconGlyphs[name] || '';
                       fontSize: `${block.headingFontSize || 24}px`,
                       textDecoration: block.headingUnderline ? 'underline' : 'none',
                       textDecorationColor: block.headingUnderlineColor || '#111827',
+                      textUnderlineOffset: '0.2em',
                     }"
                   >
                     {{ block.heading }}
