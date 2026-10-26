@@ -144,12 +144,12 @@ const toggleDropdown = (title) => {
         </RouterLink>
       </div>
 
-      <div class="hidden lg:flex items-center space-x-2 xl:space-x-4">
+      <div class="hidden xl:flex items-center space-x-1 2xl:space-x-2">
         <div v-for="link in navLinks" :key="link.title" class="relative group">
           <RouterLink
             :to="link.path"
             @click="handleLinkClick(link.path)"
-            class="flex items-center px-4 py-3 font-semibold transition-all duration-200 rounded-lg whitespace-nowrap"
+            class="flex items-center px-2 2xl:px-4 py-3 font-semibold transition-all duration-200 rounded-lg whitespace-nowrap"
             :class="[
               isLinkActive(link.path)
                 ? `bg-[${ACTIVE_BG_COLOR}] text-[${DARK_GREEN}] shadow-md`
@@ -207,8 +207,8 @@ const toggleDropdown = (title) => {
         </div>
       </div>
 
-      <div class="hidden lg:flex items-center space-x-4">
-        <div class="relative w-44">
+      <div class="hidden xl:flex items-center space-x-2 2xl:space-x-4">
+        <div class="relative w-32 2xl:w-44">
           <input
             type="text"
             placeholder="Search"
@@ -235,7 +235,7 @@ const toggleDropdown = (title) => {
           v-if="!isAuthenticated"
           @click="goToRegistration"
           :style="{ backgroundColor: DARK_GREEN }"
-          class="px-6 py-2 font-bold text-white rounded-xl shadow-lg hover:opacity-90 transition-all duration-200 transform hover:scale-[1.02]"
+          class="px-3 2xl:px-6 py-2 font-bold text-white rounded-xl shadow-lg hover:opacity-90 transition-all duration-200 transform hover:scale-[1.02] whitespace-nowrap"
         >
           Login/Signup
         </button>
@@ -290,7 +290,7 @@ const toggleDropdown = (title) => {
         </div>
       </div>
       
-      <div class="flex lg:hidden items-center ml-auto">
+      <div class="flex xl:hidden items-center ml-auto">
         <button
           @click="isMobileMenuOpen = !isMobileMenuOpen"
           class="p-2 text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-600"
@@ -334,7 +334,7 @@ const toggleDropdown = (title) => {
 
     <div
       :class="[
-        'fixed top-0 right-0 w-full h-full bg-white shadow-xl z-20 lg:hidden transform transition-transform duration-300 overflow-y-auto',
+        'fixed top-0 right-0 w-full h-full bg-white shadow-xl z-20 xl:hidden transform transition-transform duration-300 overflow-y-auto',
         isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full',
       ]"
     >
