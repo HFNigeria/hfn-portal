@@ -153,6 +153,24 @@ const heroSlides = computed(() => pageContent.value.hero?.slides?.length ? pageC
 
 const activeSlide = ref(0);
 let interval = null;
+let isLoadingNextSlide = false;
+
+const advanceHeroSlide = () => {
+  const slides = heroSlides.value;
+  if (slides.length < 2 || isLoadingNextSlide) return;
+
+  const nextIndex = (activeSlide.value + 1) % slides.length;
+  const image = new Image();
+  isLoadingNextSlide = true;
+  image.onload = () => {
+    activeSlide.value = nextIndex;
+    isLoadingNextSlide = false;
+  };
+  image.onerror = () => {
+    isLoadingNextSlide = false;
+  };
+  image.src = slides[nextIndex];
+};
 
 const faqs = computed(() => pageContent.value.faqs);
 const group =
@@ -299,10 +317,6 @@ onMounted(async () => {
   if (sectionRef.value) {
     observer.observe(sectionRef.value);
   }
-  interval = setInterval(() => {
-    activeSlide.value = (activeSlide.value + 1) % heroSlides.length;
-  }, 5000);
-
   try {
     const { data } = await api.get(`/pages/${pageType}/`);
     const rawContent = data.content || {};
@@ -319,6 +333,9 @@ onMounted(async () => {
     console.error("Failed to load homepage content:", err);
     pageContent.value = structuredClone(homePageSchema);
   }
+
+  activeSlide.value = 0;
+  interval = setInterval(advanceHeroSlide, 5000);
 
   try {
     const newsData = await newsApi.listArticles();
@@ -369,17 +386,21 @@ onUnmounted(() => {
   <div>
     <section v-if="!pageContent.hero?.is_hidden" class="relative h-[90vh] min-h-[650px] overflow-hidden">
       <div class="absolute inset-0">
-        <transition-group name="fade">
+        <transition name="fade">
           <img
-            v-for="(slide, index) in heroSlides"
-            v-show="index === activeSlide"
-            :key="slide"
-            :src="slide"
+            :key="heroSlides[activeSlide]"
+            :src="heroSlides[activeSlide]"
             class="absolute inset-0 w-full h-full object-cover"
           />
-        </transition-group>
+        </transition>
 
-        <div class="absolute inset-0" :style="{ backgroundColor: pageContent.hero.backgroundColor || 'rgba(0,0,0,0.5)' }"></div>
+        <div
+          class="absolute inset-0"
+          :style="{
+            backgroundColor: pageContent.hero.backgroundColor || '#000000',
+            opacity: 0.5,
+          }"
+        ></div>
       </div>
 
       <div class="relative z-10 h-full flex items-center">
