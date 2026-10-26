@@ -40,6 +40,11 @@ export const menuSchema = {
       dropdownItems: [
         { title: "Member Area", path: "/membership" },
         { title: "Get Involved", path: "/get-involved" },
+        {
+          title: "Directory",
+          path: "https://directory.hfnigeria.com/register",
+          external: true,
+        },
       ],
     },
     { title: "Contact Us", path: "/contact", hasDropdown: false },
