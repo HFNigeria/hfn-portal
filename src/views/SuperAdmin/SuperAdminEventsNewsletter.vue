@@ -1,5 +1,6 @@
 <script setup>
 import uploadsApi from "@/api/contentUploadsApi";
+import { toCreatedAtIso } from "@/utils/contentDate";
 import eventsApi from "@/api/events.js";
 import newsApi from "@/api/newsModule";
 import { useAuth } from "@/store/authStore";
@@ -455,7 +456,7 @@ const uploadForm = ref({
   editorial_file: "",
   featured_image: "",
   status: "draft",
-  publish_date: "",
+  issue_date: "",
 });
 
 const fetchUploads = async () => {
@@ -544,9 +545,9 @@ const fetchUploads = async () => {
       content: e.content ?? "",
       featured_image: e.featured_image ?? "",
       status: e.status ?? "draft",
-      publish_date: e.publish_date ?? "",
+      issue_date: e.issue_date ?? "",
       created_at: e.created_at,
-      date: e.publish_date || e.date,
+      date: e.issue_date || e.created_at || e.date,
     }));
 
     uploads.value = [
@@ -597,7 +598,7 @@ const editEditorial = (item) => {
   editingUploadSlug.value = item.slug;
   uploadForm.value = {
     title: item.title,
-    date: item.publish_date ? item.publish_date.split("T")[0] : item.date || "",
+    date: item.issue_date || item.date || "",
     type: "editorial",
     description: item.summary || "",
     summary: item.summary || "",
@@ -611,7 +612,7 @@ const editEditorial = (item) => {
     editorial_file: item.file || item.featured_image || "",
     featured_image: item.featured_image || "",
     status: item.status || "draft",
-    publish_date: item.publish_date ? item.publish_date.split("T")[0] : "",
+    issue_date: item.issue_date || "",
   };
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
@@ -634,7 +635,7 @@ const resetUploadForm = () => {
     editorial_file: "",
     featured_image: "",
     status: "draft",
-    publish_date: "",
+    issue_date: "",
   };
   editingUploadSlug.value = null;
 
@@ -663,8 +664,8 @@ const createUpload = async () => {
         formData.append("file", uploadForm.value.editorial_file);
       }
 
-      if (uploadForm.value.publish_date) {
-        formData.append("publish_date", uploadForm.value.publish_date);
+      if (uploadForm.value.issue_date) {
+        formData.append("issue_date", uploadForm.value.issue_date);
       }
 
       if (
@@ -695,6 +696,11 @@ const createUpload = async () => {
     formData.append("audience", uploadForm.value.audience);
     formData.append("media_type", uploadForm.value.media_type);
     formData.append("type", uploadForm.value.type);
+
+    if (["video", "gallery"].includes(uploadForm.value.type)) {
+      const createdAt = toCreatedAtIso(uploadForm.value.date);
+      if (createdAt) formData.append("created_at", createdAt);
+    }
 
     if (uploadForm.value.type === "video" && uploadForm.value.media_type === "youtube") {
       if (!uploadForm.value.youtube_url) return;
@@ -739,13 +745,11 @@ const createUpload = async () => {
   const bannerIndex = uploadForm.value.bannerIndex;
 
   const extraFiles = files.filter((_, index) => index !== bannerIndex);
-
   if (extraFiles.length) {
     await Promise.all(
       extraFiles.map((file) => {
         const payload = new FormData();
         payload.append("image", file);
-
         return uploadsApi.postGalleryItems(galleryId, payload);
       })
     );
@@ -1307,10 +1311,10 @@ const closeSidebar = () => (showSidebar.value = false);
 
               <div class="mb-3">
                 <label class="block mb-1 text-sm font-medium text-gray-700">
-                  Publish Date
+                  Issue Date
                 </label>
                 <input
-                  v-model="uploadForm.publish_date"
+                  v-model="uploadForm.issue_date"
                   type="date"
                   class="input"
                 />
