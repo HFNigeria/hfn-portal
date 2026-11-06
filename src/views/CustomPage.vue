@@ -50,6 +50,14 @@ const iconGlyphs = {
 };
 
 const getIcon = (name) => iconGlyphs[name] || '';
+
+const isExternalLink = (link) =>
+  /^(https?:\/\/|\/\/|mailto:|tel:)/i.test(link || '') ||
+  /^www\./i.test(link || '') ||
+  /^[\w.-]+\.[a-z]{2,}(?:[/:?#]|$)/i.test(link || '');
+
+const externalHref = (link) =>
+  /^www\./i.test(link) ? `https://${link}` : link;
 </script>
 
 <template>
@@ -77,8 +85,15 @@ const getIcon = (name) => iconGlyphs[name] || '';
             <p v-if="page.hero.descriptionBottom" class="mt-4 text-gray-700 text-lg">
               {{ page.hero.descriptionBottom }}
             </p>
+            <a
+              v-if="page.hero.ctaLabel && isExternalLink(page.hero.ctaLink)"
+              :href="externalHref(page.hero.ctaLink)"
+              class="inline-flex items-center mt-10 px-6 py-3 rounded-lg text-white bg-green-700 hover:bg-green-800"
+            >
+              {{ page.hero.ctaLabel }}
+            </a>
             <RouterLink
-              v-if="page.hero.ctaLabel"
+              v-else-if="page.hero.ctaLabel"
               :to="page.hero.ctaLink"
               class="inline-flex items-center mt-10 px-6 py-3 rounded-lg text-white bg-green-700 hover:bg-green-800"
             >
