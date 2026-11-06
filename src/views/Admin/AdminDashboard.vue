@@ -521,17 +521,23 @@ const closeSidebar = () => (showSidebar.value = false);
               <span v-if="stat.stars">
                 <span class="text-[#ff9900]">
                   <span v-for="i in 5" :key="i">
-                    <span v-if="i <= Math.floor(parseFloat(stat.value))"
-                      >★</span
-                    >
+                    <font-awesome-icon
+                      v-if="i <= Math.floor(parseFloat(stat.value))"
+                      icon="star"
+                    />
                     <span
                       v-else-if="
                         i === Math.ceil(parseFloat(stat.value)) &&
                         stat.value % 1 !== 0
                       "
-                      >☆</span
                     >
-                    <span v-else class="text-gray-300">★</span>
+                      <font-awesome-icon :icon="['far', 'star']" />
+                    </span>
+                    <font-awesome-icon
+                      v-else
+                      icon="star"
+                      class="text-gray-300"
+                    />
                   </span>
                 </span>
                 <span class="text-sm ml-2">{{ stat.value }}</span>

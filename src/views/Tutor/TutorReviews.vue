@@ -54,27 +54,28 @@ const currentPage = ref(1);
 const itemsPerPage = 8;
 
 const renderStars = (rating) => {
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 >= 0.25 && rating % 1 <= 0.75;
+  const normalizedRating = Math.min(5, Math.max(0, Number(rating) || 0));
+  const fullStars = Math.floor(normalizedRating);
+  const hasHalfStar =
+    normalizedRating % 1 >= 0.25 && normalizedRating % 1 <= 0.75;
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
-  const starFilled = '★';
-  const starHalf = '✭';
-  const starEmpty = '☆';
-
-  let starsHtml = '';
-  starsHtml += `<span class="text-orange-400">${starFilled.repeat(
-    fullStars
-  )}</span>`;
-  if (hasHalfStar) {
-    starsHtml += `<span class="text-orange-400">${starHalf}</span>`;
-  }
-  starsHtml += `<span class="text-gray-300">${starEmpty.repeat(
-    emptyStars
-  )}</span>`;
-
-  return starsHtml;
+  return [
+    ...Array(fullStars).fill('full'),
+    ...(hasHalfStar ? ['half'] : []),
+    ...Array(emptyStars).fill('empty'),
+  ];
 };
+
+const starIcon = (star) =>
+  star === 'half'
+    ? ['fas', 'star-half-stroke']
+    : star === 'empty'
+      ? ['far', 'star']
+      : ['fas', 'star'];
+
+const starColor = (star) =>
+  star === 'empty' ? 'text-gray-300' : 'text-orange-400';
 
 const filteredFeedback = computed(() => {
   if (selectedRating.value === 'all') return selectedCourse.value.feedback;
@@ -310,10 +311,14 @@ watch([searchQuery, selectedRating, currentPage], () => {
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <span
-                    v-html="renderStars(review.rating)"
-                    class="text-xl"
-                  ></span>
+                  <span class="inline-flex items-center gap-0.5 text-xl">
+                    <font-awesome-icon
+                      v-for="(star, index) in renderStars(review.rating)"
+                      :key="index"
+                      :icon="starIcon(star)"
+                      :class="starColor(star)"
+                    />
+                  </span>
                   <span class="ml-2 text-xs font-medium text-gray-700"
                     >({{ review.rating }})</span
                   >
@@ -383,10 +388,14 @@ watch([searchQuery, selectedRating, currentPage], () => {
               <div class="text-7xl font-extrabold text-[#006633]">
                 {{ selectedCourse.averageRating?.toFixed(1) }}
               </div>
-              <div
-                v-html="renderStars(selectedCourse.averageRating)"
-                class="text-3xl"
-              ></div>
+              <div class="inline-flex items-center gap-0.5 text-3xl">
+                <font-awesome-icon
+                  v-for="(star, index) in renderStars(selectedCourse.averageRating)"
+                  :key="index"
+                  :icon="starIcon(star)"
+                  :class="starColor(star)"
+                />
+              </div>
               <div class="text-base text-gray-600">Course Rating</div>
             </div>
             <div class="space-y-5 pt-4 md:pt-0">
@@ -398,10 +407,14 @@ watch([searchQuery, selectedRating, currentPage], () => {
                 <div
                   class="w-49 flex-shrink-0 text-sm font-medium text-gray-700 flex items-center gap-x-2"
                 >
-                  <span
-                    v-html="renderStars(dist.stars)"
-                    class="text-xl flex space-x-1"
-                  ></span>
+                  <span class="inline-flex items-center gap-0.5 text-xl">
+                    <font-awesome-icon
+                      v-for="(star, index) in renderStars(dist.stars)"
+                      :key="index"
+                      :icon="starIcon(star)"
+                      :class="starColor(star)"
+                    />
+                  </span>
                   <span>{{ dist.stars }} Star Rating</span>
                 </div>
 
@@ -463,10 +476,14 @@ watch([searchQuery, selectedRating, currentPage], () => {
                   <span class="text-xs text-gray-500">{{ feedback.time }}</span>
                 </div>
                 <div class="mb-2">
-                  <span
-                    v-html="renderStars(feedback.rating)"
-                    class="text-lg"
-                  ></span>
+                  <span class="inline-flex items-center gap-0.5 text-lg">
+                    <font-awesome-icon
+                      v-for="(star, index) in renderStars(feedback.rating)"
+                      :key="index"
+                      :icon="starIcon(star)"
+                      :class="starColor(star)"
+                    />
+                  </span>
                 </div>
                 <p class="text-gray-600 leading-relaxed text-sm">
                   {{ feedback.comment }}

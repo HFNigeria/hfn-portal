@@ -41,15 +41,15 @@ const page = computed(() => ({
   main: { ...customPageSchema.main, ...(pageFromApi.value?.main || {}) },
 }));
 
-const iconGlyphs = {
-  star: '★',
-  check: '✓',
-  heart: '♥',
-  info: 'ℹ',
-  arrow: '➜',
+const iconDefinitions = {
+  star: ['fas', 'star'],
+  check: ['fas', 'check'],
+  heart: ['fas', 'heart'],
+  info: ['fas', 'circle-info'],
+  arrow: ['fas', 'arrow-right'],
 };
 
-const getIcon = (name) => iconGlyphs[name] || '';
+const getIcon = (name) => iconDefinitions[name] || null;
 
 const isExternalLink = (link) =>
   /^(https?:\/\/|\/\/|mailto:|tel:)/i.test(link || '') ||
@@ -174,12 +174,13 @@ const externalHref = (link) =>
                   >
                     {{ block.heading }}
                   </h3>
-                  <span
+                  <font-awesome-icon
                     v-if="getIcon(block.icon)"
+                    :icon="getIcon(block.icon)"
                     class="mr-2"
                     :style="{ color: block.iconColor || page.main.iconColor || '#004d33' }"
                     aria-hidden="true"
-                  >{{ getIcon(block.icon) }}</span>
+                  />
                   <p>{{ block.content }}</p>
                 </div>
                 <img
@@ -204,12 +205,13 @@ const externalHref = (link) =>
             backgroundColor: page.main.paragraphBackgroundColors?.[index] || 'transparent',
           }"
         >
-          <span
+          <font-awesome-icon
             v-if="getIcon(page.main.paragraphIcons?.[index])"
+            :icon="getIcon(page.main.paragraphIcons[index])"
             class="mr-2"
             :style="{ color: page.main.iconColor || '#004d33' }"
             aria-hidden="true"
-          >{{ getIcon(page.main.paragraphIcons[index]) }}</span>
+          />
           {{ paragraph }}
         </div>
       </div>

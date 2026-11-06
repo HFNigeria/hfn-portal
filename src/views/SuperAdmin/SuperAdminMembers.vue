@@ -523,7 +523,10 @@ watch(currentPage, () => {
 
             <div class="text-4xl font-bold text-gray-800 mb-1">
               <span v-if="stat.stars">
-                <span class="text-[#ff9900]">★★★★</span><span class="text-gray-300">★</span>
+                <span class="text-[#ff9900]">
+                  <font-awesome-icon v-for="i in 4" :key="i" icon="star" />
+                </span>
+                <font-awesome-icon icon="star" class="text-gray-300" />
               </span>
               <span v-else>{{ stat.value }}</span>
             </div>
