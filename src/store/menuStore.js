@@ -144,10 +144,10 @@ export function useMenuStore() {
           ...addTo.membership,
         ];
       }
-      merged.push(link);
       if (key === 'contact us') {
         merged.push(...addTop);
       }
+      merged.push(link);
     }
 
     return merged;
